@@ -30,3 +30,17 @@ export interface CreateAddress {
     description: string,
     accountID: string
 }
+
+export interface UpdateAddress {
+    subDistrict: string ,
+    district: string,
+    province: string,
+    zipCode: string,
+    id : number,
+    idInformation : number,
+    status : boolean,
+    recipientName: string,
+    phoneNumber: string,
+    description: string,
+    accountID: string
+}

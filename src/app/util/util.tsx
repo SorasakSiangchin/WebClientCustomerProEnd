@@ -1,5 +1,5 @@
 import { NumericFormat } from "react-number-format";
-import { CreateAddress } from "../models/Address";
+import { Address, CreateAddress, UpdateAddress } from "../models/Address";
 
 const padTo2Digits = (num: any) => {
     return num.toString().padStart(2, '0');
@@ -43,7 +43,7 @@ export const convertRole = (roleName: any) => {
     };
 };
 
-export const convertToAddressInformations = (value : CreateAddress) => {
+export const convertToCreateAddress = (value : CreateAddress) => {
     const Result = {
         addressInformations : {
             id: 0,
@@ -57,6 +57,45 @@ export const convertToAddressInformations = (value : CreateAddress) => {
         } ,
 
     accountID: value.accountID
+    };
+    return Result;
+};
+
+export const convertToUpdateAddress = (value : UpdateAddress) => {
+    const Result = {
+        addressInformations : {
+            id: value.idInformation,
+            subDistrict: value.subDistrict,
+            district: value.district,
+            province: value.province,
+            zipCode: value.zipCode.toString(),
+            recipientName: value.recipientName,
+            phoneNumber: value.phoneNumber,
+            description: value.description,
+        } ,
+    id : value.id ,
+    status : value.status ,
+    accountID: value.accountID
+    };
+    return Result;
+};
+
+export const convertToAddress= (value : Address) => {
+    let Result = {};
+    if(value){
+        Result = {
+            id: value.id,
+            idInformation : value.addressInformations.id ,
+            status : value.status ,
+            subDistrict: value.addressInformations.subDistrict,
+            district: value.addressInformations.district,
+            province: value.addressInformations.province,
+            zipCode: value.addressInformations.zipCode,
+            recipientName: value.addressInformations.recipientName,
+            phoneNumber: value.addressInformations.phoneNumber,
+            description:  value.addressInformations.description,
+            accountID: value.accountID
+        };
     };
     return Result;
 };

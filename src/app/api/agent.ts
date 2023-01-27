@@ -103,6 +103,8 @@ const Address = {
     list: (value : any) => requests.get(`addresses?accountId=${value.accountId}&numRender=${value.numRender}`),
     create :  (value : any) => requests.post("address" , value) ,
     update :  (value : any) => requests.put("address" , value) ,
+    updateStatus :  (value : any) => requests.put("address/status" , value) ,
+    delete :  (id : any) => requests.delete(`address/${id}`) ,
 }
 
 const agent = {
