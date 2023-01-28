@@ -30,6 +30,8 @@ export const currencyFormat = (price?: number) => {
     />
 };
 
+export const Ts = ({ children } : any) => <div className="text-st">{children}</div>
+
 export const convertRole = (roleName: any) => {
     switch (roleName) {
         case "customer":
@@ -99,6 +101,7 @@ export const convertToAddress= (value : Address) => {
     };
     return Result;
 };
+
 
 export const Text = `ภายในระบบของเราจะมีสินค้าทางเกษตกรรมให้ทุกท่านเลือกชอปปิ้งอย่างมากมาย อีกทั้งยังมีการจองสินค้าที่มีเฉพาะในฤดูกาลนั้นๆและสินค้าที่คุณอาจจะเข้าถึงได้ยากอีกด้วย ขอให้ทุกท่านมีความสุขกับการชอปปิ้งนะครับ`;
 

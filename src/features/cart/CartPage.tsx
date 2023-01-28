@@ -7,7 +7,7 @@ import useCart from '../../app/hooks/useCart';
 import MainContainer from '../../app/layout/MainContainer';
 import TopSection from '../../app/layout/TopSection';
 import { useAppDispatch, useAppSelector } from '../../app/store/configureStore';
-import { currencyFormat, Text } from '../../app/util/util';
+import { currencyFormat, Text, Ts } from '../../app/util/util';
 import { addCartItemAsync, removeCartItemAsync } from './cartSlice';
 
 interface DataType {
@@ -43,7 +43,7 @@ const CartPage = () => {
             dataIndex: 'product',
             key: 'product',
             render: (data) => (
-                <Space size="middle">
+                <Space size="middle" className='text-st'>
                     <Image src={data.image} width={100} />
                     <Link to={''}>
                         {data.name}
@@ -55,28 +55,28 @@ const CartPage = () => {
             title: 'ราคาต่อชิ้น',
             dataIndex: 'price',
             key: 'price',
-            render: (data) => currencyFormat(data)
+            render: (data) => <Ts>{currencyFormat(data)}</Ts>
             ,
         },
         {
             title: 'จำนวน',
             key: 'amount',
             dataIndex: 'amount',
-            render: (data, more) => <InputNumber onChange={(amount) => handleInputChange(amount, more)} size="middle" min={1} max={100000} defaultValue={data} />
+            render: (data, more) => <InputNumber className='text-st' onChange={(amount) => handleInputChange(amount, more)} size="middle" min={1} max={100000} defaultValue={data} />
 
         },
         {
             title: 'ราคารวม',
             key: 'total',
             dataIndex: 'total',
-            render: (data) => currencyFormat(data)
+            render: (data) => <Ts>{currencyFormat(data)}</Ts>
 
         },
         {
             title: 'แอคชั่น',
             key: 'action',
             dataIndex: 'action',
-            render: (_, more) => <Button type="primary" loading={status === 'pendingRemoveItem' + more.key + 'del'} onClick={() => dispatch(removeCartItemAsync({ productId: more.key, accountId: account?.id, amount: more.amount, name: "del" }))} danger icon={<DeleteFilled />}>
+            render: (_, more) => <Button type="primary" className='text-st' loading={status === 'pendingRemoveItem' + more.key + 'del'} onClick={() => dispatch(removeCartItemAsync({ productId: more.key, accountId: account?.id, amount: more.amount, name: "del" }))} danger icon={<DeleteFilled />}>
                 ลบ
             </Button>
         }
@@ -104,7 +104,10 @@ const CartPage = () => {
                         <Table rowSelection={{
                             type: "checkbox",
                             ...rowSelection,
-                        }} columns={columns} dataSource={dataTable} className="data-table cart-table table-striped"
+                        }} 
+                        columns={columns} 
+                        dataSource={dataTable} 
+                        className="data-table cart-table table-striped "
                         />
                     </div>
                     <div className="container">

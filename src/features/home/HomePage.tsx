@@ -35,7 +35,7 @@ const HomePage = () => {
                 <div className="item">
                   <div className="item-inner">
                     <div className="item-img">
-                      <div className="item-img-info"><Link to="product-detail.html" title="Fresh Organic Mustard Leaf " className="product-image"><img src="products-images/p27.jpg" alt="sample dish" /></Link>
+                      <div className="item-img-info"><Link to=""  title="Fresh Organic Mustard Leaf " className="product-image"><img src="products-images/p27.jpg" alt="sample dish" /></Link>
                         <div className="new-label new-top-left">Hot</div>
                         <div className="sale-label sale-top-left">-15%</div>
                       </div>

@@ -62,6 +62,6 @@ const BlockCart = ({ cart, itemCount, subtotal }: Props) => {
   )
 }
 
-const ContainerCart = ({ children }: any) => <div className="block block-list block-cart">{children}</div>
+const ContainerCart = ({ children }: any) => <div className="block block-list block-cart" style={{ marginBottom:"30px" }}>{children}</div>
 
 export default BlockCart

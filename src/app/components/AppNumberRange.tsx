@@ -29,10 +29,10 @@ const AppNumberRange = ({ onRangeChange }: any) => {
     return (
         <Fragment>
             <Space direction="horizontal">
-                <InputNumber prefix="฿" min={0} style={{ width: '100px' }} onChange={(value) => setStart(Number(value))} />
+                <InputNumber className='text-st' prefix="฿" min={0} style={{ width: '100px' }} onChange={(value) => setStart(Number(value))} />
                 <Divider type="horizontal" plain style={{ width: "20px", backgroundColor: "#000" }} />
-                <InputNumber prefix="฿" min={0} style={{ width: '100px' }} onChange={(value) => setEnd(Number(value))} />
-                <Button icon={<CaretRightOutlined />} onClick={onClick} />
+                <InputNumber className='text-st' prefix="฿" min={0} style={{ width: '100px' }} onChange={(value) => setEnd(Number(value))} />
+                <Button  icon={<CaretRightOutlined />} onClick={onClick} />
             </Space>
             {error ? <p style={{ color:"red" }}>{error}</p> : ""}
         </Fragment>

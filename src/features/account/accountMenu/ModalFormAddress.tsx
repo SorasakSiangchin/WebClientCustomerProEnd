@@ -9,6 +9,7 @@ import { default as dtSubDistrict } from "../../../assets/jsondata/subdistrict.j
 import { Col, Row } from 'react-bootstrap';
 import { useAppDispatch, useAppSelector } from '../../../app/store/configureStore';
 import { createAddressAsync, updateAddressAsync } from '../../address/addressSlice';
+import { Ts } from '../../../app/util/util';
 
 interface Props {
     modalOpen: boolean;
@@ -219,14 +220,14 @@ const ModalForm = ({ isOpen, onCancel, onOk, title, content, isSubmitting }: any
         centered
         open={isOpen}
         okText={
-            <div className='text-st'>
+            <Ts>
                 บันทึก
-            </div>
+            </Ts>
         }
         cancelText={
-            <div className='text-st'>
+            <Ts>
                 ยกเลิก
-            </div>
+            </Ts>
         }
         onOk={onOk}
         onCancel={onCancel}

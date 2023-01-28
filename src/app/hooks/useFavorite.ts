@@ -6,9 +6,9 @@ interface Types {
     infoFavorite: Product[];
     addFavorite: (info: Product) => void;
     resetSearch: (info: Product) => void;
-    checkFavorite:  (id: any) => boolean;
+    checkFavorite: (id: any) => boolean;
     resetFavorite: () => void;
-    removeFavorite:(idProducts: any) => void;
+    removeFavorite: (idProducts: any) => void;
 };
 
 let store: any = (set: any) => {
@@ -18,18 +18,25 @@ let store: any = (set: any) => {
             set((state: any) => ({ infoFavorite: [...state.infoFavorite, info] }));
         },
         removeFavorite: (idProducts: any) => {
-            for (const idProduct of idProducts) {
+            if(typeof(idProducts) === "object"){
+                for (const idProduct of idProducts) {
+                    set((state: any) => {
+                        const result = state.infoFavorite.filter((product: Product) => product.id !== idProduct);
+                        return { infoFavorite: [...result] }
+                    });
+                }
+            }else{
                 set((state: any) => {
-                const result = state.infoFavorite.filter((product: Product) => product.id !== idProduct) ;
-                return { infoFavorite: [...result] }
-            });
+                    const result = state.infoFavorite.filter((product: Product) => product.id !== idProducts);
+                    return { infoFavorite: [...result] }
+                });
             }
         },
         checkFavorite: (id: any) => {
             let status = false;
             set((state: any) => {
-                const result = state.infoFavorite.filter((product: Product) => product.id === id) ;
-                if(result.length !== 0 ) status = true;
+                const result = state.infoFavorite.filter((product: Product) => product.id === id);
+                if (result.length !== 0) status = true;
                 return state;
             });
             return status;

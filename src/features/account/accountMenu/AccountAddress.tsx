@@ -6,7 +6,7 @@ import { useAppDispatch, useAppSelector } from '../../../app/store/configureStor
 import { ColAccount } from "../AccountPage";
 import { addressSelectors, deleteAddressAsync, fetchAddressesAsync, updateStatusAddressAsync } from '../../address/addressSlice';
 import ModalFormAddress from './ModalFormAddress';
-import { convertToAddress } from '../../../app/util/util';
+import { convertToAddress, Ts } from '../../../app/util/util';
 import { Address } from '../../../app/models/Address';
 
 const AccountAddress = () => {
@@ -96,9 +96,9 @@ const AccountAddress = () => {
                                                                         setUpdateData(item);
                                                                     }} className='text-st' type="link">แก้ไข</Button>
                                                                     <Popconfirm
-                                                                        title="ต้องการลบที่อยู่นี้?"
-                                                                        okText="ตกลง"
-                                                                        cancelText="ยกเลิก"
+                                                                        title={<Ts>ต้องการลบที่อยู่นี้?</Ts>}
+                                                                        okText={<Ts>ตกลง</Ts>}
+                                                                        cancelText={<Ts>ยกเลิก</Ts>}
                                                                         onConfirm={() => dispatch(deleteAddressAsync(item.id))}
                                                                     >
                                                                         <Button className='text-st' type="link">ลบ</Button>

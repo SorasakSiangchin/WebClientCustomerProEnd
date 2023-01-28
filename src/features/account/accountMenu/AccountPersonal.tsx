@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { convertRole, } from '../../../app/util/util';
+import { convertRole, Ts, } from '../../../app/util/util';
 import { EditOutlined, SaveOutlined } from '@ant-design/icons';
 import { Avatar, Button, Divider, Form, Select, Space } from 'antd';
 import { Container } from 'react-bootstrap';
@@ -137,7 +137,7 @@ const AccountPersonal = () => {
                                                 errors={errors.phoneNumber}
                                             />
                                             <Form.Item
-                                                label={<div className="text-st">ตำแหน่ง</div>}
+                                                label={<Ts>ตำแหน่ง</Ts>}
                                             >
                                                 {!statusInput ? <strong className="text-st">{convertRole(account?.role.name)}</strong> :
                                                     <Select
@@ -155,7 +155,7 @@ const AccountPersonal = () => {
                                                             roleData?.map(data => {
                                                                 return {
                                                                     value: data.id,
-                                                                    label: <div className="text-st">{convertRole(data.name)}</div>,
+                                                                    label: <Ts>{convertRole(data.name)}</Ts>,
                                                                     disabled: data.name === "admin" ? true : false,
                                                                 }
                                                             })
@@ -181,9 +181,9 @@ const AccountPersonal = () => {
                                                         เลื่อกรูป
                                                     </Button>
                                                 </AppUpload>
-                                                <p className='center text-st'>
+                                                <Ts>
                                                     ไฟล์ที่รองรับ: .JPEG, .PNG
-                                                </p>
+                                                </Ts>
                                             </Space>
                                         </div>
                                     </div>
@@ -200,7 +200,7 @@ const AccountPersonal = () => {
 
 const InputLabelAndText = ({ data, label, status, name, onChange, onBlur, value, touched, errors }: any) => {
     return <Form.Item
-        label={<div className="text-st">{label}</div>}
+        label={<Ts>{label}</Ts>}
     >
         {
             !status ? <strong className="text-st">{data}</strong> : <AppTextInput

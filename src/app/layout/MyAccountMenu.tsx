@@ -13,8 +13,6 @@ interface Prop {
     account: Account;
 };
 
-
-
 export const MyAccountMenu = ({ account }: Prop) => {
     const dispatch = useAppDispatch();
     const dataPrivate = [
@@ -44,7 +42,7 @@ export const MyAccountMenu = ({ account }: Prop) => {
             dataSource={account ? dataPrivate : dataPublic}
             renderItem={(item) => (
                 <List.Item>
-                    <Link to={item.path || ""} onClick={item.onClick} >{item.icon}{" "}{item.title}</Link>
+                    <Link className="text-st" to={item.path || ""} onClick={item.onClick} >{item.icon}{" "}{item.title}</Link>
                 </List.Item>
             )}
         />
