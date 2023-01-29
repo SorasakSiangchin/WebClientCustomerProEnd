@@ -12,7 +12,7 @@ import { setParams } from '../../features/product/productSlice';
 
 export const midLinks = [
     { title: "หน้าแรก", path: "/" },
-    { title: "เกี่ยวกับ", path: "/about" },
+    { title: "เกี่ยวกับ", path: "/admin/main" },
     { title: "สินค้า", path: "/product-list" },
 ];
 

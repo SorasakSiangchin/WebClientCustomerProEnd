@@ -1,5 +1,6 @@
-import { Fragment, useEffect, useCallback } from 'react';
+import { useEffect, useCallback } from 'react';
 import {
+  useLocation,
   useNavigate
 } from "react-router-dom";
 import Footer from './Footer';
@@ -11,10 +12,15 @@ import { mainRoutes } from '../routes/Routes';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import "../../App.css";
-function App() {
+import { setShowLayout } from '../../features/home/homeSlice';
+import { Layout } from 'antd';
+
+const App = () => {
   const { token, tokenExpirationDate } = useAppSelector(state => state.account);
+  const { showLayout } = useAppSelector(state => state.home);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
   let logoutTimer: any;
 
   const initApp = useCallback(async () => {
@@ -61,9 +67,16 @@ function App() {
     initApp();
   }, [initApp]);
 
+  useEffect(() => {
+    var obj = JSON.parse(JSON.stringify(location));
+    var path = obj.pathname as string;
+    if (!path.includes("/admin")) dispatch(setShowLayout(true));
+    else dispatch(setShowLayout(false));
+  }, [location, showLayout]);
+
   return (
-    <Fragment>
-      <Header />
+    <Layout style={{ minHeight: '100vh' }}>
+      {showLayout ? <Header /> : "" }
       <ToastContainer
         position="top-center"
         autoClose={2000}
@@ -77,8 +90,8 @@ function App() {
         theme="colored"
       />
       {mainRoutes}
-      <Footer />
-    </Fragment>
+      {showLayout ? <Footer /> : ""}
+    </Layout>
   )
 }
 

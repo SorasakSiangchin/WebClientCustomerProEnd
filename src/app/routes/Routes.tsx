@@ -9,6 +9,8 @@ import CartPage from '../../features/cart/CartPage';
 import AccountPage from '../../features/account/AccountPage';
 import { PrivateLogin, PrivateRoute } from "../layout/PrivateRoute";
 import ProductFavorite from "../../features/product/ProductFavorite";
+import Dashboard from "../../features/private/Dashboard";
+import MainPrivate from "../../features/private/MainPrivate";
 
 export const mainRoutes = <Routes>
     <Route path='/' element={<HomePage />} />
@@ -25,6 +27,10 @@ export const mainRoutes = <Routes>
     <Route element={<PrivateRoute />} >
         <Route path='/cart' element={<CartPage />} />
         <Route path='/account' element={<AccountPage />} />
+    </Route>
+    {/* roles={["admin" , "seller"]}  */}
+    <Route element={<PrivateRoute />} >
+        <Route path='/admin/main' element={<MainPrivate />} />
     </Route>
     <Route path='/product-favorite' element={<ProductFavorite />} />
     <Route path='/product-list' element={<ProductList />} />

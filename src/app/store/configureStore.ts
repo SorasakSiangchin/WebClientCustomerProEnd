@@ -6,13 +6,15 @@ import { TypedUseSelectorHook } from "react-redux/es/types";
 import { accountSlice } from "../../features/account/accountSlice";
 import { cartSlice } from "../../features/cart/cartSlice";
 import { productSlice } from "../../features/product/productSlice";
+import { homeSlice } from '../../features/home/homeSlice';
 
 export const store = configureStore({
     reducer:{
        account : accountSlice.reducer ,
        product : productSlice.reducer ,
        cart : cartSlice.reducer ,
-       address : addressSlice.reducer 
+       address : addressSlice.reducer ,
+       home : homeSlice.reducer ,
     }
 })
 
