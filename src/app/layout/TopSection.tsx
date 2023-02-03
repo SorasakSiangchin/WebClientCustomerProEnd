@@ -41,7 +41,7 @@ const TopSection = (props: Props) => {
                                                 </div>
                                             </div>
                                         </div> : ""}
-                                        <div className="page-title">
+                                        <div className="page-title text-st">
                                             {props.textSize ? <h3 style={{ color: "#2a5b6c", fontSize: "40px" }}>{props.title}</h3> : <h2>{props.title}</h2>}
                                         </div>
                                     </div>
@@ -72,9 +72,6 @@ const TopSection = (props: Props) => {
                     </div>
                 </div>
             </TopSectionContainer>
-
-
-
         </Fragment >
     )
 };

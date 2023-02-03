@@ -1,4 +1,4 @@
-import { HeartOutlined, LoginOutlined, LogoutOutlined, UserOutlined } from "@ant-design/icons";
+import { HeartOutlined, LoginOutlined, LogoutOutlined, ShopOutlined, UserOutlined } from "@ant-design/icons";
 import { Avatar, List, Popover } from "antd"
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
@@ -15,7 +15,7 @@ interface Prop {
 
 export const MyAccountMenu = ({ account }: Prop) => {
     const dispatch = useAppDispatch();
-    const dataPrivate = [
+    const customer = [
         { title: "บัญชีของฉัน", path: "/account", icon: <UserOutlined />, onClick: () => { } },
         { title: "สิงที่ฉันถูกใจ", path: "/product-favorite", icon: <HeartOutlined />, onClick: () => { } },
         {
@@ -32,11 +32,29 @@ export const MyAccountMenu = ({ account }: Prop) => {
 
     ];
 
+    const seller = [
+        { title: "บัญชีของฉัน", path: "/account", icon: <UserOutlined />, onClick: () => { } },
+        { title: "สิงที่ฉันถูกใจ", path: "/product-favorite", icon: <HeartOutlined />, onClick: () => { } },
+        { title: "ร้านของฉัน", path: "/private/dashboard", icon: <ShopOutlined />, onClick: () => { } },
+        {
+            title: "ออกจากระบบ", path: null, icon: <LogoutOutlined />, onClick: () => Swal.fire({
+                title: 'ออกจากระบบหรือไม่?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                cancelButtonText: "ยกเลิก",
+                confirmButtonText: 'ตกลง'
+            }).then((result) => result.isConfirmed && dispatch(logout()))
+        }
+
+    ];
+    const dataPrivate = account?.role.name.toLowerCase() !== "seller" ?  customer : seller ;
+
     const dataPublic = [
         { title: "เข้าสู่ระบบ", path: "/login", icon: <LoginOutlined />, onClick: () => { } }
-    ]
-
-
+    ];
+    
     const content = (
         <List
             dataSource={account ? dataPrivate : dataPublic}
@@ -46,7 +64,8 @@ export const MyAccountMenu = ({ account }: Prop) => {
                 </List.Item>
             )}
         />
-    )
+    );
+
     return (
         <div className="fl-links">
             <div className="no-js">

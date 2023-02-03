@@ -1,28 +1,29 @@
 export interface Product {
-    id:                string;
-    name:              string;
-    price:             number;
-    stock:             number;
-    color:             string;
-    weight:            number;
-    description:       string;
-    imageUrl:          string;
-    created:           Date;
-    lastUpdate:        Date;
-    weightUnitID:      number;
+    id: string;
+    name: string;
+    price: number;
+    stock: number;
+    color: string;
+    weight: number;
+    description: string;
+    imageUrl: string;
+    accountID: string;
+    created: Date;
+    lastUpdate: Date;
+    weightUnitID: number;
     categoryProductID: number;
-    weightUnit:        WeightUnit;
-    categoryProduct:   CategoryProduct;
+    weightUnit: WeightUnit;
+    categoryProduct: CategoryProduct;
 }
 
 export interface CategoryProduct {
-    id:        number;
-    name:      string;
+    id: number;
+    name: string;
     accountID: string;
 }
 
 export interface WeightUnit {
-    id:   number;
+    id: number;
     name: string;
 }
 
@@ -36,10 +37,10 @@ export interface ProductParams {
     rangePriceStart: number;
     rangePriceEnd: number;
     searchTerm?: string;
-} 
+}
 
 export interface ImageProduct {
-    id:        string;
-    imageUrl:  string;
+    id: string;
+    imageUrl: string;
     productID: string;
 }

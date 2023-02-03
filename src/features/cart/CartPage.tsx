@@ -1,7 +1,7 @@
-import { DeleteFilled } from '@ant-design/icons';
+import { CheckCircleFilled, DeleteFilled } from '@ant-design/icons';
 import { Button, Card, Image, InputNumber, Space, Table } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
-import { Fragment } from 'react';
+import { Fragment, useState } from 'react';
 import { Link } from 'react-router-dom';
 import useCart from '../../app/hooks/useCart';
 import MainContainer from '../../app/layout/MainContainer';
@@ -9,9 +9,20 @@ import TopSection from '../../app/layout/TopSection';
 import { useAppDispatch, useAppSelector } from '../../app/store/configureStore';
 import { currencyFormat, Text, Ts } from '../../app/util/util';
 import { addCartItemAsync, removeCartItemAsync } from './cartSlice';
+import { useNavigate } from "react-router-dom";
+import { CartItem } from '../../app/models/Cart';
+import { toast } from 'react-toastify';
+import Lottie from "lottie-react";
+import IconWarning from "../../assets/icons/warning.json";
+import agent from '../../app/api/agent';
+import { Product } from '../../app/models/Product';
+import { Container } from 'react-bootstrap';
 
-interface DataType {
+export interface DataTypeCart {
     key: string;
+    accountId: string;
+    stock: number;
+    cartItemId: number;
     product: object;
     amount: number;
     price: number;
@@ -21,8 +32,9 @@ interface DataType {
 
 const CartPage = () => {
     const dispatch = useAppDispatch();
+    const navigate = useNavigate();
+    const [dataCart, setDataCart] = useState<DataTypeCart[]>([]);
     const { account } = useAppSelector(state => state.account);
-
     const { cart, deliveryFree, status, subtotal } = useCart();
 
     const handleInputChange = (event: any, product?: any) => {
@@ -37,14 +49,14 @@ const CartPage = () => {
 
     };
 
-    const columns: ColumnsType<DataType> = [
+    const columns: ColumnsType<DataTypeCart> = [
         {
             title: 'สินค้า',
             dataIndex: 'product',
             key: 'product',
-            render: (data) => (
+            render: (data: CartItem) => (
                 <Space size="middle" className='text-st'>
-                    <Image src={data.image} width={100} />
+                    <Image src={data.imageUrl} width={100} />
                     <Link to={''}>
                         {data.name}
                     </Link>
@@ -62,7 +74,12 @@ const CartPage = () => {
             title: 'จำนวน',
             key: 'amount',
             dataIndex: 'amount',
-            render: (data, more) => <InputNumber className='text-st' onChange={(amount) => handleInputChange(amount, more)} size="middle" min={1} max={100000} defaultValue={data} />
+            render: (data, more) => <Space direction='vertical'>
+                <InputNumber className='text-st' onChange={(amount) => handleInputChange(amount, more)} size="middle" min={1} max={more.stock} defaultValue={data} />
+                <Container  className="text-st" style={{  color: "#FF6100" , width : "100%" }}>
+                    เหลือสินค้าอยู่ {more.stock} ชิ้น
+                </Container>
+            </Space>
 
         },
         {
@@ -82,19 +99,53 @@ const CartPage = () => {
         }
     ];
 
-    const dataTable: DataType[] = cart?.items.map(item => ({
-        key: item.productId,
-        product: { image: item.imageUrl, name: item.name },
-        amount: item.amount,
-        price: item.price,
-        total: item.price * item.amount,
-        action: null
-    })) as DataType[];
+    const dataTable: DataTypeCart[] = cart?.items.map(item => {
+        return {
+            key: item.productId,
+            cartItemId: item.id,
+            accountId: item.accountId,
+            stock: item.stock,
+            product: item,
+            amount: item.amount,
+            price: item.price,
+            total: item.price * item.amount,
+            action: null
+        };
+    }) as DataTypeCart[];
 
     const rowSelection = {
-        onChange: (selectedRowKeys: React.Key[], selectedRows: DataType[]) => {
+        onChange: (_: any, selectedRows: DataTypeCart[]) => {
+            setDataCart(selectedRows);
         }
     };
+
+    const onClick = () => {
+        if (dataCart?.length > 0) {
+            navigate("/checkout", {
+                state: {
+                    dataCart: dataCart,
+                    cartId: cart?.id
+                }
+            });
+        } else toast(toastContent, {
+            position: "top-center",
+            autoClose: 2500,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+        });
+    };
+
+    const toastContent = <div style={{ display: "flex" }}>
+        <Lottie style={{ width: "30px", display: "flex", justifyItems: "center" }} animationData={IconWarning} />
+        <div className='center'>
+            <Ts>กรุณาเลือกสินค้าก่อนยืนยันคำสั่งซื้อ</Ts>
+        </div>
+    </div>;
+
     return (
         <Fragment>
             <TopSection text={Text} title="ตะกร้าสินค้า" backToPageTitle="หน้าแรก" backToPageUrl="/" />
@@ -104,10 +155,10 @@ const CartPage = () => {
                         <Table rowSelection={{
                             type: "checkbox",
                             ...rowSelection,
-                        }} 
-                        columns={columns} 
-                        dataSource={dataTable} 
-                        className="data-table cart-table table-striped "
+                        }}
+                            columns={columns}
+                            dataSource={dataTable}
+                            className="data-table cart-table table-striped "
                         />
                     </div>
                     <div className="container">
@@ -132,7 +183,15 @@ const CartPage = () => {
                                             </tbody>
                                         </table>
                                         <div className="checkout">
-                                            <button type="button" className="button btn-proceed-checkout"><span>ดำเนินการชำระเงิน</span></button>
+                                            <Button
+                                                htmlType="button"
+                                                size='large'
+                                                className="button btn-proceed-checkout"
+                                                icon={<CheckCircleFilled />}
+                                                onClick={onClick}
+                                            >
+                                                <span>ดำเนินการชำระเงิน</span>
+                                            </Button>
                                         </div>
                                     </Card>
                                 }

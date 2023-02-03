@@ -33,7 +33,6 @@ export const fetchImageProductsAsync = createAsyncThunk<ImageProduct[], any>(
     }
 );
 
-
 export const fetchProductsAsync = createAsyncThunk<Product[], void, { state: RootState }>(
     'product/fetchProducts',
     async (_, thunkAPI) => {
@@ -92,7 +91,15 @@ export const fetchProductByNameAsync = createAsyncThunk<Product[], string>("prod
         }
     });
 
-function initParams(): ProductParams {
+export const removeProductAsync = createAsyncThunk<void, string>("product/removeProductAsync", async (productId, thunkAPI) => {
+    try {
+        await agent.Product.delete(productId);
+    } catch (error: any) {
+        return thunkAPI.rejectWithValue({ error: error.data })
+    }
+});
+
+const initParams = (): ProductParams => {
     return {
         pageNumber: 1,
         pageSize: 9,
@@ -161,6 +168,9 @@ export const productSlice = createSlice({
         builder.addCase(fetchImageProductsAsync.fulfilled, (state, action) => {
             state.imageProducts = action.payload;
             state.imageProductLoaded = true;
+        });
+        builder.addCase(removeProductAsync.fulfilled, (state) => {
+            state.productsLoaded = false;
         });
     }
 });

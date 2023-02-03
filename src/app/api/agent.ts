@@ -71,7 +71,8 @@ const Product = {
     list: (params: any) => requests.post('products', params),
     getName: (nameProduct : any) => requests.get(`product/name?name=${nameProduct}`),
     getRares: () => requests.get('product/rare'),
-    detail: (idProduct: string) => requests.get(`product/${idProduct}`)
+    detail: (idProduct: string) => requests.get(`product/${idProduct}`),
+    delete: (idProduct: string) => requests.delete(`product/${idProduct}`)
 };
 
 const CategoryProduct = {
@@ -81,7 +82,7 @@ const CategoryProduct = {
 const Account = {
     login: (value: any) => requests.post('login', createFormData(value)),
     register: (value: any) => requests.post('register', createFormData(value)),
-    currentAccount: (idAccount : any) => requests.get(`account/${idAccount}`),// ข้อมูลคนปัจจุบัน
+    currentAccount: (idAccount : any) => requests.get(`account/${idAccount}`), // ข้อมูลคนปัจจุบัน
     update: (value: any) => requests.put("account", createFormData(value)),
 };
 
@@ -90,6 +91,10 @@ const Cart = {
     addItem: (value: any) => requests.post("cart/addItem", value),
     removeItem: (value: any) => requests.post("cart/removeItem", value),
 };
+
+const Order = {
+    getIdAccount: (value: any) => requests.post(`/orders/accountId`,value),
+}
 
 const Role = {
     list: () => requests.get('role'),
@@ -114,7 +119,8 @@ const agent = {
     CategoryProduct,
     Cart,
     ImageProduct ,
-    Address
+    Address ,
+    Order
 };
 
 export default agent;

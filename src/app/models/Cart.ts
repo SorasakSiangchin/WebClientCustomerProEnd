@@ -1,15 +1,17 @@
 export interface Cart {
-    id:        string;
+    id: string;
     accountID: string;
-    items:     CartItem[];
+    items: CartItem[];
 }
 
 export interface CartItem {
-    productId:           string;
-    name:                string;
-    price:               number;
-    stock:               number;
-    imageUrl:            string;
+    id : number;
+    productId: string;
+    name: string;
+    price: number;
+    stock: number;
+    accountId: string;
+    imageUrl: string;
     categoryProductName: string;
-    amount:              number;
+    amount: number;
 }

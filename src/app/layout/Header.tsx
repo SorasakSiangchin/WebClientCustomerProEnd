@@ -12,7 +12,7 @@ import { setParams } from '../../features/product/productSlice';
 
 export const midLinks = [
     { title: "หน้าแรก", path: "/" },
-    { title: "เกี่ยวกับ", path: "/admin/main" },
+    { title: "เกี่ยวกับ", path: "/private/dashboard" },
     { title: "สินค้า", path: "/product-list" },
 ];
 
@@ -27,7 +27,7 @@ const Header = () => {
                         <div className="container">
                             <div className="header-container row">
                                 <div className="logo"> <Link to="/" title="index">
-                                    <img src={"https://drive.google.com/uc?id=1Hc2YPepcxfYe8wcwI6zXm-SWpgkyokDC"} width="200px" alt="logo" />
+                                    <img src={"https://drive.google.com/uc?id=1F6-VLIM03K13GOPYiyuICjDCWQhdT5BR"} width="200px" alt="logo" />
                                 </Link> </div>
                                 <div className="fl-nav-menu">
                                     <nav>

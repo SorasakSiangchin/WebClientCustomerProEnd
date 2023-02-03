@@ -1,4 +1,4 @@
-import { Badge, List, Popover } from "antd";
+import { Badge, Button, List, Popover } from "antd";
 import ProductsP6 from "../../assets/products-images/p6.jpg";
 import ProductsP5 from "../../assets/products-images/p5.jpg";
 import { Link, useNavigate, } from "react-router-dom";
@@ -6,6 +6,7 @@ import { Cart, CartItem } from "../models/Cart";
 import { currencyFormat } from "../util/util";
 import AppButton from "../components/AppButton";
 import useCart from "../hooks/useCart";
+import { ShoppingCartOutlined } from "@ant-design/icons";
 
 
 interface Prop {
@@ -48,9 +49,9 @@ export const MyCartMenu = ({ cart }: Prop) => {
             <Link to="/cart">
                 <BoxPopover content={contentBasket} cartItem={cart?.items} >
                     <Badge count={itemCount} offset={[-3, 7]}>
-                        <div className="basket">
+                        <Button  icon={<ShoppingCartOutlined />} style={{ height : "50%" , fontSize : "25px" , color : "white"}} className="basket center">
                             <Link to="/cart">ตะกร้าสินค้า</Link>
-                        </div>
+                        </Button>
                     </Badge>
                 </BoxPopover>
             </Link>

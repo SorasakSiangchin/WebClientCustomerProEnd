@@ -14,9 +14,11 @@ import 'react-toastify/dist/ReactToastify.css';
 import "../../App.css";
 import { setShowLayout } from '../../features/home/homeSlice';
 import { Layout } from 'antd';
+import useSiderPrivate from '../hooks/useSiderPrivate';
 
 const App = () => {
   const { token, tokenExpirationDate } = useAppSelector(state => state.account);
+  const { Sider } = useSiderPrivate();
   const { showLayout } = useAppSelector(state => state.home);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -70,13 +72,13 @@ const App = () => {
   useEffect(() => {
     var obj = JSON.parse(JSON.stringify(location));
     var path = obj.pathname as string;
-    if (!path.includes("/admin")) dispatch(setShowLayout(true));
+    if (!path.includes("/private")) dispatch(setShowLayout(true));
     else dispatch(setShowLayout(false));
   }, [location, showLayout]);
 
   return (
-    <Layout style={{ minHeight: '100vh' }}>
-      {showLayout ? <Header /> : "" }
+    <Layout style={{ minHeight: '100vh' }} className="site-layout">
+      {showLayout ? <Header /> : Sider}
       <ToastContainer
         position="top-center"
         autoClose={2000}

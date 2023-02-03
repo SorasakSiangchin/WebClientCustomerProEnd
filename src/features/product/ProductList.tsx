@@ -41,11 +41,9 @@ const ProductList = () => {
   const [isViewMode, setIsViewMode] = useState(false);
   const setGridViewMode = () => setIsViewMode(false);
   const setListViewMode = () => setIsViewMode(true);
-
   const showProducts = React.Children.toArray(products.map((product) => <ProductCard product={product} isViewMode={isViewMode} productsLoaded={productsLoaded} />));
-
+  
   const reset = () => dispatch(resetProductParams());
-
   return (
     <Fragment>
       <TopSection text={Text} title="สินค้า" backToPageTitle="หน้าแรก" backToPageUrl="/" />

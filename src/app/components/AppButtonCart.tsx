@@ -1,5 +1,5 @@
+import { FastBackwardOutlined, ShoppingCartOutlined } from '@ant-design/icons';
 import { Button } from 'antd';
-import { Fragment } from 'react'
 
 interface Prop {
   children: any;
@@ -10,16 +10,20 @@ interface Prop {
 const AppButtonCart = ({ children, onClick, disabled }: Prop) => {
   return (
     <Button
-    htmlType='button'
-   disabled={disabled} 
-    onClick={()=>onClick()}
-    className="button btn-cart" style={{
-      height: "54px", display: "flex",
-      justifyContent: "center",
-      alignItems: "center",
-      padding: "20px"
-      
-    }}>{children}</Button>
+      htmlType='button'
+      disabled={disabled}
+      onClick={() => onClick()}
+      icon={<ShoppingCartOutlined style={{ fontSize : "30px" }} />}
+      className="button btn-cart"
+      style={{
+        height: "54px", display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        padding: "20px"
+      }}
+    >
+      {children}
+    </Button>
   )
 }
 

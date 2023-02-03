@@ -1,11 +1,11 @@
 import { FacebookFilled, HeartOutlined, InstagramFilled } from '@ant-design/icons';
-import { Button, Image, Input, Rate } from 'antd';
+import { Alert, Button, Image, Input, Rate } from 'antd';
 import { Fragment, useState, useEffect } from 'react';
 import ImageGallery from 'react-image-gallery';
 import { Link, useParams } from 'react-router-dom';
 import AppButtonCart from '../../app/components/AppButtonCart';
 import { useAppDispatch, useAppSelector } from '../../app/store/configureStore';
-import { currencyFormat } from '../../app/util/util';
+import { currencyFormat, Ts } from '../../app/util/util';
 import { fetchImageProductsAsync, fetchProductAsync, productSelectors, resetImageProduct } from './productSlice';
 import { FacebookShareButton } from "react-share";
 import MainContainer from '../../app/layout/MainContainer';
@@ -48,10 +48,10 @@ const ProductDetail = () => {
   useEffect(() => {
     dispatch(fetchImageProductsAsync(idProduct));
     if (imageProducts && images.length === 1) imageProducts.map(imgPro => setImages((image: any) => {
-        return [...image, { original: imgPro.imageUrl, thumbnail: imgPro.imageUrl, renderItem: () => RenderItem(imgPro.imageUrl) }]
-      }));
+      return [...image, { original: imgPro.imageUrl, thumbnail: imgPro.imageUrl, renderItem: () => RenderItem(imgPro.imageUrl) }]
+    }));
     return () => {
-      if(imageProducts) dispatch(resetImageProduct());
+      if (imageProducts) dispatch(resetImageProduct());
     };
   }, [imageProductLoaded, dispatch]);
 
@@ -160,9 +160,9 @@ const ProductDetail = () => {
               <AppButtonCart disabled={item?.amount === amount || (!item && amount === 0)} onClick={handleOnCart} >เพิ่มไปยังรถเข็น</AppButtonCart>
             </AddToBox>
             <div className="short-description">
-              <p>
+              <Ts>
                 {product?.description}
-              </p>
+              </Ts>
             </div>
             <div className="social">
               <ul className="link">
@@ -201,7 +201,7 @@ const ProductDetail = () => {
             <div className="product-collateral">
               <TitleTap titles={titleTap} keys={keysTap} />
               <div id="productTabContent" className="tab-content">
-                <ContentTap ids={keysTap} />
+                <ContentTap ids={keysTap} idAccount={product?.accountID} />
               </div>
             </div>
           </div>
@@ -215,9 +215,10 @@ const RenderItem = (image: string) => (<div className="product-full">
   <Image id="product-zoom" src={image} alt="product-image" style={{ height: "500px" }} />
 </div>);
 
-const LabelAvailability = ({ stock }: any) => <p className="availability in-stock"><span>มีสินค้า {stock} รายการ</span></p>;
+const LabelAvailability = ({ stock }: any) => <Alert className='text-st availability ' style={{ width: "20%", marginBottom: "25px" }} message={`มีสินค้า ${stock} รายการ`} type="success" showIcon />;
 
 const AddToBox = ({ children }: any) => (
+
   <div className="add-to-box">
     <div className="add-to-cart">
       {children}

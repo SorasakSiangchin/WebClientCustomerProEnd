@@ -30,7 +30,7 @@ export const currencyFormat = (price?: number) => {
     />
 };
 
-export const Ts = ({ children } : any) => <div className="text-st">{children}</div>
+export const Ts = ({ children , className } : any) => <div className={`text-st ${className}`}>{children}</div>
 
 export const convertRole = (roleName: any) => {
     switch (roleName) {

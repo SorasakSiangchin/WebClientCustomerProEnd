@@ -5,7 +5,7 @@ import { Text } from '../../app/util/util';
 import { EditFilled } from '@ant-design/icons';
 import { Avatar, Card, Menu } from 'antd';
 import type { MenuProps } from 'antd/es/menu';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { VscLocation, VscAccount, VscLock, VscOutput } from "react-icons/vsc";
 import { useAppSelector } from '../../app/store/configureStore';
 import AccountPersonal from './accountMenu/AccountPersonal';
@@ -36,10 +36,15 @@ const items: MenuItem[] = [
 
 const AccountPage = () => {
     const { Meta } = Card;
+    const { state } = useLocation();
     const { account } = useAppSelector(state => state.account);
     const [menuKey, setMenuKey] = useState<string>("1");
 
     const handleMenu = (data: any) => setMenuKey(data.key);
+
+    useEffect(() => {
+        if (state) setMenuKey(state);
+    }, [state]);
 
     const ShowItem = () => {
         switch (menuKey) {
@@ -74,8 +79,8 @@ const AccountPage = () => {
                             <Menu
                                 className='text-st'
                                 style={{ width: "100%" }}
-                                defaultSelectedKeys={['1']}
-                                defaultOpenKeys={['sub1']}
+                                defaultSelectedKeys={[state ? state : menuKey]}
+                                defaultOpenKeys={[state ? state : menuKey]}
                                 onClick={handleMenu}
                                 mode={"inline"}
                                 theme={"light"}

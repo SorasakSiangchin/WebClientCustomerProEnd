@@ -737,13 +737,10 @@ ul.currencies_list li a:hover {
 
 .mini-cart .basket a {
   color: #fff;
-  margin: 0px;
-  font-size: 14px;
+  font-size: 16px;
   padding: 0px 0px 0px 36px;
   font-family: 'Mitr', sans-serif;
-  letter-spacing: 0.5px;
   font-weight: 500;
-  display: block;
   line-height: 40px;
   -webkit-transition: all 0.3s cubic-bezier(0.8, 0, 0, 1);
   -o-transition: all 0.3s cubic-bezier(0.8, 0, 0, 1);
@@ -2610,7 +2607,6 @@ ul.level1 {
 }
 
 .products-grid-home .item .item-inner .item-img .item-box-hover .box-inner .add_cart button.button.btn-cart:before {
-  content: "\f07a";
   font-family: "FontAwesome";
   font-size: 14px;
   margin-right: 7px;
@@ -9956,7 +9952,6 @@ a.button.detail-bnt span {
 }
 
 .product-shop button.button.btn-cart:before {
-  content: "\f07a";
   font-family: 'Mitr', sans-serif;
   font-weight: 600;
   margin-right: 10px;
@@ -12316,21 +12311,19 @@ button.button.coupon:before {
 
 button.button.btn-proceed-checkout {
   background: #88be4c;
-  padding: 15px 0px;
   color: #fff;
   width: 100%;
+  height: 100%;
   border: none;
 }
 
 button.button.btn-proceed-checkout:hover {
   background: #ed6663;
   color: #fff;
-  padding: 15px 0px;
   border: none;
 }
 
-button.button.btn-proceed-checkout:before {
-  content: "\f00c";
+button.button.btn-proceed-checkout:before { 
   font-family: 'Mitr', sans-serif;
   font-size: 20px;
   padding-right: 10px;
@@ -12424,7 +12417,6 @@ button.button.btn-proceed-checkout span {
 }
 
 #wishlist-table button.button.btn-cart:before {
-  content: "\f07a";
   font-family: 'Mitr', sans-serif;
   font-size: 16px;
   background: none;

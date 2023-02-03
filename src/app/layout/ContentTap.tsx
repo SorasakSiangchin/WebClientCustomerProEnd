@@ -1,13 +1,18 @@
-import { Pagination } from 'antd';
-import { Fragment } from 'react'
+import { Avatar, Card, Pagination, Space } from 'antd';
+import { Fragment, useState, useEffect } from 'react'
 import { Container } from 'react-bootstrap';
 import Image from "../../assets/images/member1.png";
+import agent from '../api/agent';
+import { Account } from '../models/Account';
+import { Result } from '../models/Interfaces/IResponse';
+import { useAppDispatch } from '../store/configureStore';
 
-const ContentTap = ({ ids }: any) => {
+
+const ContentTap = ({ ids, idAccount }: any) => {
     return (
         <Fragment>
             <ReviewTap id={ids[0]} />
-            <ProductStore id={ids[1]} />
+            <ProductStore id={ids[1]} idAccount={idAccount} />
         </Fragment>
     )
 }
@@ -67,11 +72,27 @@ const ReviewTap = ({ id }: any) => {
     </div>
 }
 
-const ProductStore = ({ id }: any) => {
+const ProductStore = ({ id, idAccount }: any) => {
+    // const dispatch = useAppDispatch();
+    // const [account, setAccount] = useState<Account | null>(null);
+    // useEffect(() => {
+    //     if (account === null) {
+    //         const loadAccount = async () => {
+    //             const result: Result = await agent.Account.currentAccount(idAccount);
+    //             if (result.isSuccess === true && result.statusCode === 200) setAccount(result.result);
+    //         }
+    //         loadAccount();
+    //     }
+    // }, [dispatch , account]);
+
+
     return <div className="tab-pane fade" id={id}>
-        <div className="product-tabs-content-inner clearfix">
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed tempor, lorem et placerat vestibulum, metus nisi posuere nisl, in accumsan elit odio quis mi.</p>
-            <p> Cras neque metus, consequat et blandit et, luctus a nunc. Etiam gravida vehicula tellus, in imperdiet ligula euismod eget. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nam erat mi, rutrum at sollicitudin rhoncus, ultricies posuere erat. Duis convallis, arcu nec aliquam consequat, purus felis vehicula felis, a dapibus enim lorem nec augue.</p>
+        <div className="product-tabs-content-inner clearfix" style={{ width: "100%" }}>
+            {/* <Card.Meta
+                style={{ display: "flex" }}
+                avatar={<Avatar src={account?.imageUrl} style={{ width: "90px", height: "90px" }} />}
+                title={<h2 style={{ marginLeft: "30px" }}>{account?.firstName}</h2>}
+            /> */}
         </div>
     </div>
 }

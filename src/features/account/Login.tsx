@@ -62,7 +62,7 @@ const Login = () => {
                 <fieldset className="col2-set">
                   <div className="col-1 new-users"> <strong>สมัครสมาชิกใหม่!</strong>
                     <div className="content">
-                      <p>เมื่อสร้างบัญชีกับร้านค้าของเรา คุณจะสามารถดำเนินการตามขั้นตอนการชำระเงินได้เร็วขึ้น จัดเก็บที่อยู่จัดส่งหลายแห่ง ดูและติดตามคำสั่งซื้อของคุณในบัญชีของคุณ และอื่นๆ อีกมากมาย</p>
+                      <p className='text-st'>เมื่อสร้างบัญชีกับร้านค้าของเรา คุณจะสามารถดำเนินการตามขั้นตอนการชำระเงินได้เร็วขึ้น จัดเก็บที่อยู่จัดส่งหลายแห่ง ดูและติดตามคำสั่งซื้อของคุณในบัญชีของคุณ และอื่นๆ อีกมากมาย</p>
                       <Button type="primary" className="button" icon={<UserAddOutlined />} size="large" onClick={() => navigate("/register")}>
                         <span>สมัครสมาชิก</span>
                       </Button>
@@ -72,7 +72,7 @@ const Login = () => {
                     <div className="content">
                       <ul className="form-list">
                         <li>
-                          <label htmlFor="email">ที่อยู่อีเมล<em className="required">*</em></label>
+                          <label htmlFor="email" className='text-st'>ที่อยู่อีเมล<em className="required">*</em></label>
                           <div className="input-box">
                             <Input
                               type="text"
@@ -88,7 +88,7 @@ const Login = () => {
                           </div>
                         </li>
                         <li>
-                          <label htmlFor="pass">รหัสผ่าน<em className="required">*</em></label>
+                          <label htmlFor="pass" className='text-st'>รหัสผ่าน<em className="required">*</em></label>
                           <div className="input-box">
                             <Input.Password
                               type="text"
@@ -109,7 +109,7 @@ const Login = () => {
                         <AppButton type="primary" htmlType="submit" loading={isSubmitting} icon={<LockFilled style={{ fontSize: '110%' }} />} size="large">
                           ตกลง
                         </AppButton>
-                        <Link to="" className="forgot-word">
+                        <Link to="" className="forgot-word text-st">
                           ลืมรหัสผ่านหรือไม่?
                         </Link>
                       </div>
