@@ -31,7 +31,6 @@ const ProductFavorite = () => {
 
     const showProduct = React.Children.toArray(infoFavorite?.map((product, index) => index >= minIndex &&
         index < maxIndex && <li className="item col-lg-3 col-md-3 col-sm-3 col-xs-6">
-
             <Card
                 hoverable
                 className='text-st'

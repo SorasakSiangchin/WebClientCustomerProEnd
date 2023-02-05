@@ -70,7 +70,7 @@ const ProductCard = ({ product, newLabel = false, saleLabel = false, isViewMode 
                                     <Link to="#" onClick={() => onFavorite(product)} >
                                         <HeartFilled style={{ fontSize: "15px" , color:statusFavorite ? "red" : "" }} /> รายการโปรด
                                     </Link>
-                                    <Link to="#">
+                                    <Link to="/products-similar">
                                         <ShoppingCartOutlined style={{ fontSize: "15px" }} /> สินค้าที่คล้ายกัน
                                     </Link>
                                 </div>

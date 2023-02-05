@@ -10,6 +10,7 @@ import { VscLocation, VscAccount, VscLock, VscOutput } from "react-icons/vsc";
 import { useAppSelector } from '../../app/store/configureStore';
 import AccountPersonal from './accountMenu/AccountPersonal';
 import AccountAddress from './accountMenu/AccountAddress';
+import SetPassword from './accountMenu/SetPassword';
 
 type MenuItem = Required<MenuProps>['items'][number];
 
@@ -52,8 +53,10 @@ const AccountPage = () => {
                 return <AccountPersonal />
             case "2":
                 return <AccountAddress />
+            case "3":
+                return <SetPassword />
             default:
-                return <></>;
+                return <AccountPersonal />;
         };
     };
 

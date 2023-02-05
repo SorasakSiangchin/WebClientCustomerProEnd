@@ -12,6 +12,8 @@ import DashboardPage from "../../features/private/DashboardPage";
 import CheckoutPage from "../../features/checkout/CheckoutPage";
 import ProductPrivatePage from "../../features/private/product/ProductPrivatePage";
 import ProductDetailPrivate from "../../features/private/product/ProductDetailPrivate";
+import ProductsSimilar from "../../features/product/ProductsSimilar";
+import TestPage from "../../features/TestPage";
 
 export const mainRoutes = <Routes>
     <Route path='/' element={<HomePage />} />
@@ -37,5 +39,7 @@ export const mainRoutes = <Routes>
     </Route>
     <Route path='/product-favorite' element={<ProductFavorite />} />
     <Route path='/product-list' element={<ProductList />} />
+    <Route path='/products-similar' element={<ProductsSimilar />} />
     <Route path='/product-detail/:idProduct' element={<ProductDetail />} />
+    <Route path='/test' element={<TestPage />} />
 </Routes>

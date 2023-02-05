@@ -43,6 +43,7 @@
     "react-toastify": "^9.1.1",
     "reactstrap": "^9.1.5",
     "redux": "^4.2.0",
+    "sass": "^1.58.0",
     "smooth-scrollbar-react": "^2.4.1",
     "sweetalert": "^2.1.2",
     "sweetalert2": "^11.6.16",

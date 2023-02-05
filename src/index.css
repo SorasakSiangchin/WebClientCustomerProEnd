@@ -1,17 +1,4 @@
-/* @media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-
-  a:hover {
-    color: #747bff;
-  }
-
-  button {
-    background-color: #f9f9f9;
-  }
-} */
+/* code color #58944C */
 
 .img-opacity {
   opacity: 0.4;
@@ -20,7 +7,7 @@
 }
 
 html {
-  /* background-color: #90c741; */
+  /* background-color: #58944C; */
 }
 
 
@@ -46,8 +33,6 @@ a:hover {
   color: #ed6663;
   text-decoration: none;
 }
-
-:hover {}
 
 small {
   font-size: 85%;
@@ -130,7 +115,7 @@ small {
   content: "";
   width: 100px;
   height: 2px;
-  background: #90c741;
+  background: #58944C;
 }
 
 .page_title p {
@@ -199,7 +184,7 @@ header {
   z-index: 1000;
   padding-top: 25px;
   padding-bottom: 25px;
-  background: #90c741;
+  background: #58944C;
 }
 
 .sticky-header {
@@ -214,7 +199,7 @@ header {
   z-index: 10000;
   display: block;
   top: 0px;
-  background: #90c741;
+  background: #58944C;
   width: 94%;
   box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
   left: 3%;
@@ -1191,7 +1176,7 @@ background-color: #fff;
 }
 
 #nav ul.level1>li a:hover {
-  color: #90c741;
+  color: #58944C;
 }
 
 #nav li a span {}
@@ -2476,7 +2461,7 @@ ul.level1 {
 }
 
 .products-grid-home .item .item-inner .item-img .ico-product.ico-sale {
-  background: #7ebf38;
+  background: #58944C;
   right: 10px;
   left: auto;
 }
@@ -4105,7 +4090,7 @@ ul.pdt-list li.item a img.image-hover {
 }
 
 .products-grid .item .item-inner .item-img .ico-product.ico-sale {
-  background: #7ebf38;
+  background: #58944C;
   right: 10px;
   left: auto;
 }
@@ -4309,7 +4294,7 @@ ul.pdt-list li.item a img.image-hover {
   margin: 0;
   width: 54px;
   height: 2px;
-  background: #90c741;
+  background: #58944C;
   content: "";
   position: absolute;
   left: 50%;
@@ -4848,7 +4833,7 @@ ul.pdt-list li.item a img.image-hover {
 .featured-pro .pro-img img {
   position: relative;
   width: 100%;
-  border: 4px #90c741 solid;
+  border: 4px #58944C solid;
   width: 135px;
   height: 135px;
   border-radius: 999px;
@@ -5370,7 +5355,7 @@ text-transform: uppercase
 }
 
 .best-pro .new_title.top-border {
-  border-top: 135px #90c741 solid;
+  border-top: 135px #58944C solid;
 }
 
 .best-pro .new_title h2 {
@@ -5393,7 +5378,7 @@ text-transform: uppercase
   content: "";
   width: 100px;
   height: 2px;
-  background: #90c741;
+  background: #58944C;
 }
 
 .best-pro p {
@@ -5482,7 +5467,7 @@ text-transform: uppercase
 #best-rest .owl-item .item .item-inner {
   position: relative;
   box-shadow: 0 0 14px 2px rgba(81, 81, 81, 0.1);
-  border-top: 4px #90c741 solid;
+  border-top: 4px #58944C solid;
 }
 
 .best-pro .owl-item .item .item-inner .actions {
@@ -5512,7 +5497,7 @@ text-transform: uppercase
 }
 
 .best-pro .owl-item .item .item-inner .item-img .ico-product.ico-sale {
-  background: #7ebf38;
+  background: #58944C;
   right: 10px;
   left: auto;
 }
@@ -5736,7 +5721,7 @@ text-transform: uppercase
 }
 
 .products-grid .btn-cart {
-  background: #90c741;
+  background: #58944C;
   border: 4px #fff solid;
   box-shadow: none;
   color: #fff;
@@ -6049,7 +6034,7 @@ text-transform: uppercase
   float: left;
   height: 80px;
   margin-right: 8px;
-  background: #90c741;
+  background: #58944C;
   font-family: 'Mitr', sans-serif;
   letter-spacing: 0.5px;
 }
@@ -6441,7 +6426,7 @@ blockquote:before {
   content: "";
   width: 100px;
   height: 2px;
-  background: #90c741;
+  background: #58944C;
 }
 
 .latest-blog .new_title p {
@@ -6545,7 +6530,7 @@ blockquote:before {
   margin: 0;
   width: 54px;
   height: 2px;
-  background: #90c741;
+  background: #58944C;
   content: "";
   position: absolute;
   left: 50%;
@@ -6735,7 +6720,7 @@ blockquote:before {
 .blog-img a.info {
   display: inline-block;
   text-decoration: none;
-  background: #90c741;
+  background: #58944C;
   border: 4px #fff solid;
   box-shadow: none;
   color: #fff;
@@ -6830,7 +6815,7 @@ blockquote:before {
 
 .mid-section .block1 i {
   font-size: 42px;
-  color: #90c741;
+  color: #58944C;
 }
 
 .mid-section strong {
@@ -7201,7 +7186,7 @@ blockquote:before {
 
 .breadcrumbs strong {
   font-weight: 400;
-  color: #a8ca01 !important;
+  color: #58944C !important;
 }
 
 .slider-items-products .owl-buttons .owl-prev a {
@@ -7807,8 +7792,8 @@ ul#magicat li .open-close,
 }
 
 .one-page-checkout .active .step-title .number {
-  background: none repeat scroll 0 0 #90c741;
-  border: 1px solid #90c741;
+  background: none repeat scroll 0 0 #58944C;
+  border: 1px solid #58944C;
   color: #fff;
   padding: 10px 14px;
   font-weight: bold;
@@ -7816,7 +7801,7 @@ ul#magicat li .open-close,
 }
 
 .one-page-checkout .active .step-title h3 {
-  color: #90c741;
+  color: #58944C;
   font-size: 14px;
   font-family: 'Mitr', sans-serif;
   font-weight: 500;
@@ -9195,8 +9180,8 @@ ol#compare-items li:last-child {
   z-index: 2;
   color: #fff;
   cursor: default;
-  background-color: #90c741;
-  border-color: #90c741;
+  background-color: #58944C;
+  border-color: #58944C;
   border-width: 1px;
 }
 
@@ -9511,20 +9496,20 @@ ol#compare-items li:last-child {
 
 .toolbar span.button-active.button-grid {
   background: url('https://drive.google.com/uc?id=1cy8XPm3ZyiQvVR0_p0GE1v4pBklb2BOi') no-repeat 10px 10px;
-  background-color: #90c741;
+  background-color: #58944C;
   color: #fff;
   padding: 7px 8px 8px 22px;
   margin-right: 5px;
-  border: 1px #90c741 solid;
+  border: 1px #58944C solid;
   border-radius: 0px;
 }
 
 .toolbar span.button-active.button-list {
   background: url("https://drive.google.com/uc?id=1XEcy6ezFFle75itlv6rJ2CwVfM5H1VJ8") no-repeat 10px 8px;
-  background-color: #90c741;
+  background-color: #58944C;
   color: #fff;
   padding: 6px 11px 7px 22px;
-  border: 1px #90c741 solid;
+  border: 1px #58944C solid;
   border-radius: 0px;
 }
 
@@ -9752,7 +9737,7 @@ li .list {
   letter-spacing: 0.5px;
   border: none;
   vertical-align: top;
-  background-color: #90c741;
+  background-color: #58944C;
   border-radius: 999px;
 }
 
@@ -9801,11 +9786,11 @@ li .list {
 
 .link-wishlist:hover,
 .link-compare:hover {
-  background-color: #90c741;
+  background-color: #58944C;
   cursor: pointer;
   bottom: 10%;
   color: #fff;
-  border-color: #90c741;
+  border-color: #58944C;
 }
 
 .link-wishlist,
@@ -10043,7 +10028,6 @@ a.button.detail-bnt span {
 
 .product-view .flexslider-thumb li img {
   cursor: pointer;
-  -moz-user-select: none;
   border: 1px #ececec solid;
 }
 
@@ -10104,7 +10088,6 @@ a.button.detail-bnt span {
   width: 100%;
   padding: 4px 0;
   cursor: pointer;
-  -moz-user-select: none;
 }
 
 .flex-direction-nav,
@@ -10392,7 +10375,7 @@ ul.shipping-pro li {
 
 .product-view .product-shop .add-to-box .btn-cart:hover {
   color: #fff;
-  background-color: #90c741;
+  background-color: #58944C;
 }
 
 .product-view .product-shop .product-options-bottom .btn-cart {
@@ -10735,10 +10718,10 @@ ul.shipping-pro li {
   -webkit-transition: all 0.3s cubic-bezier(0.8, 0, 0, 1);
   -o-transition: all 0.3s cubic-bezier(0.8, 0, 0, 1);
   transition: all 0.3s cubic-bezier(0.8, 0, 0, 1);
-  box-shadow: inset 0 -45px 0 0 #88be4c;
-  border: 1px solid #88be4c;
+  box-shadow: inset 0 -45px 0 0 #58944C;
+  border: 1px solid #58944C;
   color: #fff;
-  background-color: #88be4c;
+  background-color: #58944C;
 }
 
 .product-view .product-shop .add-to-box .add-to-cart label {
@@ -10778,7 +10761,7 @@ ul.shipping-pro li {
 .product-collateral {
   position: relative;
   padding: 0px;
-  background: #90c741;
+  background: #58944C;
   box-shadow: 0 0 14px 2px rgba(81, 81, 81, 0.1);
   margin-top: -140px;
 }
@@ -13205,7 +13188,7 @@ footer .newsletter-row {
   overflow: hidden;
   width: 100%;
   padding: 65px 0px;
-  background: #90c741 url('https://drive.google.com/file/d/1MoIJ1Hoj1GyWlDaaOg0XnoofhtZcSrQY/view?usp=sharing');
+  background: #58944C url('https://drive.google.com/file/d/1MoIJ1Hoj1GyWlDaaOg0XnoofhtZcSrQY/view?usp=sharing');
   padding-bottom: 150px;
   background-repeat: no-repeat;
   background-size: 1670px 1076px;
@@ -14597,7 +14580,7 @@ button.button span span {
   margin: 11% 0px;
   position: absolute;
   width: 48.5%;
-  border-left: 5px #90c741 solid;
+  border-left: 5px #58944C solid;
   padding-left: 30px;
   padding-bottom: 40px;
   padding-top: 45px;
@@ -15635,7 +15618,7 @@ button.btn-share,
 }
 
 .desc-text {
-  background: #90c741 url("https://drive.google.com/uc?id=13T7kjPguE0rbZJ0tjrYb32EgoIzFJHUy") repeat top left;
+  background: #58944C url("https://drive.google.com/uc?id=13T7kjPguE0rbZJ0tjrYb32EgoIzFJHUy") repeat top left;
   background-size: 18px 36px;
 }
 
@@ -15805,7 +15788,7 @@ button.btn-share,
   font-size: 14px;
   font-family: 'Mitr', sans-serif;
   font-weight: 500;
-  color: #90c741;
+  color: #58944C;
 }
 
 .clients_author span {
@@ -20920,23 +20903,6 @@ Text Domain:  Vmarto
   padding-left: 10px;
 }
 
-/*-----------------------------------------------------------------------------
-
--	Revolution Slider 4.1 Captions -
-
-Theme Name: Vmarto
-Author:  ThemesMartGroup
-Description:  Vmarto HTML Template
-License: GNU General Public License v2 or later
-Tags: two-columns, left-sidebar, fixed-layout, responsive-layout, custom-background, custom-colors, custom-header, custom-menu
-Text Domain:  Vmarto
-
------------------------------------------------------------------------------*/
-
-/*************************
-	-	CAPTIONS	-
-**************************/
-
 #thmg-slider-slideshow {
   border: none;
   padding: 0;
@@ -21716,7 +21682,6 @@ Text Domain:  Vmarto
   display: none;
   position: relative;
   width: 100%;
-  -ms-touch-action: pan-y;
 }
 
 .owl-carousel .owl-wrapper {

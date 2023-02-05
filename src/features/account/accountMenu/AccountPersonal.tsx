@@ -47,6 +47,7 @@ const AccountPersonal = () => {
             dispatch(setAccount({ account: result }));
         };
     };
+    
     return (
         <Formik
             initialValues={value}

@@ -215,7 +215,7 @@ const RenderItem = (image: string) => (<div className="product-full">
   <Image id="product-zoom" src={image} alt="product-image" style={{ height: "500px" }} />
 </div>);
 
-const LabelAvailability = ({ stock }: any) => <Alert className='text-st availability ' style={{ width: "20%", marginBottom: "25px" }} message={`มีสินค้า ${stock} รายการ`} type="success" showIcon />;
+const LabelAvailability = ({ stock }: any) => <Alert className='text-st availability ' style={{ width: "25%", marginBottom: "25px" }} message={`มีสินค้า ${stock} รายการ`} type="success" showIcon />;
 
 const AddToBox = ({ children }: any) => (
 

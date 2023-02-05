@@ -42,7 +42,7 @@ const ProductList = () => {
   const setGridViewMode = () => setIsViewMode(false);
   const setListViewMode = () => setIsViewMode(true);
   const showProducts = React.Children.toArray(products.map((product) => <ProductCard product={product} isViewMode={isViewMode} productsLoaded={productsLoaded} />));
-  
+
   const reset = () => dispatch(resetProductParams());
   return (
     <Fragment>

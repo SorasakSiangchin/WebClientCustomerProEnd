@@ -1,3 +1,4 @@
+
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { toast } from "react-toastify";
 import { PaginatedResponse } from "../models/Pagination";
@@ -84,6 +85,7 @@ const Account = {
     register: (value: any) => requests.post('register', createFormData(value)),
     currentAccount: (idAccount : any) => requests.get(`account/${idAccount}`), // ข้อมูลคนปัจจุบัน
     update: (value: any) => requests.put("account", createFormData(value)),
+    updatePassword: (value: any) => requests.put("account/password", createFormData(value)),
 };
 
 const Cart = {
