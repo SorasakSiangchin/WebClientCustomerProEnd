@@ -14,9 +14,8 @@ const initialState: CartState = {
 }
 
 export const fetchCartAsync = createAsyncThunk<Cart, string>("cart/fetchCartAsync", async (accountId, thunkAPI) => {
-    console.log(accountId)
     try {
-        const { result }: Result = await agent.Cart.get("d9236da96cb64617b7cc01790c4aac96");
+        const { result }: Result = await agent.Cart.get(accountId);
         return result;
     } catch (error: any) {
         return thunkAPI.rejectWithValue({ error: error.data });

@@ -1,6 +1,6 @@
 
 import { useRef, useState } from 'react';
-import { DeleteFilled, EditFilled, InfoCircleFilled, SearchOutlined } from '@ant-design/icons';
+import { DeleteFilled, EditFilled, InfoCircleFilled, PlusCircleFilled, SearchOutlined } from '@ant-design/icons';
 import { Col, Divider, Dropdown, Image, InputRef, MenuProps, Row, Tag } from 'antd';
 import { Button, Input, Space, Table } from 'antd';
 import type { ColumnsType, ColumnType } from 'antd/es/table';
@@ -13,7 +13,8 @@ import { useNavigate } from 'react-router-dom';
 import LayoutPrivate from '../LayoutPrivate';
 import Swal from 'sweetalert2';
 import { useAppDispatch } from '../../../app/store/configureStore';
-import { removeProductAsync } from '../../product/productSlice';
+import { removeProductAsync, setParams } from '../../product/productSlice';
+import AppPagination from '../../../app/components/AppPagination';
 export interface DataType {
   key: string;
   name: string;
@@ -40,7 +41,6 @@ const columnDatas = [
   { key: "stock", title: "คลัง" },
   { key: "action", title: "เมนู" },
 ];
-
 
 const ProductPrivatePage = () => {
   const { categoryProducts, metaData, products, productsLoaded } = useProducts();
@@ -241,14 +241,27 @@ const ProductPrivatePage = () => {
 
   return (
     <LayoutPrivate>
-      <Row style={{
-        display: "flex",
-        justifyContent: "space-between"
-      }}>
-        <h1 className='text-st'>สินค้าของฉัน</h1>
+      <Row  >
+        <Col span={8}><h1 className='text-st'>สินค้าของฉัน</h1></Col>
+        <Col span={8} offset={8} style={{ display: "flex", justifyContent: "end" }}>
+          <h1>
+            <Button className='text-st' type="primary" icon={<PlusCircleFilled />} onClick={() => navigate("/private/product/form")}>
+              เพิ่มสินค้า
+            </Button>
+          </h1>
+        </Col>
       </Row>
       <Divider />
-      <Table columns={columns} dataSource={data} />
+      <Table columns={columns} dataSource={data} pagination={false} />
+      {products.length > 0 && metaData && (
+        <AppPagination
+          isSimple={false}
+          metaData={metaData}
+          onPageChange={(page: number) =>
+            dispatch(setParams({ pageNumber: page }))
+          }
+        />
+      )}
     </LayoutPrivate>
   )
 }

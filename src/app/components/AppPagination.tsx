@@ -7,14 +7,15 @@ import { MetaData } from "../models/Pagination";
 interface Props {
     metaData: MetaData;
     onPageChange: (page: number) => void;
+    isSimple? :boolean;
 }
 
-export default function AppPagination({ metaData, onPageChange }: Props) {
+export default function AppPagination({ metaData, onPageChange , isSimple= true }: Props) {
     const { currentPage, totalCount, pageSize } = metaData;
     return (
         <div className="toolbar bottom">
             <div className="display-product-option">
-                <Pagination simple defaultCurrent={1} responsive current={currentPage} total={totalCount} onChange={(page) => onPageChange(page)} pageSize={pageSize} />
+                <Pagination simple={isSimple} defaultCurrent={1} responsive current={currentPage} total={totalCount} onChange={(page) => onPageChange(page)} pageSize={pageSize} />
             </div>
         </div>
     )

@@ -117,7 +117,7 @@ const ModalFormAddress = ({ modalOpen, setModalOpen, address }: Props) => {
                     setFieldValue("province", more[0].value);
                     setFieldValue("district", more[1].value);
                     setFieldValue("subDistrict", more[2].value);
-                    setFieldValue("zipCode", more[2].code);
+                    setFieldValue("zipCode", more[2].code); 
                 };
                 return <>
                     {modalOpen && <ModalForm

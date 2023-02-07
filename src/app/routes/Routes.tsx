@@ -14,6 +14,7 @@ import ProductPrivatePage from "../../features/private/product/ProductPrivatePag
 import ProductDetailPrivate from "../../features/private/product/ProductDetailPrivate";
 import ProductsSimilar from "../../features/product/ProductsSimilar";
 import TestPage from "../../features/TestPage";
+import ProductFormPrivate from "../../features/private/product/ProductFormPrivate";
 
 export const mainRoutes = <Routes>
     <Route path='/' element={<HomePage />} />
@@ -36,6 +37,7 @@ export const mainRoutes = <Routes>
         <Route path='/private/dashboard' element={<DashboardPage />} />
         <Route path='/private/product' element={<ProductPrivatePage />} />
         <Route path='/private/product/detail' element={<ProductDetailPrivate />} />
+        <Route path='/private/product/form' element={<ProductFormPrivate />} />
     </Route>
     <Route path='/product-favorite' element={<ProductFavorite />} />
     <Route path='/product-list' element={<ProductList />} />

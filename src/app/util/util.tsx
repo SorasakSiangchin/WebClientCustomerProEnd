@@ -1,3 +1,5 @@
+import { message } from "antd";
+import { RcFile } from "antd/es/upload";
 import { NumericFormat } from "react-number-format";
 import { Address, CreateAddress, UpdateAddress } from "../models/Address";
 
@@ -102,6 +104,17 @@ export const convertToAddress= (value : Address) => {
     return Result;
 };
 
+export const beforeUploadAntd = (file: RcFile) => {
+    const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
+    if (!isJpgOrPng) {
+      message.error('สามารถอัปโหลดไฟล์ JPG/PNG เท่านั้น!');
+    }
+    const isLt2M = file.size / 1024 / 1024 < 100;
+    if (!isLt2M) {
+      message.error('รูปภาพต้องมีขนาดเล็กกว่า 100MB!');
+    }
+    return isJpgOrPng && isLt2M;
+  };
 
 export const Text = `ภายในระบบของเราจะมีสินค้าทางเกษตกรรมให้ทุกท่านเลือกชอปปิ้งอย่างมากมาย อีกทั้งยังมีการจองสินค้าที่มีเฉพาะในฤดูกาลนั้นๆและสินค้าที่คุณอาจจะเข้าถึงได้ยากอีกด้วย ขอให้ทุกท่านมีความสุขกับการชอปปิ้งนะครับ`;
 

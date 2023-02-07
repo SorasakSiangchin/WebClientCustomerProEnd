@@ -3,6 +3,8 @@ import React, { useState } from 'react'
 import { Container } from 'react-bootstrap';
 import { VscChevronLeft, VscDashboard, VscPackage } from 'react-icons/vsc';
 import { useNavigate } from 'react-router-dom';
+import { resetProductParams } from '../../features/product/productSlice';
+import { useAppDispatch } from '../store/configureStore';
 const { Sider } = Layout;
 type MenuItem = Required<MenuProps>['items'][number];
 
@@ -22,6 +24,7 @@ function getItem(
 
 const useSiderPrivate = () => {
   const [collapsed, setCollapsed] = useState(false);
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const items: MenuItem[] = [
     getItem('แดชบอร์ด', '1', <VscDashboard style={{ fontSize: "20px" }} />,),
@@ -43,6 +46,7 @@ const useSiderPrivate = () => {
         break;
       case "9":
         navigate("/");
+        dispatch(resetProductParams());
         break;
       default:
         break;
@@ -52,8 +56,8 @@ const useSiderPrivate = () => {
   return {
     Sider: (
       <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
-        <Container className='center' style={{ padding : "10px" }}>
-          <img src='https://drive.google.com/uc?id=1cCYCdUJx1b3U3mx91nPtdGCZOlU1dhSJ' width={50} />
+        <Container className='center' style={{ padding: "10px" }}>
+          <img src='https://drive.google.com/uc?id=1cCYCdUJx1b3U3mx91nPtdGCZOlU1dhSJ' alt='logo image' width={50} />
         </Container>
         <Menu onClick={(e) => onPage({ key: e.key })} className='text-st' theme="dark" defaultSelectedKeys={['1']} mode="inline" items={items} />
       </Sider>

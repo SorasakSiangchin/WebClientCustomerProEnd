@@ -107,10 +107,6 @@ export const fetchCurrentAccount = createAsyncThunk<Account>(
     }
 );
 
-// const addAddressAsync  = createAsyncThunk("account/fetchCurrentAccount" , () => {})
-
-
-
 export const accountSlice = createSlice({
     name: "account",
     initialState,

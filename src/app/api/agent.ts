@@ -1,4 +1,3 @@
-
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { toast } from "react-toastify";
 import { PaginatedResponse } from "../models/Pagination";
@@ -73,7 +72,8 @@ const Product = {
     getName: (nameProduct : any) => requests.get(`product/name?name=${nameProduct}`),
     getRares: () => requests.get('product/rare'),
     detail: (idProduct: string) => requests.get(`product/${idProduct}`),
-    delete: (idProduct: string) => requests.delete(`product/${idProduct}`)
+    delete: (idProduct: string) => requests.delete(`product/${idProduct}`),
+    create:(value: any) => requests.post("product", createFormData(value)),
 };
 
 const CategoryProduct = {
@@ -99,8 +99,16 @@ const Order = {
 }
 
 const Role = {
-    list: () => requests.get('role'),
+    list: () => requests.get('roles'),
 };
+
+const WeightUnit = {
+    list: () => requests.get('weightUnits'),
+};
+
+const LevelProduct = {
+    list : () => requests.get('levelProducts'),
+}
 
 const ImageProduct = {
     get: (idProduct: any) => requests.get(`imageproduct/${idProduct}`),
@@ -122,7 +130,9 @@ const agent = {
     Cart,
     ImageProduct ,
     Address ,
-    Order
+    Order ,
+    WeightUnit  ,
+    LevelProduct 
 };
 
 export default agent;

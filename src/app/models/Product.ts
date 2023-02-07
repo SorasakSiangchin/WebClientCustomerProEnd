@@ -44,3 +44,13 @@ export interface ImageProduct {
     imageUrl: string;
     productID: string;
 }
+
+export interface WeightUnit {
+    id:   number;
+    name: string;
+}
+
+export interface LevelProduct {
+    id:    number;
+    level: string;
+}

@@ -1,7 +1,7 @@
 import { Result } from './../../app/models/Interfaces/IResponse';
-import { createAsyncThunk, createEntityAdapter, createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createEntityAdapter, createSlice, isAnyOf } from "@reduxjs/toolkit";
 import agent from "../../app/api/agent";
-import { Product, ProductParams, CategoryProduct, ImageProduct } from '../../app/models/Product';
+import { Product, ProductParams, CategoryProduct, ImageProduct, WeightUnit, LevelProduct } from '../../app/models/Product';
 import { RootState } from '../../app/store/configureStore';
 import { MetaData } from '../../app/models/Pagination';
 
@@ -17,6 +17,10 @@ interface ProductState {
     productNameLoaded: boolean;
     imageProducts: ImageProduct[] | null;
     productParams: ProductParams;
+    weightUnits: WeightUnit[] | null;
+    weightUnitLoaded: boolean;
+    levelProducts: LevelProduct[] | null;
+    levelProductLoaded: boolean;
     metaData: MetaData | null;
 };
 
@@ -60,6 +64,31 @@ export const fetchProductAsync = createAsyncThunk<Product, any>(
     }
 );
 
+export const fetchWeightUnitsAsync = createAsyncThunk<Result>(
+    "product/fetchWeightUnitAsync",
+    async (_, thunkAPI) => {
+        try {
+            const results: Result = await agent.WeightUnit.list();
+            return results;
+        } catch (error: any) {
+            return thunkAPI.rejectWithValue({ error: error.data })
+        }
+    }
+);
+
+export const fetchLevelProductsAsync = createAsyncThunk<Result>(
+    "product/fetchLevelProductsAsync",
+    async (_, thunkAPI) => {
+        try {
+            const results: Result = await agent.LevelProduct.list();
+            return results;
+        } catch (error: any) {
+            return thunkAPI.rejectWithValue({ error: error.data })
+        }
+    }
+);
+
+
 export const fetchCategoryProductsAsync = createAsyncThunk("product/fetchCategoryProduct",
     async (_, thunkAPI) => {
         try {
@@ -91,9 +120,19 @@ export const fetchProductByNameAsync = createAsyncThunk<Product[], string>("prod
         }
     });
 
-export const removeProductAsync = createAsyncThunk<void, string>("product/removeProductAsync", async (productId, thunkAPI) => {
+export const removeProductAsync = createAsyncThunk<Result, string>("product/removeProductAsync", async (productId, thunkAPI) => {
     try {
-        await agent.Product.delete(productId);
+        const results: Result = await agent.Product.delete(productId);
+        return results;
+    } catch (error: any) {
+        return thunkAPI.rejectWithValue({ error: error.data })
+    }
+});
+
+export const createProductAsync = createAsyncThunk<Result, any>("product/createProductAsync", async (product, thunkAPI) => {
+    try {
+        const results: Result = await agent.Product.create(product);
+        return results;
     } catch (error: any) {
         return thunkAPI.rejectWithValue({ error: error.data })
     }
@@ -126,7 +165,11 @@ export const productSlice = createSlice({
         productRare: null,
         productRareLoaded: false,
         productNames: null,
-        productNameLoaded: false
+        productNameLoaded: false,
+        weightUnits: null,
+        weightUnitLoaded: false,
+        levelProducts: null,
+        levelProductLoaded: false,
     }),
     reducers: {
         setMetaData: (state, action) => {
@@ -169,8 +212,19 @@ export const productSlice = createSlice({
             state.imageProducts = action.payload;
             state.imageProductLoaded = true;
         });
-        builder.addCase(removeProductAsync.fulfilled, (state) => {
-            state.productsLoaded = false;
+        builder.addCase(fetchWeightUnitsAsync.fulfilled, (state, action) => {
+            const { result, isSuccess, statusCode } = action.payload;
+            if (isSuccess === true && statusCode === 200) state.weightUnits = result;
+            state.weightUnitLoaded = true;
+        });
+        builder.addCase(fetchLevelProductsAsync.fulfilled, (state, action) => {
+            const { result, isSuccess, statusCode } = action.payload;
+            if (isSuccess === true && statusCode === 200) state.levelProducts = result;
+            state.levelProductLoaded = true;
+        });
+        builder.addMatcher(isAnyOf(removeProductAsync.fulfilled, createProductAsync.fulfilled), (state, action) => {
+            const { isSuccess } = action.payload;
+            if (isSuccess === true) state.productsLoaded = false;
         });
     }
 });

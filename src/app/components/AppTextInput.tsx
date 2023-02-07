@@ -22,6 +22,7 @@ const AppTextInput = (props: Props) => {
             {!props.isLabel && <label className='text-st' htmlFor={props.name}>{props.label}<em className="required">*</em></label>}
             {props.button}
             <Input
+                style={{ width:"100%" }}
                 allowClear
                 onChange={props.onChange}
                 onBlur={props.onBlur}

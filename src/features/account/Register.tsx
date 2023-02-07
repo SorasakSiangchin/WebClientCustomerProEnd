@@ -17,7 +17,7 @@ import { useAppDispatch, useAppSelector } from '../../app/store/configureStore';
 import AppPasswordInput from '../../app/components/AppPasswordInput';
 import swal from 'sweetalert';
 import { Result } from '../../app/models/Interfaces/IResponse';
-import { Text } from '../../app/util/util';
+import { beforeUploadAntd, Text } from '../../app/util/util';
 
 const Register = () => {
   const dispatch = useAppDispatch();
@@ -36,17 +36,7 @@ const Register = () => {
     reader.readAsDataURL(img);
   };
 
-  const beforeUpload = (file: RcFile) => {
-    const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
-    if (!isJpgOrPng) {
-      message.error('สามารถอัปโหลดไฟล์ JPG/PNG เท่านั้น!');
-    }
-    const isLt2M = file.size / 1024 / 1024 < 100;
-    if (!isLt2M) {
-      message.error('รูปภาพต้องมีขนาดเล็กกว่า 100MB!');
-    }
-    return isJpgOrPng && isLt2M;
-  };
+
 
   const submitForm = async (data: any) => {
     const result: Result = await dispatch(registerAccount(data)).unwrap();
@@ -229,7 +219,7 @@ const Register = () => {
                                 name="avatar"
                                 className="avatar-uploader"
                                 showUploadList={false}
-                                beforeUpload={beforeUpload}
+                                beforeUpload={beforeUploadAntd}
                                 action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
                                 onChange={handleChangeImaage}
                               >
