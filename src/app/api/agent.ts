@@ -74,6 +74,7 @@ const Product = {
     detail: (idProduct: string) => requests.get(`product/${idProduct}`),
     delete: (idProduct: string) => requests.delete(`product/${idProduct}`),
     create:(value: any) => requests.post("product", createFormData(value)),
+    edit:(value: any) => requests.put("product", createFormData(value)),
 };
 
 const CategoryProduct = {

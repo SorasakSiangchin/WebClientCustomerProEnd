@@ -7,5 +7,5 @@ export const ProductPrivateValidate = Yup.object().shape({
     weight:Yup.number().min(1 , "น้ำหนักต้องมากกว่า 1").required("กรุณากรอกจำนวน"),
     description : Yup.string().required('กรุณากรอกคำอธิบาย'),
     categoryProductID:Yup.string().required("เลือกประเภทสินค้า"),
-    formFiles : Yup.string().required("กรุณาเลือกรูปภาพ")
+    //formFiles : Yup.string().required("กรุณาเลือกรูปภาพ")
   });

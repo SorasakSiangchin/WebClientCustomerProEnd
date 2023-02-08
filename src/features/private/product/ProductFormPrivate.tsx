@@ -1,7 +1,7 @@
 import { CloseOutlined, CloudUploadOutlined, LoadingOutlined, RollbackOutlined, SaveOutlined } from '@ant-design/icons';
 import { ErrorMessage, Formik } from 'formik';
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom';
 import {
   Button,
   Col,
@@ -26,34 +26,41 @@ import ImgCrop from 'antd-img-crop';
 import useProducts from '../../../app/hooks/useProducts';
 import { ProductPrivateValidate } from './ProductPrivateValidate';
 import { useAppDispatch, useAppSelector } from '../../../app/store/configureStore';
-import { createProductAsync } from '../../product/productSlice';
+import { createProductAsync, editProductAsync } from '../../product/productSlice';
 import { Result } from '../../../app/models/Interfaces/IResponse';
 import Swal from 'sweetalert2';
+import { Product } from '../../../app/models/Product';
 const { Option } = Select;
 
 const ProductFormPrivate = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const { state } = useLocation();
   const { account } = useAppSelector(state => state.account);
   const { weightUnits, categoryProducts, levelProducts } = useProducts();
-  const [imageUrl, setImageUrl] = useState<string>();
+  const [imageUrl, setImageUrl] = useState<string>("");
   const defaultUnit = weightUnits?.find(e => e.id);
   const defaultLevelProduct = levelProducts?.find(e => e.id);
   const [loading, setLoading] = useState(false);
 
   const values = {
-    name: '',
-    price: 0,
-    stock: 0,
-    color: '',
-    weight: 0,
-    description: '',
+    id: state ? state.key : '',
+    name: state ? state.name : '',
+    price: state ? state.price : 0,
+    stock: state ? state.stock : 0,
+    color: state ? state.color : '',
+    weight: state ? state.weight : 0,
+    description: state ? state.description : '',
     accountID: account?.id,
-    weightUnitID: defaultUnit?.id,
-    categoryProductID: "",
-    levelProductID: defaultLevelProduct?.id,
+    weightUnitID: state ? state.weightUnitID : defaultUnit?.id,
+    categoryProductID: state ? state.categoryProductID : "",
+    levelProductID: state ? state.levelProductID : defaultLevelProduct?.id,
     formFiles: ""
   };
+
+  useEffect(() => {
+    console.log(state);
+  }, []);
 
   const getBase64 = (img: RcFile, callback: (url: string) => void) => {
     const reader = new FileReader();
@@ -62,8 +69,12 @@ const ProductFormPrivate = () => {
   };
 
   const handleSubmitForm = async (value: any) => {
-    const { isSuccess }: Result = await dispatch(createProductAsync(value)).unwrap();
-    if (isSuccess) {
+    let result: Result;
+    if (!state) result = await dispatch(createProductAsync(value)).unwrap();
+    else result = await dispatch(editProductAsync(value)).unwrap();
+
+
+    if (result!.isSuccess)
       Swal.fire({
         position: 'center',
         icon: 'success',
@@ -71,7 +82,6 @@ const ProductFormPrivate = () => {
         showConfirmButton: false,
         timer: 1500
       }).then(() => navigate(-1));
-    }
   }
 
   return (
@@ -93,7 +103,7 @@ const ProductFormPrivate = () => {
         handleBlur,
         handleSubmit,
         isSubmitting,
-        setFieldValue
+        setFieldValue,
       }) => {
         const props: UploadProps = {
           name: 'formFiles',
@@ -235,6 +245,7 @@ const ProductFormPrivate = () => {
                           onChange={(data) => {
                             setFieldValue("categoryProductID", data);
                           }}
+                          value={values.categoryProductID}
                           onBlur={handleBlur}
                           status={touched.categoryProductID && errors.categoryProductID
                             ? "error"
@@ -294,7 +305,7 @@ const ProductFormPrivate = () => {
                       <Form.Item
                         label={<Ts>ระดับสินค้า</Ts>}
                       >
-                        <Radio.Group onChange={onChangeRadio} value={values.levelProductID}>
+                        <Radio.Group onChange={onChangeRadio} value={values.levelProductID} >
                           {levelProducts?.map((levelProduct, index) => <Radio key={index} value={levelProduct.id} className='text-st'>{levelProduct.level}</Radio>)}
                         </Radio.Group>
                       </Form.Item >
@@ -305,26 +316,42 @@ const ProductFormPrivate = () => {
                 <BootstrapCol sm={4}  >
                   <ImgCrop rotate modalTitle='แก้ไขรูปภาพ' modalOk='ตกลง' modalCancel='ยกเลิก' >
                     <Upload.Dragger height={250} {...props} beforeUpload={beforeUploadAntd} showUploadList={false}>
-                      {!imageUrl ? <> <p className="ant-upload-drag-icon">
-                        {!loading ? <CloudUploadOutlined style={{ fontSize: "60px" }} /> : <LoadingOutlined style={{ fontSize: "60px" }} />}
-                      </p>
-                        <p className="ant-upload-text text-st">
-                          เพิ่มรูปภาพสินค้า
-                        </p> </> : <Badge count={<Button
-                          type="primary"
-                          shape="circle"
-                          htmlType='button'
-                          danger icon={<CloseOutlined />}
-                          onClick={RemoveImage}
-                          size="small"
-                          style={{ marginLeft: "5px" }} />}>
-                        <img
-                          src={imageUrl}
-                          className='img-thumbnail'
-                          alt='...'
-                          style={{ width: '100%', height: "200px" }}
-                        />
-                      </Badge>}
+                      {!imageUrl ?
+                        !state ? (<> <p className="ant-upload-drag-icon">
+                          {!loading ? <CloudUploadOutlined style={{ fontSize: "60px" }} /> : <LoadingOutlined style={{ fontSize: "60px" }} />}
+                        </p>
+                          <p className="ant-upload-text text-st">
+                            เพิ่มรูปภาพสินค้า
+                          </p> </>)
+                          : (<Badge count={<Button
+                            type="primary"
+                            shape="circle"
+                            htmlType='button'
+                            danger icon={<CloseOutlined />}
+                            onClick={RemoveImage}
+                            size="small"
+                            style={{ marginLeft: "5px" }} />}>
+                            <img
+                              src={state.imageUrl}
+                              className='img-thumbnail'
+                              alt='...'
+                              style={{ width: '100%', height: "200px" }}
+                            />
+                          </Badge>) : (<Badge count={<Button
+                            type="primary"
+                            shape="circle"
+                            htmlType='button'
+                            danger icon={<CloseOutlined />}
+                            onClick={RemoveImage}
+                            size="small"
+                            style={{ marginLeft: "5px" }} />}>
+                            <img
+                              src={imageUrl}
+                              className='img-thumbnail'
+                              alt='...'
+                              style={{ width: '100%', height: "200px" }}
+                            />
+                          </Badge>)}
                     </Upload.Dragger>
                   </ImgCrop>
                   <ErrorMessage name="formFiles" component="div" className="text-danger text-st" />

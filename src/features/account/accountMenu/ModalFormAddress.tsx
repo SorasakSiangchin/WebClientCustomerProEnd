@@ -113,12 +113,14 @@ const ModalFormAddress = ({ modalOpen, setModalOpen, address }: Props) => {
                 useEffect(() => {
                     if (address) setValues(address, false);
                 }, [address]);
+
                 const onChangeCascader = (_: any, more: any) => {
                     setFieldValue("province", more[0].value);
                     setFieldValue("district", more[1].value);
                     setFieldValue("subDistrict", more[2].value);
                     setFieldValue("zipCode", more[2].code); 
                 };
+                
                 return <>
                     {modalOpen && <ModalForm
                         isOpen={modalOpen}

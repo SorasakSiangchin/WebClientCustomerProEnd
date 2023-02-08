@@ -138,6 +138,15 @@ export const createProductAsync = createAsyncThunk<Result, any>("product/createP
     }
 });
 
+export const editProductAsync = createAsyncThunk<Result, any>("product/editProductAsync", async (product, thunkAPI) => {
+    try {
+        const results: Result = await agent.Product.edit(product);
+        return results;
+    } catch (error: any) {
+        return thunkAPI.rejectWithValue({ error: error.data })
+    }
+});
+
 const initParams = (): ProductParams => {
     return {
         pageNumber: 1,
@@ -222,7 +231,7 @@ export const productSlice = createSlice({
             if (isSuccess === true && statusCode === 200) state.levelProducts = result;
             state.levelProductLoaded = true;
         });
-        builder.addMatcher(isAnyOf(removeProductAsync.fulfilled, createProductAsync.fulfilled), (state, action) => {
+        builder.addMatcher(isAnyOf(removeProductAsync.fulfilled, createProductAsync.fulfilled , editProductAsync.fulfilled), (state, action) => {   
             const { isSuccess } = action.payload;
             if (isSuccess === true) state.productsLoaded = false;
         });

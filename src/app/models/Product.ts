@@ -14,6 +14,7 @@ export interface Product {
     categoryProductID: number;
     weightUnit: WeightUnit;
     categoryProduct: CategoryProduct;
+    levelProductID:number;
 }
 
 export interface CategoryProduct {
