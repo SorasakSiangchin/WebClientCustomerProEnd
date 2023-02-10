@@ -1,9 +1,176 @@
-import React from 'react'
 
-const ProductDetailPrivate = () => {
-  return (
-    <div>ProductDetail</div>
-  )
+import { Card, Col, Descriptions, Divider, Image, Row, Space, Upload, Modal, Button, Tag, Empty } from 'antd';
+import { useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useAppDispatch, useAppSelector } from '../../../app/store/configureStore';
+import { currencyFormat } from '../../../app/util/util';
+import { crateImageProductAsync, deleteImageProductAsync, fetchImageProductsAsync, fetchProductAsync, productSelectors, resetImageProduct } from '../../product/productSlice';
+import LayoutPrivate from '../LayoutPrivate';
+import React, { useState } from 'react';
+import { DeleteFilled, InfoCircleFilled, RollbackOutlined, UploadOutlined } from '@ant-design/icons';
+import type { UploadProps } from 'antd/es/upload';
+import type { UploadChangeParam, UploadFile } from 'antd/es/upload/interface';
+import ImageList from '@mui/material/ImageList';
+import ImageListItem from '@mui/material/ImageListItem';
+import { beforeUploadAntd } from '../../../app/util/util';
+import { IconButton, ImageListItemBar } from '@mui/material';
+
+interface IValue {
+  id: string;
+  formFiles: any,
+  productID: any
 }
 
+const ProductDetailPrivate = () => {
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const { idProduct } = useParams<{ idProduct: any }>();
+  const [loading, setLoading] = useState<boolean>(false);
+  const [openModal, setOpenModal] = useState<boolean>(false);
+  const [urlModal, setUrlModal] = useState<string>("");
+  const product = useAppSelector(state => productSelectors.selectById(state, idProduct));
+  const { imageProducts, imageProductLoaded } = useAppSelector(state => state.product);
+
+  useEffect(() => {
+    if (!product) dispatch(fetchProductAsync(idProduct));
+  }, [idProduct, dispatch, product]);
+
+  const infoProduct = [
+    { title: 'ชื่อ', info: product?.name },
+    { title: 'ราคา', info: <Tag className='text-st' color={"green"} key={product?.id}>{currencyFormat(product?.price)}</Tag> },
+    { title: 'คลัง', info: product?.stock },
+    { title: 'สี', info: <Card style={{ height: "30px", backgroundColor: product?.color }} /> },
+    { title: 'น้ำหนัก', info: `${product?.weight} ${product?.weightUnit.name}` },
+    { title: 'ประเภทสินค้า', info: product?.categoryProduct.name },
+    { title: 'คำอธิบาย', info: product?.description },
+  ];
+
+  const value: IValue = {
+    id: "",
+    formFiles: null,
+    productID: product?.id
+  }
+
+  useEffect(() => {
+    if (!imageProductLoaded) dispatch(fetchImageProductsAsync(idProduct));
+    return () => {
+      if (imageProducts) dispatch(resetImageProduct());
+    };
+  }, [imageProductLoaded, dispatch]);
+
+  const handleChange: UploadProps['onChange'] = async (info: UploadChangeParam<UploadFile>) => {
+    if (info.file.status === 'uploading') {
+      setLoading(true);
+      return;
+    }
+    value.formFiles = info.file.originFileObj;
+    dispatch(crateImageProductAsync(value));
+    value.formFiles = null;
+    setLoading(false);
+  };
+
+  const buttonUpload = <Upload
+    action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+    style={{ width: "20px" }}
+    multiple={true}
+    showUploadList={false}
+    beforeUpload={beforeUploadAntd}
+    onChange={handleChange}
+  >
+    <Button className='text-st' loading={loading} icon={<UploadOutlined />}>
+      เพิ่มรูปภาพ
+    </Button>
+  </Upload>
+
+  return (
+    <LayoutPrivate>
+      <Row  >
+        <Col span={8}><h1 className='text-st'>ข้อมูลสินค้า</h1></Col>
+        <Col span={8} offset={8} style={{ display: "flex", justifyContent: "end", alignItems: "center" }}>
+          <Button style={{ backgroundColor: "grey" }} className='text-st' type="primary" icon={<RollbackOutlined />} onClick={() => navigate(-1)}>
+            กลับ
+          </Button>
+        </Col>
+      </Row>
+      <Divider />
+      <Row gutter={24}>
+        <Col span={10}>
+          <Space direction='vertical'>
+            <Card >
+              <Image alt="image-product" width={"100%"} height={"400px"} src={product?.imageUrl} />
+            </Card>
+            <Card
+              style={{ width: "100%" }}
+            >
+              <Descriptions className='text-st' column={4} title="รูปภาพเพิ่มเติม" extra={buttonUpload} />
+              {imageProducts?.length === 0 && <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="ไม่มีรูปภาพ" className='text-st' />}
+              <ImageList cols={4}>
+                <>
+                  {imageProducts?.map(item => (
+                    <ImageListItem key={item.id}>
+                      <Image
+                        style={{ width: "100%", height: "100px" }}
+                        preview={false}
+                        src={item.imageUrl}
+                        alt={item.productID}
+                      />
+                      <ImageListItemBar
+                        actionIcon={
+                          <IconButton sx={{ color: 'rgba(255, 255, 255, 0.54)' }}>
+                            <Space>
+                              <InfoCircleFilled onClick={() => {
+                                setOpenModal(true);
+                                setUrlModal(item.imageUrl);
+                              }} />
+                              <DeleteFilled onClick={() => dispatch(deleteImageProductAsync(item.id))} />
+                            </Space>
+                          </IconButton>
+                        }
+                      />
+                    </ImageListItem>
+                  ))}
+                </>
+              </ImageList>
+            </Card>
+          </Space>
+        </Col>
+        <Modal open={openModal} footer={null} onCancel={() => {
+          setOpenModal(false);
+          setUrlModal("");
+        }}>
+          <img alt="example" style={{ width: '100%' }} src={urlModal} />
+        </Modal>
+        <Col span={14}>
+          <Space direction='vertical'>
+            <Card
+              style={{ width: "100%" }}
+            >
+              <Descriptions title={<h4 style={{ textDecoration: "underline" }} >ข้อมูล</h4>} className='text-st'>
+                {React.Children.toArray(infoProduct.map(({ info, title }) => <Descriptions.Item labelStyle={{ fontWeight: "bold" }} label={title}>{info}</Descriptions.Item>))}
+              </Descriptions>
+            </Card>
+            <Card
+              style={{ width: "100%" }}
+            >
+              <Descriptions column={2} title="รายละเอียดเพิ่มเติม" className='text-st'>
+                <Descriptions.Item label="ชื่อพันธุ์">{product?.name}</Descriptions.Item>
+                <Descriptions.Item label="วิธีการใส่ปุ๋ย">{currencyFormat(product?.price)}</Descriptions.Item>
+                <Descriptions.Item label="วิธีการปลูก">{product?.stock}</Descriptions.Item>
+                <Descriptions.Item label="ฤดูปลูก">
+                  <Card style={{ height: "30px", backgroundColor: product?.color }} />
+                </Descriptions.Item>
+                <Descriptions.Item label="ฤดูเก็บเกี่ยว">
+                  {product?.weight} {product?.weightUnit.name}
+                </Descriptions.Item>
+                <Descriptions.Item label="เพิ่มเติม">
+                  {product?.categoryProduct.name}
+                </Descriptions.Item>
+              </Descriptions>
+            </Card>
+          </Space>
+        </Col>
+      </Row>
+    </LayoutPrivate>
+  )
+}
 export default ProductDetailPrivate;

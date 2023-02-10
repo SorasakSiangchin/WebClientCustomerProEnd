@@ -138,7 +138,7 @@ const ProductDetail = () => {
             <div className="ratings">
               <Rate disabled defaultValue={2} style={{ fontSize: "15px" }} />
               <p className="rating-links">
-                <Link to={""}>1 Review</Link>
+                <Link to={""}>1 {imageProductLoaded.toString()}</Link>
                 <span className="separator">|</span>
                 <Link to="">Add Your Review</Link>
               </p>

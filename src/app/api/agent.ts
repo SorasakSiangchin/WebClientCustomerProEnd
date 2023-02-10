@@ -1,3 +1,4 @@
+import { value } from './../../features/account/accountSlice';
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { toast } from "react-toastify";
 import { PaginatedResponse } from "../models/Pagination";
@@ -74,7 +75,7 @@ const Product = {
     detail: (idProduct: string) => requests.get(`product/${idProduct}`),
     delete: (idProduct: string) => requests.delete(`product/${idProduct}`),
     create:(value: any) => requests.post("product", createFormData(value)),
-    edit:(value: any) => requests.put("product", createFormData(value)),
+    update:(value: any) => requests.put("product", createFormData(value)),
 };
 
 const CategoryProduct = {
@@ -111,8 +112,16 @@ const LevelProduct = {
     list : () => requests.get('levelProducts'),
 }
 
+const DetailProduct = {
+    getByIdProduct : (idProduct: any) => requests.get(`detailProduct/idProduct?idProduct=${idProduct}`),
+    create : (value: any) => requests.post("detailProduct" , value),
+    update : (value: any) => requests.put("detailProduct" , value),
+}
+
 const ImageProduct = {
     get: (idProduct: any) => requests.get(`imageproduct/${idProduct}`),
+    create: (value: any) => requests.post("imageproduct" , createFormData(value)),
+    delete: (idProduct: any) => requests.delete(`imageproduct/${idProduct}`)
 };
 
 const Address = {
@@ -133,7 +142,8 @@ const agent = {
     Address ,
     Order ,
     WeightUnit  ,
-    LevelProduct 
+    LevelProduct ,
+    DetailProduct
 };
 
 export default agent;

@@ -29,7 +29,6 @@ import { useAppDispatch, useAppSelector } from '../../../app/store/configureStor
 import { createProductAsync, editProductAsync } from '../../product/productSlice';
 import { Result } from '../../../app/models/Interfaces/IResponse';
 import Swal from 'sweetalert2';
-import { Product } from '../../../app/models/Product';
 const { Option } = Select;
 
 const ProductFormPrivate = () => {
@@ -58,10 +57,6 @@ const ProductFormPrivate = () => {
     formFiles: ""
   };
 
-  useEffect(() => {
-    console.log(state);
-  }, []);
-
   const getBase64 = (img: RcFile, callback: (url: string) => void) => {
     const reader = new FileReader();
     reader.addEventListener('load', () => callback(reader.result as string));
@@ -72,8 +67,6 @@ const ProductFormPrivate = () => {
     let result: Result;
     if (!state) result = await dispatch(createProductAsync(value)).unwrap();
     else result = await dispatch(editProductAsync(value)).unwrap();
-
-
     if (result!.isSuccess)
       Swal.fire({
         position: 'center',
@@ -359,7 +352,6 @@ const ProductFormPrivate = () => {
               </BootstrapRow>
             </Container>
           </Form>
-
         </LayoutPrivate>
       }
       }

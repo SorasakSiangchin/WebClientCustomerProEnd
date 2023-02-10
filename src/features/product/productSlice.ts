@@ -24,19 +24,6 @@ interface ProductState {
     metaData: MetaData | null;
 };
 
-export const fetchImageProductsAsync = createAsyncThunk<ImageProduct[], any>(
-    'product/fetchImageProductsAsync',
-    async (idProduct, thunkAPI) => {
-        try {
-            const result = await agent.ImageProduct.get(idProduct);
-            const images = result.result;
-            return images;
-        } catch (error: any) {
-            return thunkAPI.rejectWithValue({ error: error.data })
-        }
-    }
-);
-
 export const fetchProductsAsync = createAsyncThunk<Product[], void, { state: RootState }>(
     'product/fetchProducts',
     async (_, thunkAPI) => {
@@ -87,7 +74,6 @@ export const fetchLevelProductsAsync = createAsyncThunk<Result>(
         }
     }
 );
-
 
 export const fetchCategoryProductsAsync = createAsyncThunk("product/fetchCategoryProduct",
     async (_, thunkAPI) => {
@@ -140,12 +126,43 @@ export const createProductAsync = createAsyncThunk<Result, any>("product/createP
 
 export const editProductAsync = createAsyncThunk<Result, any>("product/editProductAsync", async (product, thunkAPI) => {
     try {
-        const results: Result = await agent.Product.edit(product);
+        const results: Result = await agent.Product.update(product);
         return results;
     } catch (error: any) {
         return thunkAPI.rejectWithValue({ error: error.data })
     }
 });
+
+/* #region ImageProduct */
+export const fetchImageProductsAsync = createAsyncThunk<ImageProduct[], any>(
+    'product/fetchImageProductsAsync',
+    async (idProduct, thunkAPI) => {
+        try {
+            const result = await agent.ImageProduct.get(idProduct);
+            const images = result.result;
+            return images;
+        } catch (error: any) {
+            return thunkAPI.rejectWithValue({ error: error.data })
+        }
+    }
+);
+
+export const crateImageProductAsync = createAsyncThunk<Result, any>("product/crateImageProductAsync", async (value, thunkAPI) => {
+    try {
+        return await agent.ImageProduct.create(value);
+    } catch (error: any) {
+        return thunkAPI.rejectWithValue({ error: error.data })
+    }
+});
+
+export const deleteImageProductAsync = createAsyncThunk<Result, string>("product/deleteImageProductAsync", async (idImageProduct, thunkAPI) => {
+    try {
+        return await agent.ImageProduct.delete(idImageProduct);
+    } catch (error: any) {
+        return thunkAPI.rejectWithValue({ error: error.data })
+    }
+});
+/* #endregion */
 
 const initParams = (): ProductParams => {
     return {
@@ -221,6 +238,7 @@ export const productSlice = createSlice({
             state.imageProducts = action.payload;
             state.imageProductLoaded = true;
         });
+
         builder.addCase(fetchWeightUnitsAsync.fulfilled, (state, action) => {
             const { result, isSuccess, statusCode } = action.payload;
             if (isSuccess === true && statusCode === 200) state.weightUnits = result;
@@ -231,10 +249,16 @@ export const productSlice = createSlice({
             if (isSuccess === true && statusCode === 200) state.levelProducts = result;
             state.levelProductLoaded = true;
         });
-        builder.addMatcher(isAnyOf(removeProductAsync.fulfilled, createProductAsync.fulfilled , editProductAsync.fulfilled), (state, action) => {   
+        builder.addMatcher(isAnyOf(removeProductAsync.fulfilled, createProductAsync.fulfilled, editProductAsync.fulfilled), (state, action) => {
             const { isSuccess } = action.payload;
             if (isSuccess === true) state.productsLoaded = false;
         });
+        /* #region ImageProduct */
+        builder.addMatcher(isAnyOf(crateImageProductAsync.fulfilled, deleteImageProductAsync.fulfilled), (state, action) => {
+            const { isSuccess } = action.payload;
+            if (isSuccess) state.imageProductLoaded = false;
+        });
+        /* #endregion */
     }
 });
 

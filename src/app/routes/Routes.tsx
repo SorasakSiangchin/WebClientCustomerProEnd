@@ -36,7 +36,7 @@ export const mainRoutes = <Routes>
     <Route element={<PrivateRoute roles={["admin" , "seller"]} />} >
         <Route path='/private/dashboard' element={<DashboardPage />} />
         <Route path='/private/product' element={<ProductPrivatePage />} />
-        <Route path='/private/product/detail' element={<ProductDetailPrivate />} />
+        <Route path='/private/product/detail/:idProduct' element={<ProductDetailPrivate />} />
         <Route path='/private/product/form' element={<ProductFormPrivate />} />
     </Route>
     <Route path='/product-favorite' element={<ProductFavorite />} />

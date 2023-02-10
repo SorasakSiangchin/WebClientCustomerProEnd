@@ -81,7 +81,7 @@ const ProductPrivatePage = () => {
     lastUpdate: product.lastUpdate,
     weightUnit: product.weightUnit,
     weightUnitID: product.weightUnitID,
-    levelProductID : product.levelProductID
+    levelProductID: product.levelProductID
   })) as DataType[];
 
   const getColumnSearchProps = (dataIndex: DataIndex, title?: string): ColumnType<DataType> => ({
@@ -216,7 +216,8 @@ const ProductPrivatePage = () => {
             key: '2',
             icon: <InfoCircleFilled />,
             className: "text-st",
-            style: { color: "#0077b6" }
+            style: { color: "#0077b6" },
+            onClick: () => navigate(`/private/product/detail/${_more.key}`)
           },
           {
             label: 'ลบ',
