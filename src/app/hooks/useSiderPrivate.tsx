@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import { Container } from 'react-bootstrap';
 import { VscChevronLeft, VscDashboard, VscPackage } from 'react-icons/vsc';
 import { useNavigate } from 'react-router-dom';
-import { resetProductParams } from '../../features/product/productSlice';
+import { resetProductParams } from '../../app/store/productSlice';
 import { useAppDispatch } from '../store/configureStore';
 const { Sider } = Layout;
 type MenuItem = Required<MenuProps>['items'][number];

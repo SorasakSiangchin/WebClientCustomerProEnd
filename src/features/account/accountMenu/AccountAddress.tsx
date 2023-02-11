@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { Col, Container, Row } from 'react-bootstrap';
 import { useAppDispatch } from '../../../app/store/configureStore';
 import { ColAccount } from "../AccountPage";
-import { deleteAddressAsync,  updateStatusAddressAsync } from '../../address/addressSlice';
+import { deleteAddressAsync,  updateStatusAddressAsync } from '../../../app/store/addressSlice';
 import ModalFormAddress from './ModalFormAddress';
 import { convertToAddress, Ts } from '../../../app/util/util';
 import { Address } from '../../../app/models/Address';

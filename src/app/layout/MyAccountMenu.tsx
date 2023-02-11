@@ -2,7 +2,7 @@ import { HeartOutlined, LoginOutlined, LogoutOutlined, ShopOutlined, UserOutline
 import { Avatar, List, Popover } from "antd"
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
-import { logout } from "../../features/account/accountSlice";
+import { logout } from "../../app/store/accountSlice";
 import { Account } from "../models/Account";
 import { useAppDispatch } from "../store/configureStore";
 import Lottie from "lottie-react";

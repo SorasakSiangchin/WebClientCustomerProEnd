@@ -14,7 +14,7 @@ const initialState: DetailProductState = {
     detailProductLoaded: false
 }
 
-export const createDetailProductByIdProduct = createAsyncThunk<Result, any>("detailProduct/createDetailProductByIdProduct",
+export const createDetailProductAsync = createAsyncThunk<Result, any>("detailProduct/createDetailProductAsync",
     async (value, thunkAPI) => {
         try {
             return await agent.DetailProduct.create(value);
@@ -23,7 +23,7 @@ export const createDetailProductByIdProduct = createAsyncThunk<Result, any>("det
         }
     });
 
-export const updateDetailProductByIdProduct = createAsyncThunk<Result, any>("detailProduct/updateDetailProductByIdProduct",
+export const updateDetailProductAsync = createAsyncThunk<Result, any>("detailProduct/updateDetailProductAsync",
     async (value, thunkAPI) => {
         try {
             return await agent.DetailProduct.update(value);
@@ -31,7 +31,18 @@ export const updateDetailProductByIdProduct = createAsyncThunk<Result, any>("det
             return thunkAPI.rejectWithValue({ error: error.data })
         }
     });
-export const fetchDetailProductByIdProduct = createAsyncThunk<Result, any>("detailProduct/fetchDetailProductByIdProduct",
+
+export const deleteDetailProductAsync = createAsyncThunk<Result, any>("detailProduct/deleteDetailProductAsync",
+    async (id, thunkAPI) => {
+        try {
+            const result = await agent.DetailProduct.delete(id);
+            return result ;
+        } catch (error: any) {
+            return thunkAPI.rejectWithValue({ error: error.data })
+        }
+    });
+
+export const fetchDetailProductByIdProductAsync = createAsyncThunk<Result, any>("detailProduct/fetchDetailProductByIdProductAsync",
     async (idProduct, thunkAPI) => {
         try {
             return await agent.DetailProduct.getByIdProduct(idProduct);
@@ -43,13 +54,25 @@ export const fetchDetailProductByIdProduct = createAsyncThunk<Result, any>("deta
 export const detailProductSlice = createSlice({
     name: "detailProduct",
     initialState,
-    reducers: {},
+    reducers: {
+        reSetDetailProduct: (state) => {
+            state.detailProduct = null;
+        }
+    },
     extraReducers(builder) {
-        builder.addMatcher(isAnyOf(createDetailProductByIdProduct.fulfilled, updateDetailProductByIdProduct.fulfilled), (state, action) => {
+        builder.addCase(fetchDetailProductByIdProductAsync.fulfilled, (state, action) => {
+            const { isSuccess, result } = action.payload;
+            if (isSuccess === true) {
+                state.detailProduct = result;
+                state.detailProductLoaded = true;
+            };
+        });
+        builder.addMatcher(isAnyOf(createDetailProductAsync.fulfilled, updateDetailProductAsync.fulfilled , deleteDetailProductAsync.fulfilled ), (state, action) => {
             const { isSuccess } = action.payload;
             if (isSuccess === true) state.detailProductLoaded = false;
         });
+
     },
 });
 
-const { } = detailProductSlice.actions;
+export const { reSetDetailProduct } = detailProductSlice.actions;

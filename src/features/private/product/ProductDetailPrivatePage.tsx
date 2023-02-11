@@ -4,16 +4,19 @@ import { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../../app/store/configureStore';
 import { currencyFormat } from '../../../app/util/util';
-import { crateImageProductAsync, deleteImageProductAsync, fetchImageProductsAsync, fetchProductAsync, productSelectors, resetImageProduct } from '../../product/productSlice';
+import { crateImageProductAsync, deleteImageProductAsync, fetchImageProductsAsync, fetchProductAsync, productSelectors, resetImageProduct } from '../../../app/store/productSlice';
 import LayoutPrivate from '../LayoutPrivate';
 import React, { useState } from 'react';
-import { DeleteFilled, InfoCircleFilled, RollbackOutlined, UploadOutlined } from '@ant-design/icons';
+import { DeleteFilled, DeleteOutlined, EditOutlined, InfoCircleFilled, RollbackOutlined, UploadOutlined } from '@ant-design/icons';
 import type { UploadProps } from 'antd/es/upload';
 import type { UploadChangeParam, UploadFile } from 'antd/es/upload/interface';
 import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
 import { beforeUploadAntd } from '../../../app/util/util';
 import { IconButton, ImageListItemBar } from '@mui/material';
+import { fetchDetailProductByIdProductAsync, reSetDetailProduct, deleteDetailProductAsync } from '../../../app/store/detailProductSlice';
+import ModalFormDetailProduct from './ModalFormDetailProduct';
+import Swal from 'sweetalert2';
 
 interface IValue {
   id: string;
@@ -21,19 +24,35 @@ interface IValue {
   productID: any
 }
 
-const ProductDetailPrivate = () => {
+const ProductDetailPrivatePage = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
   const { idProduct } = useParams<{ idProduct: any }>();
   const [loading, setLoading] = useState<boolean>(false);
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [urlModal, setUrlModal] = useState<string>("");
   const product = useAppSelector(state => productSelectors.selectById(state, idProduct));
   const { imageProducts, imageProductLoaded } = useAppSelector(state => state.product);
+  const { detailProduct, detailProductLoaded } = useAppSelector(state => state.detailProduct);
 
   useEffect(() => {
     if (!product) dispatch(fetchProductAsync(idProduct));
   }, [idProduct, dispatch, product]);
+
+  useEffect(() => {
+    if (!imageProductLoaded) dispatch(fetchImageProductsAsync(idProduct));
+    return () => {
+      if (imageProducts) dispatch(resetImageProduct());
+    };
+  }, [imageProductLoaded, dispatch]);
+
+  useEffect(() => {
+    dispatch(fetchDetailProductByIdProductAsync(idProduct));
+    return () => {
+      dispatch(reSetDetailProduct());
+    }
+  }, [detailProductLoaded, dispatch]);
 
   const infoProduct = [
     { title: 'ชื่อ', info: product?.name },
@@ -45,18 +64,20 @@ const ProductDetailPrivate = () => {
     { title: 'คำอธิบาย', info: product?.description },
   ];
 
+  const infoDetailProduct = [
+    { title: 'ชื่อพันธุ์', info: detailProduct?.speciesName },
+    { title: 'วิธีการใส่ปุ๋ย', info: detailProduct?.fertilizeMethod },
+    { title: 'วิธีการปลูก', info: detailProduct?.plantingMethod },
+    { title: 'ฤดูปลูก', info: detailProduct?.growingSeason },
+    { title: 'ฤดูเก็บเกี่ยว', info: detailProduct?.harvestTime },
+    { title: 'เพิ่มเติม', info: detailProduct?.description },
+  ];
+
   const value: IValue = {
     id: "",
     formFiles: null,
     productID: product?.id
   }
-
-  useEffect(() => {
-    if (!imageProductLoaded) dispatch(fetchImageProductsAsync(idProduct));
-    return () => {
-      if (imageProducts) dispatch(resetImageProduct());
-    };
-  }, [imageProductLoaded, dispatch]);
 
   const handleChange: UploadProps['onChange'] = async (info: UploadChangeParam<UploadFile>) => {
     if (info.file.status === 'uploading') {
@@ -68,6 +89,31 @@ const ProductDetailPrivate = () => {
     value.formFiles = null;
     setLoading(false);
   };
+
+  const textButton = !detailProduct ? "เพิ่ม" : "แก้ไข";
+
+  const onDelete = (id: any) => {
+    Swal.fire({
+      title: 'ลบรายละเอียดหรือไม่?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      cancelButtonText: "ยกเลิก",
+      confirmButtonText: 'ตกลง'
+    }).then((result: any) => {
+      if (result.isConfirmed) {
+        dispatch(deleteDetailProductAsync(id));
+        dispatch(reSetDetailProduct());
+      }
+    })
+  };
+
+
+  const extraDetail = <Space>
+    {detailProduct && <Button className='text-st' danger type='primary' onClick={() => onDelete(detailProduct?.id)} icon={<DeleteOutlined />}>ลบ</Button>}
+    <Button className='text-st' type='primary' onClick={() => setModalOpen(true)} icon={<EditOutlined />}>{textButton}</Button>
+  </Space>
 
   const buttonUpload = <Upload
     action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
@@ -84,6 +130,7 @@ const ProductDetailPrivate = () => {
 
   return (
     <LayoutPrivate>
+      <ModalFormDetailProduct modalOpen={modalOpen} setModalOpen={setModalOpen} detailProduct={detailProduct} idProduct={idProduct} />
       <Row  >
         <Col span={8}><h1 className='text-st'>ข้อมูลสินค้า</h1></Col>
         <Col span={8} offset={8} style={{ display: "flex", justifyContent: "end", alignItems: "center" }}>
@@ -152,20 +199,10 @@ const ProductDetailPrivate = () => {
             <Card
               style={{ width: "100%" }}
             >
-              <Descriptions column={2} title="รายละเอียดเพิ่มเติม" className='text-st'>
-                <Descriptions.Item label="ชื่อพันธุ์">{product?.name}</Descriptions.Item>
-                <Descriptions.Item label="วิธีการใส่ปุ๋ย">{currencyFormat(product?.price)}</Descriptions.Item>
-                <Descriptions.Item label="วิธีการปลูก">{product?.stock}</Descriptions.Item>
-                <Descriptions.Item label="ฤดูปลูก">
-                  <Card style={{ height: "30px", backgroundColor: product?.color }} />
-                </Descriptions.Item>
-                <Descriptions.Item label="ฤดูเก็บเกี่ยว">
-                  {product?.weight} {product?.weightUnit.name}
-                </Descriptions.Item>
-                <Descriptions.Item label="เพิ่มเติม">
-                  {product?.categoryProduct.name}
-                </Descriptions.Item>
+              <Descriptions column={2} title="รายละเอียดเพิ่มเติม" className='text-st' extra={extraDetail}>
+                {detailProduct && React.Children.toArray(infoDetailProduct.map(({ info, title }) => <Descriptions.Item labelStyle={{ fontWeight: "bold" }} label={title}>{info}</Descriptions.Item>))}
               </Descriptions>
+              {!detailProduct && <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="ไม่มีข้อมูล" className='text-st' />}
             </Card>
           </Space>
         </Col>
@@ -173,4 +210,4 @@ const ProductDetailPrivate = () => {
     </LayoutPrivate>
   )
 }
-export default ProductDetailPrivate;
+export default ProductDetailPrivatePage;

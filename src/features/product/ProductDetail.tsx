@@ -6,12 +6,12 @@ import { Link, useParams } from 'react-router-dom';
 import AppButtonCart from '../../app/components/AppButtonCart';
 import { useAppDispatch, useAppSelector } from '../../app/store/configureStore';
 import { currencyFormat, Ts } from '../../app/util/util';
-import { fetchImageProductsAsync, fetchProductAsync, productSelectors, resetImageProduct } from './productSlice';
+import { fetchImageProductsAsync, fetchProductAsync, productSelectors, resetImageProduct } from '../../app/store/productSlice';
 import { FacebookShareButton } from "react-share";
 import MainContainer from '../../app/layout/MainContainer';
 import TitleTap from '../../app/layout/TitleTap';
 import ContentTap from '../../app/layout/ContentTap';
-import { addCartItemAsync, removeCartItemAsync } from '../cart/cartSlice';
+import { addCartItemAsync, removeCartItemAsync } from '../../app/store/cartSlice';
 import Swal from 'sweetalert2';
 
 interface IImageGallery {

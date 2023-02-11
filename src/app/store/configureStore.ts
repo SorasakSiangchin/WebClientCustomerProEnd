@@ -1,12 +1,13 @@
-import { addressSlice } from './../../features/address/addressSlice';
+import { addressSlice } from './addressSlice';
 import { configureStore } from "@reduxjs/toolkit";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux/es/exports";
 import { TypedUseSelectorHook } from "react-redux/es/types";
-import { accountSlice } from "../../features/account/accountSlice";
-import { cartSlice } from "../../features/cart/cartSlice";
-import { productSlice } from "../../features/product/productSlice";
-import { homeSlice } from '../../features/home/homeSlice';
+import { accountSlice } from "./accountSlice";
+import { cartSlice } from "./cartSlice";
+import { productSlice } from "./productSlice";
+import { homeSlice } from './homeSlice';
+import { detailProductSlice } from './detailProductSlice';
 
 export const store = configureStore({
     reducer:{
@@ -15,6 +16,7 @@ export const store = configureStore({
        cart : cartSlice.reducer ,
        address : addressSlice.reducer ,
        home : homeSlice.reducer ,
+       detailProduct : detailProductSlice.reducer ,
     }
 })
 

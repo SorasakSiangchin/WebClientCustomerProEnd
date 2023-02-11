@@ -5,7 +5,7 @@ import { Account } from "../../app/models/Account";
 import { Role } from "../../app/models/Role";
 import { Login, Register } from '../../app/models/Interfaces/IAccount';
 import { formatDate } from '../../app/util/util';
-import { setCart } from '../cart/cartSlice';
+import { setCart } from '../../app/store/cartSlice';
 
 export const value = { firstName: "", lastName: "", email: "", password: "", phoneNumber: "", roleID: "", formFiles: File };
 

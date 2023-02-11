@@ -116,6 +116,7 @@ const DetailProduct = {
     getByIdProduct : (idProduct: any) => requests.get(`detailProduct/idProduct?idProduct=${idProduct}`),
     create : (value: any) => requests.post("detailProduct" , value),
     update : (value: any) => requests.put("detailProduct" , value),
+    delete: (idProduct: any) => requests.delete(`detailProduct/${idProduct}`)
 }
 
 const ImageProduct = {

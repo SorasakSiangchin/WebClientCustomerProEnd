@@ -8,10 +8,11 @@ import { RcFile, UploadChangeParam, UploadFile, UploadProps } from 'antd/es/uplo
 import AppUpload, { getBase64 } from '../../../app/components/AppUpload';
 import { RegisterValidate } from '../AccountValidate';
 import { useAppDispatch, useAppSelector } from '../../../app/store/configureStore';
-import { fetchRolesAsync, loadAccountStorage, setAccount } from '../accountSlice';
+import { fetchRolesAsync, loadAccountStorage, setAccount } from '../../../app/store/accountSlice';
 import agent from '../../../app/api/agent';
 import AppTextInput from '../../../app/components/AppTextInput';
 import { ColAccount } from "../AccountPage";
+
 const AccountPersonal = () => {
     const dispatch = useAppDispatch();
     const accountStorage = loadAccountStorage();
@@ -47,7 +48,7 @@ const AccountPersonal = () => {
             dispatch(setAccount({ account: result }));
         };
     };
-    
+
     return (
         <Formik
             initialValues={value}

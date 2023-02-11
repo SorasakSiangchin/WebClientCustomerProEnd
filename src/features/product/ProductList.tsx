@@ -1,10 +1,10 @@
-import React, { Fragment, useState } from 'react'
+import React, { Fragment, useState, useCallback } from 'react'
 import TopSection from '../../app/layout/TopSection';
 import ProductCard from './ProductCard';
 import CustomSlider from './CustomSlider';
 import BlockCart from './BlockCart';
 import { useAppDispatch } from '../../app/store/configureStore';
-import { resetProductParams, setParams } from './productSlice';
+import { resetProductParams, setParams } from '../../app/store/productSlice';
 import AppPagination from '../../app/components/AppPagination';
 import { Button, Empty, Form, Select, Space } from 'antd';
 import { AppstoreOutlined, RedoOutlined, UnorderedListOutlined } from '@ant-design/icons';
@@ -41,6 +41,7 @@ const ProductList = () => {
   const [isViewMode, setIsViewMode] = useState(false);
   const setGridViewMode = () => setIsViewMode(false);
   const setListViewMode = () => setIsViewMode(true);
+
   const showProducts = React.Children.toArray(products.map((product) => <ProductCard product={product} isViewMode={isViewMode} productsLoaded={productsLoaded} />));
 
   const reset = () => dispatch(resetProductParams());

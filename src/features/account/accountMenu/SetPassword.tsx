@@ -6,7 +6,7 @@ import { ErrorMessage, Formik } from 'formik';
 import { Ts } from '../../../app/util/util';
 import agent from '../../../app/api/agent';
 import { useAppDispatch, useAppSelector } from '../../../app/store/configureStore';
-import { loadAccountStorage, setAccount } from '../accountSlice';
+import { loadAccountStorage, setAccount } from '../../../app/store/accountSlice';
 import { Result } from '../../../app/models/Interfaces/IResponse';
 import swal from 'sweetalert';
 

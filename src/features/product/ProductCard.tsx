@@ -1,10 +1,12 @@
 import { HeartFilled, HeartOutlined, ShoppingCartOutlined } from '@ant-design/icons';
 import { Avatar, Card } from 'antd';
-import React, { Fragment } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import useFavorite from '../../app/hooks/useFavorite';
 import { Product } from '../../app/models/Product';
 import { currencyFormat } from '../../app/util/util';
+
+let checkTimer: any;
 
 interface Props {
     product: Product
@@ -15,14 +17,31 @@ interface Props {
     col?: string
 }
 
+const { Meta } = Card;
+
 const ProductCard = ({ product, newLabel = false, saleLabel = false, isViewMode = false, productsLoaded }: Props) => {
-    const { Meta } = Card;
-    const { checkFavorite , addFavorite , removeFavorite } = useFavorite();
+    
+    const dateCreated = new Date(new Date(product.created).getTime() + 1000 * 20);
+    const date = new Date();
+    const { checkFavorite, addFavorite, removeFavorite } = useFavorite();
+    const [checkDate, setCheckDate] = useState<boolean>(false);
     const statusFavorite = checkFavorite(product.id)
-    const onFavorite = (info : Product) => {
-        if(!statusFavorite) addFavorite(info);
+    const onFavorite = (info: Product) => {
+        if (!statusFavorite) addFavorite(info);
         else removeFavorite(info.id);
-    }
+    };
+
+    useEffect(() => {
+        if (new Date(dateCreated) > date) {
+            const remainingTime =
+            dateCreated.getTime() - date.getTime();
+            setCheckDate(true);
+            checkTimer = setTimeout(() => {
+                setCheckDate(false);
+            }, remainingTime);
+        } else clearTimeout(checkTimer);
+    }, [checkDate, dateCreated, date, product.created]);
+
     if (!productsLoaded) {
         return (
             <li className="item col-lg-4 col-md-3 col-sm-4 col-xs-6">
@@ -47,7 +66,7 @@ const ProductCard = ({ product, newLabel = false, saleLabel = false, isViewMode 
                             <Link to={`/product-detail/${product.id}`} title="Fresh Organic Mustard Leaves " className="product-image">
                                 <img src={product.imageUrl} alt="Fresh Organic Mustard Leaves " height="250px" />
                             </Link>
-                            {newLabel && <div className="new-label new-top-left">New</div>}
+                            {checkDate && <div className="new-label new-top-left">New</div>}
                             {saleLabel && <div className="sale-label sale-top-right">Sale</div>}
                         </div>
                     </div>
@@ -68,7 +87,7 @@ const ProductCard = ({ product, newLabel = false, saleLabel = false, isViewMode 
                                 </div>
                                 <div className="restuarent">
                                     <Link to="#" onClick={() => onFavorite(product)} >
-                                        <HeartFilled style={{ fontSize: "15px" , color:statusFavorite ? "red" : "" }} /> รายการโปรด
+                                        <HeartFilled style={{ fontSize: "15px", color: statusFavorite ? "red" : "" }} /> รายการโปรด
                                     </Link>
                                     <Link to="/products-similar">
                                         <ShoppingCartOutlined style={{ fontSize: "15px" }} /> สินค้าที่คล้ายกัน

@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { addressSelectors, fetchAddressesAsync } from '../../features/address/addressSlice';
+import { addressSelectors, fetchAddressesAsync } from '../../app/store/addressSlice';
 import { useAppDispatch, useAppSelector } from '../store/configureStore';
 
 const useAddress = () => {

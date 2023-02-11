@@ -8,14 +8,12 @@ import MainContainer from '../../app/layout/MainContainer';
 import TopSection from '../../app/layout/TopSection';
 import { useAppDispatch, useAppSelector } from '../../app/store/configureStore';
 import { currencyFormat, Text, Ts } from '../../app/util/util';
-import { addCartItemAsync, removeCartItemAsync } from './cartSlice';
+import { addCartItemAsync, removeCartItemAsync } from '../../app/store/cartSlice';
 import { useNavigate } from "react-router-dom";
 import { CartItem } from '../../app/models/Cart';
 import { toast } from 'react-toastify';
 import Lottie from "lottie-react";
 import IconWarning from "../../assets/icons/warning.json";
-import agent from '../../app/api/agent';
-import { Product } from '../../app/models/Product';
 import { Container } from 'react-bootstrap';
 
 export interface DataTypeCart {

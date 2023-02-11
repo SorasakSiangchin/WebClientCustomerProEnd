@@ -13,7 +13,7 @@ import { useNavigate } from 'react-router-dom';
 import LayoutPrivate from '../LayoutPrivate';
 import Swal from 'sweetalert2';
 import { useAppDispatch } from '../../../app/store/configureStore';
-import { removeProductAsync, setParams } from '../../product/productSlice';
+import { removeProductAsync, setParams } from '../../../app/store/productSlice';
 import AppPagination from '../../../app/components/AppPagination';
 export interface DataType {
   key: string;

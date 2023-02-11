@@ -3,7 +3,7 @@ import { Formik, Form, ErrorMessage } from 'formik';
 import { Fragment } from 'react'
 import TopSection from '../../app/layout/TopSection'
 import { useAppDispatch } from '../../app/store/configureStore';
-import { loginAccount } from './accountSlice';
+import { loginAccount } from '../../app/store/accountSlice';
 import { LoginValidate } from './AccountValidate';
 import { Link, useNavigate } from 'react-router-dom';
 import swal from 'sweetalert';

@@ -12,7 +12,7 @@ import type { UploadChangeParam } from 'antd/es/upload';
 import { CiShuffle } from "react-icons/ci";
 import "./Register.css";
 import AppTextInput from '../../app/components/AppTextInput';
-import { fetchRolesAsync, registerAccount, value } from './accountSlice';
+import { fetchRolesAsync, registerAccount, value } from '../../app/store/accountSlice';
 import { useAppDispatch, useAppSelector } from '../../app/store/configureStore';
 import AppPasswordInput from '../../app/components/AppPasswordInput';
 import swal from 'sweetalert';
@@ -35,8 +35,6 @@ const Register = () => {
     reader.addEventListener('load', () => callback(reader.result as string));
     reader.readAsDataURL(img);
   };
-
-
 
   const submitForm = async (data: any) => {
     const result: Result = await dispatch(registerAccount(data)).unwrap();

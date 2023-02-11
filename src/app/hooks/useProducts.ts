@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { fetchCategoryProductsAsync, fetchLevelProductsAsync, fetchProductRaresAsync, fetchProductsAsync, fetchWeightUnitsAsync, productSelectors } from '../../features/product/productSlice';
+import { fetchCategoryProductsAsync, fetchLevelProductsAsync, fetchProductRaresAsync, fetchProductsAsync, fetchWeightUnitsAsync, productSelectors } from '../../app/store/productSlice';
 import { useAppDispatch, useAppSelector } from '../store/configureStore';
 
 const useProducts = () => {

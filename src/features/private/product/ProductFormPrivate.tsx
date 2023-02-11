@@ -26,7 +26,7 @@ import ImgCrop from 'antd-img-crop';
 import useProducts from '../../../app/hooks/useProducts';
 import { ProductPrivateValidate } from './ProductPrivateValidate';
 import { useAppDispatch, useAppSelector } from '../../../app/store/configureStore';
-import { createProductAsync, editProductAsync } from '../../product/productSlice';
+import { createProductAsync, editProductAsync } from '../../../app/store/productSlice';
 import { Result } from '../../../app/models/Interfaces/IResponse';
 import Swal from 'sweetalert2';
 const { Option } = Select;

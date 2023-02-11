@@ -3,11 +3,12 @@ import React from 'react';
 interface Props {
   ReactFC: any;
   data: any;
+  typeChart: string;
 }
 
-const Doughnut3D = ({ ReactFC, data }: Props) => {
+const Doughnut3D = ({ ReactFC, data, typeChart }: Props) => {
   const chartConfigs = {
-    type: "doughnut3d",
+    type: typeChart,
     width: "100%",
     height: "400",
     dataFormat: "json",

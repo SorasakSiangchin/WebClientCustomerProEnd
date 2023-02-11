@@ -5,7 +5,7 @@ import { Cart } from '../../app/models/Cart';
 import FreeScrollBar from 'react-free-scrollbar';
 import { currencyFormat } from '../../app/util/util';
 import { useAppDispatch, useAppSelector } from '../../app/store/configureStore';
-import { removeCartItemAsync } from '../cart/cartSlice';
+import { removeCartItemAsync } from '../../app/store/cartSlice';
 import { CheckOutlined } from '@ant-design/icons';
 interface Props {
   cart: Cart

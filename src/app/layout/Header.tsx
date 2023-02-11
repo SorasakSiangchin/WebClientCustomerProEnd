@@ -8,7 +8,7 @@ import { Cart } from '../models/Cart';
 import Lottie from "lottie-react";
 import IconSearch from "../../assets/icons/search.json";
 import { Button, Form, Input } from 'antd';
-import { setParams } from '../../features/product/productSlice';
+import { setParams } from '../../app/store/productSlice';
 
 export const midLinks = [
     { title: "หน้าแรก", path: "/" },

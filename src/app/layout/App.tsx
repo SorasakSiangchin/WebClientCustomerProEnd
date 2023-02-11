@@ -6,13 +6,13 @@ import {
 import Footer from './Footer';
 import Header from './Header';
 import { useAppDispatch, useAppSelector } from '../store/configureStore';
-import { fetchCurrentAccount, logout, setTing, setUp } from '../../features/account/accountSlice';
-import { fetchCartAsync } from '../../features/cart/cartSlice';
+import { fetchCurrentAccount, logout, setTing, setUp } from '../store/accountSlice';
+import { fetchCartAsync } from '../../app/store/cartSlice';
 import { mainRoutes } from '../routes/Routes';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import "../../App.css";
-import { setShowLayout } from '../../features/home/homeSlice';
+import { setShowLayout } from '../../app/store/homeSlice';
 import { Layout } from 'antd';
 import useSiderPrivate from '../hooks/useSiderPrivate';
 

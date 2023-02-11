@@ -8,7 +8,7 @@ import { default as dtProvince } from "../../../assets/jsondata/province.json";
 import { default as dtSubDistrict } from "../../../assets/jsondata/subdistrict.json";
 import { Col, Row } from 'react-bootstrap';
 import { useAppDispatch, useAppSelector } from '../../../app/store/configureStore';
-import { createAddressAsync, updateAddressAsync } from '../../address/addressSlice';
+import { createAddressAsync, updateAddressAsync } from '../../../app/store/addressSlice';
 import { Ts } from '../../../app/util/util';
 
 interface Props {
@@ -118,9 +118,9 @@ const ModalFormAddress = ({ modalOpen, setModalOpen, address }: Props) => {
                     setFieldValue("province", more[0].value);
                     setFieldValue("district", more[1].value);
                     setFieldValue("subDistrict", more[2].value);
-                    setFieldValue("zipCode", more[2].code); 
+                    setFieldValue("zipCode", more[2].code);
                 };
-                
+
                 return <>
                     {modalOpen && <ModalForm
                         isOpen={modalOpen}
@@ -129,7 +129,7 @@ const ModalFormAddress = ({ modalOpen, setModalOpen, address }: Props) => {
                             setModalOpen(false);
                             resetForm();
                         }}
-                        onOk={handleSubmit}
+                        onOk={handleSubmit }
                         title="ที่อยู่ใหม่"
                         content={<div style={{ padding: "20px" }}>
                             <Space direction="vertical" size="middle" style={{ display: 'flex' }}>
