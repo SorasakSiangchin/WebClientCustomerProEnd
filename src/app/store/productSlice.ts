@@ -99,7 +99,6 @@ export const fetchProductByNameAsync = createAsyncThunk<Product[], string>("prod
     async (nameProduct, thunkAPI) => {
         try {
             const { result }: Result = await agent.Product.getName(nameProduct);
-            console.log(result);
             return result;
         } catch (error: any) {
             return thunkAPI.rejectWithValue({ error: error.data })
@@ -212,7 +211,7 @@ export const productSlice = createSlice({
         resetImageProduct: (state) => {
             state.imageProducts = null;
             state.imageProductLoaded = false;
-        }
+        },
     },
     extraReducers: builder => {
         builder.addCase(fetchProductsAsync.fulfilled, (state, action) => {

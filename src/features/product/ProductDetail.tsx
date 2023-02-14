@@ -1,5 +1,5 @@
 import { FacebookFilled, HeartOutlined, InstagramFilled } from '@ant-design/icons';
-import { Alert, Button, Image, Input, Rate } from 'antd';
+import { Alert, Button, Image, Input, Rate, Space } from 'antd';
 import { Fragment, useState, useEffect } from 'react';
 import ImageGallery from 'react-image-gallery';
 import { Link, useParams } from 'react-router-dom';
@@ -20,8 +20,8 @@ interface IImageGallery {
   renderItem: any;
 }
 
-const keysTap = ["reviews_tabs", "product_tabs_custom"];
-const titleTap = ["ความคิดเห็น", "ข้อมูลร้านค้า"];
+const keysTap = ["reviews_tabs", "product_tabs_custom", "product_detail_tabs"];
+const titleTap = ["ความคิดเห็น", "ข้อมูลร้านค้า", "เพิ่มเติม"];
 
 const ProductDetail = () => {
   const dispatch = useAppDispatch();
@@ -120,6 +120,19 @@ const ProductDetail = () => {
     });
   };
 
+  const checkTypeAlert = (levelID: any) => {
+    switch (levelID) {
+      case 1:
+        return "info";
+      case 2:
+        return "warning";
+      case 3:
+        return "error";
+      default:
+        return "info";
+    };
+  }
+
   return (
     <Fragment>
       <div className="product-essential container">
@@ -145,7 +158,12 @@ const ProductDetail = () => {
             </div>
             <div className="price-block">
               <div className="price-box">
-                <LabelAvailability stock={product?.stock} />
+                <div style={{ display: "flex", }}>
+                  <Space direction='horizontal' style={{ width: "100%" }}>
+                    <LabelAvailability message={`มีสินค้า ${product?.stock} รายการ`} showIcon={true} type="success" />
+                    <LabelAvailability message={<>ระดับสินค้า <u>{product?.levelProduct.level}</u></>} showIcon={false} type={checkTypeAlert(product?.levelProductID)} />
+                  </Space>
+                </div>
                 <p className="special-price"> <span id="product-price-48" className="price"> {currencyFormat(product?.price)}</span> </p>
               </div>
             </div>
@@ -201,7 +219,7 @@ const ProductDetail = () => {
             <div className="product-collateral">
               <TitleTap titles={titleTap} keys={keysTap} />
               <div id="productTabContent" className="tab-content">
-                <ContentTap ids={keysTap} idAccount={product?.accountID} />
+                <ContentTap ids={keysTap} product={product} />
               </div>
             </div>
           </div>
@@ -215,7 +233,14 @@ const RenderItem = (image: string) => (<div className="product-full">
   <Image id="product-zoom" src={image} alt="product-image" style={{ height: "500px" }} />
 </div>);
 
-const LabelAvailability = ({ stock }: any) => <Alert className='text-st availability ' style={{ width: "25%", marginBottom: "25px" }} message={`มีสินค้า ${stock} รายการ`} type="success" showIcon />;
+const LabelAvailability = ({ message, showIcon, type }: any) =>
+  <Alert
+    className='text-st availability '
+    style={{ width: "100%", marginBottom: "25px" }}
+    message={message}
+    type={type}
+    showIcon={showIcon}
+  />;
 
 const AddToBox = ({ children }: any) => (
 

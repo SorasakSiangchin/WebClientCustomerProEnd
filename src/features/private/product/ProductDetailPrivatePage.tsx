@@ -109,7 +109,6 @@ const ProductDetailPrivatePage = () => {
     })
   };
 
-
   const extraDetail = <Space>
     {detailProduct && <Button className='text-st' danger type='primary' onClick={() => onDelete(detailProduct?.id)} icon={<DeleteOutlined />}>ลบ</Button>}
     <Button className='text-st' type='primary' onClick={() => setModalOpen(true)} icon={<EditOutlined />}>{textButton}</Button>

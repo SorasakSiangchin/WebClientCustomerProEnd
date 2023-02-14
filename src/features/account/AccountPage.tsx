@@ -11,6 +11,7 @@ import { useAppSelector } from '../../app/store/configureStore';
 import AccountPersonal from './accountMenu/AccountPersonal';
 import AccountAddress from './accountMenu/AccountAddress';
 import SetPassword from './accountMenu/SetPassword';
+import AccountPurchase from './accountMenu/accountPurchase/AccountPurchase';
 
 type MenuItem = Required<MenuProps>['items'][number];
 
@@ -55,6 +56,8 @@ const AccountPage = () => {
                 return <AccountAddress />
             case "3":
                 return <SetPassword />
+            case "4":
+                return <AccountPurchase />
             default:
                 return <AccountPersonal />;
         };

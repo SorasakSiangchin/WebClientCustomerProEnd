@@ -1,4 +1,3 @@
-import { value } from './../../features/account/accountSlice';
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { toast } from "react-toastify";
 import { PaginatedResponse } from "../models/Pagination";
@@ -72,6 +71,7 @@ const Product = {
     list: (params: any) => requests.post('products', params),
     getName: (nameProduct : any) => requests.get(`product/name?name=${nameProduct}`),
     getRares: () => requests.get('product/rare'),
+    getByIdAccount : (idAccount : any) => requests.get(`product/accountId?accountId=${idAccount}`),
     detail: (idProduct: string) => requests.get(`product/${idProduct}`),
     delete: (idProduct: string) => requests.delete(`product/${idProduct}`),
     create:(value: any) => requests.post("product", createFormData(value)),
@@ -98,6 +98,9 @@ const Cart = {
 
 const Order = {
     getIdAccount: (value: any) => requests.post(`/orders/accountId`,value),
+    create: (value: any) => requests.post(`orders`,value),
+    getByIdAccount: (accountId: any) => requests.get(`orders?accountId=${accountId}`),
+    detail : (idOrder: any) => requests.get(`order/${idOrder}`)
 }
 
 const Role = {

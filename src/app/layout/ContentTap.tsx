@@ -1,18 +1,26 @@
-import { Avatar, Card, Pagination, Space } from 'antd';
-import { Fragment, useState, useEffect } from 'react'
+import { ShopOutlined } from '@ant-design/icons';
+import { Avatar, Button, Card, Col, Descriptions, Divider, Empty, Pagination, Row, Space } from 'antd';
+import React, { Fragment, useState, useEffect } from 'react'
 import { Container } from 'react-bootstrap';
 import Image from "../../assets/images/member1.png";
 import agent from '../api/agent';
 import { Account } from '../models/Account';
 import { Result } from '../models/Interfaces/IResponse';
-import { useAppDispatch } from '../store/configureStore';
+import { Product } from '../models/Product';
+import { useAppDispatch, useAppSelector } from '../store/configureStore';
+import { fetchDetailProductByIdProductAsync, reSetDetailProduct } from '../store/detailProductSlice';
 
+interface Props {
+    ids: any;
+    product: Product | undefined;
+}
 
-const ContentTap = ({ ids, idAccount }: any) => {
+const ContentTap = ({ ids, product }: Props) => {
     return (
         <Fragment>
             <ReviewTap id={ids[0]} />
-            <ProductStore id={ids[1]} idAccount={idAccount} />
+            <ProductStore id={ids[1]} idAccount={product?.accountID} />
+            <ProductDetail id={ids[2]} product={product} />
         </Fragment>
     )
 }
@@ -73,26 +81,106 @@ const ReviewTap = ({ id }: any) => {
 }
 
 const ProductStore = ({ id, idAccount }: any) => {
-    // const dispatch = useAppDispatch();
-    // const [account, setAccount] = useState<Account | null>(null);
-    // useEffect(() => {
-    //     if (account === null) {
-    //         const loadAccount = async () => {
-    //             const result: Result = await agent.Account.currentAccount(idAccount);
-    //             if (result.isSuccess === true && result.statusCode === 200) setAccount(result.result);
-    //         }
-    //         loadAccount();
-    //     }
-    // }, [dispatch , account]);
+    const dispatch = useAppDispatch();
+    const [account, setAccount] = useState<Account | null>(null);
+    const [products, setProducts] = useState<Product[] | null>(null);
+    useEffect(() => {
+        if (account === null) {
+            const loadAccount = async () => {
+                const result: Result = await agent.Account.currentAccount(idAccount);
+                if (result.isSuccess === true && result.statusCode === 200) setAccount(result.result);
+            }
+            loadAccount();
+        }
+    }, [dispatch, account]);
 
+    useEffect(() => {
+        if (products === null) {
+            const loadProducts = async () => {
+                const result: Result = await agent.Product.getByIdAccount(idAccount);
+                if (result.isSuccess === true && result.statusCode === 200) setProducts(result.result);
+            }
+            loadProducts();
+        }
+    }, [dispatch]);
 
     return <div className="tab-pane fade" id={id}>
-        <div className="product-tabs-content-inner clearfix" style={{ width: "100%" }}>
-            {/* <Card.Meta
-                style={{ display: "flex" }}
-                avatar={<Avatar src={account?.imageUrl} style={{ width: "90px", height: "90px" }} />}
-                title={<h2 style={{ marginLeft: "30px" }}>{account?.firstName}</h2>}
-            /> */}
+        <div className="product-tabs-content-inner clearfix" >
+            <Row gutter={24}>
+                <Col span={20} >
+                    <Space>
+                        <div>
+                            <Card.Meta
+                                style={{ width: "100%" }}
+                                avatar={<Avatar src={account?.imageUrl} size={100} />}
+                            />
+                        </div>
+                        <div style={{ display: "flex" }}>
+                            <Col className='text-st'>
+                                <h2>{account?.firstName}</h2>
+                                <p>สินค้าทั้งหมด {products?.length} รายการ</p>
+                                <br />
+                                <br />
+                            </Col>
+                        </div>
+                    </Space>
+                </Col>
+                <Col span={4} style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "end"
+                }}>
+                    <Button className='text-st' size='large' icon={<ShopOutlined />}>ดูร้านค้า</Button>
+                </Col>
+            </Row>
+        </div>
+    </div>
+}
+
+const ProductDetail = ({ id, product }: any) => {
+    const dispatch = useAppDispatch();
+    const { detailProduct, detailProductLoaded } = useAppSelector(state => state.detailProduct);
+
+    useEffect(() => {
+        dispatch(fetchDetailProductByIdProductAsync(product?.id));
+        return () => {
+            dispatch(reSetDetailProduct());
+        }
+    }, [detailProductLoaded, dispatch]);
+
+    const infoProduct = [
+        { title: 'ประเภทสินค้า', info: product?.categoryProduct.name },
+        { title: 'น้ำหนัก', info: `${product?.weight} ${product?.weightUnit.name}` },
+        { title: 'สี', info: <Card style={{ height: "30px", backgroundColor: product?.color }} /> },
+    ];
+
+    const infoDetailProduct = [
+        { title: 'ชื่อพันธุ์', info: detailProduct?.speciesName },
+        { title: 'วิธีการใส่ปุ๋ย', info: detailProduct?.fertilizeMethod },
+        { title: 'วิธีการปลูก', info: detailProduct?.plantingMethod },
+        { title: 'ฤดูปลูก', info: detailProduct?.growingSeason },
+        { title: 'ฤดูเก็บเกี่ยว', info: detailProduct?.harvestTime },
+        { title: 'เพิ่มเติม', info: detailProduct?.description },
+    ];
+
+    return <div className="tab-pane fade" id={id}>
+        <div className="product-tabs-content-inner clearfix" >
+            <Row gutter={24}>
+                <Col span={11} >
+                    <Descriptions column={1} title={<u>รายละเอียดสินค้า</u>} className='text-st'>
+                        {React.Children.toArray(infoProduct.map(({ info, title }) => <Descriptions.Item labelStyle={{ fontWeight: "bold" }} label={title}>{info}</Descriptions.Item>))}
+                    </Descriptions>
+                </Col>
+                <Col span={2} className='center'>
+                    <Divider type='vertical' style={{ height: "100%" }} />
+                </Col>
+                <Col span={11}>
+                    <Descriptions column={1} title={<u>ข้อมูลจำเพาะของสินค้า</u>} className='text-st'>
+                        {detailProduct && React.Children.toArray(infoDetailProduct.map(({ info, title }) => <Descriptions.Item labelStyle={{ fontWeight: "bold" }} label={title}>{info}</Descriptions.Item>))}
+                    </Descriptions>
+                    {!detailProduct && <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="ไม่มีข้อมูล" className='text-st' />}
+                </Col>
+            </Row>
         </div>
     </div>
 }

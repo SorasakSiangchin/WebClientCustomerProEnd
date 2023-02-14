@@ -12,6 +12,12 @@ import { CartItem } from '../../app/models/Cart';
 import CheckoutAddress from './CheckoutAddress';
 import useAddress from '../../app/hooks/useAddress';
 import CheckoutInfoPayment from './CheckoutInfoPayment';
+import { OrderRequest } from '../../app/models/Order';
+import Swal from 'sweetalert2';
+import { useAppDispatch } from '../../app/store/configureStore';
+import { crateOrderAsync } from '../../app/store/orderSlice';
+import { fetchCartAsync } from '../../app/store/cartSlice';
+import AppAvatarAccount from '../../app/components/AppAvatarAccount';
 
 interface DataType {
     key: string;
@@ -58,12 +64,15 @@ const columns: ColumnsType<DataType> = [
     }
 ];
 
+
 const CheckoutPage = () => {
     const { state } = useLocation();
+    const dispatch = useAppDispatch();
     const [accountId, setAccountId] = useState<string[]>([]);
     const { addresses } = useAddress();
     const address = addresses.find(x => x.status === true)
     const navigate = useNavigate();
+
     const loadAccountId = async () => {
         const { result, isSuccess, statusCode }: Result = await agent.Order.getIdAccount({
             cartId: state.cartId,
@@ -71,7 +80,7 @@ const CheckoutPage = () => {
         });
         if (isSuccess === true && statusCode === 200) setAccountId(result);
     };
-   
+
     const priceTotal = state?.dataCart.reduce((curNumber: any, item: any) => {
         return curNumber + item.price * item.amount;
     }, 0);
@@ -82,14 +91,58 @@ const CheckoutPage = () => {
         loadAccountId();
     }, []);
 
+    const orderRequest: OrderRequest = {
+        addressID: address?.id !== 0 ? address?.id : 0,
+        orderItems: state.dataCart.map((item: any) => {
+            return {
+                amount: item.amount,
+                price: item.price,
+                itemOrdered: {
+                    productID: item.key,
+                    imageUrl: item.product.imageUrl,
+                    name: item.product.name
+                },
+                id: 0
+            }
+        }),
+        accountIdFromProduct: accountId,
+        cartID: state.cartId
+    };
+
+    const handleClickOrder = async () => {
+        if (address) {
+            const result: Result = await dispatch(crateOrderAsync(orderRequest)).unwrap();
+            if (result.isSuccess === true && result.statusCode === 200) {
+                Swal.fire({
+                    position: 'center',
+                    icon: 'success',
+                    title: 'สำเร็จ',
+                    showConfirmButton: false,
+                    timer: 1000
+                }).then(() => {
+                    navigate("/account", { state: "4" });
+                    dispatch(fetchCartAsync(address.accountID));
+                });
+            };
+        } else {
+            Swal.fire({
+                icon: 'warning',
+                title: 'กรุณาเลือกที่อยู่',
+            });
+        }
+    }
+
     const showProduct = React.Children.toArray(accountId.map(id => {
         const product = state.dataCart.filter((e: any) => e.accountId === id);
+
         const priceSubTotal = product.reduce((curNumber: any, item: any) => {
             return curNumber + item.price * item.amount;
         }, 0);
+
         const amountSubTotal = product.reduce((curNumber: any, item: any) => {
             return curNumber + item.amount;
         }, 0);
+
         const data: DataType[] = product.map((item: any) => {
             return {
                 key: item.cartItemId,
@@ -100,7 +153,10 @@ const CheckoutPage = () => {
                 total: item.price * item.amount,
             };
         });
-        return <Card hoverable className='text-st' title={<AvatarAccount accountId={id} />} bordered={true} style={{
+
+        const summaryCard = <Ts>ยอดสั่งซื้อทั้งหมด ({amountSubTotal} ชิ้น): <span style={{ fontWeight: "bold" }}>{currencyFormat(priceSubTotal)}</span> </Ts>
+
+        return <Card hoverable className='text-st' title={<AppAvatarAccount accountId={id} />} bordered={true} style={{
             width: "100%",
             height: "100%",
             marginTop: "20px",
@@ -108,8 +164,12 @@ const CheckoutPage = () => {
             borderStyle: "solid",
             borderWidth: "5px"
         }}>
-            <Table columns={columns} dataSource={data} pagination={false} />
+            <Space size="large" direction='vertical' style={{ width: "100%" }} >
+                <Table columns={columns} dataSource={data} pagination={false} />
+                {summaryCard}
+            </Space>
         </Card>;
+
     }));
 
     return (
@@ -132,8 +192,8 @@ const CheckoutPage = () => {
                                 title="ที่อยู่ในการจัดส่ง"
                                 className="block block-progress text-st"
                                 extra={
-                                    <Button type='link' className='text-st' onClick={() => navigate("/account" , {state : "2" })}>
-                                        {address ? "เปลี่ยน" : "เพิ่ม" } 
+                                    <Button type='link' className='text-st' onClick={() => navigate("/account", { state: "2" })}>
+                                        {address ? "เปลี่ยน" : "เพิ่ม"}
                                     </Button>
                                 }
                             >
@@ -144,6 +204,7 @@ const CheckoutPage = () => {
                                 className="block block-progress text-st"
                                 actions={[
                                     <Button
+                                        onClick={() => handleClickOrder()}
                                         style={{ width: "90%" }}
                                         htmlType="button"
                                         size='large'
@@ -153,7 +214,7 @@ const CheckoutPage = () => {
                                     </Button>
                                 ]}
                             >
-                                <CheckoutInfoPayment deliveryFree={deliveryFree} priceTotal={priceTotal}  />
+                                <CheckoutInfoPayment deliveryFree={deliveryFree} priceTotal={priceTotal} />
                             </Card>
                         </div>
                     </div>
@@ -163,19 +224,6 @@ const CheckoutPage = () => {
     )
 };
 
-const AvatarAccount = ({ accountId }: any) => {
-    const [account, setAccount] = useState<Account | null>(null);
-    useEffect(() => {
-        const loadAccount = async () => {
-            const { result, isSuccess, statusCode }: Result = await agent.Account.currentAccount(accountId);
-            if (isSuccess === true && statusCode === 200) setAccount(result);
-        }
-        loadAccount();
-    }, []);
-    return <Card.Meta
-        avatar={<Avatar src={account?.imageUrl} />}
-        title={account?.firstName}
-    />;
-}
+
 
 export default CheckoutPage

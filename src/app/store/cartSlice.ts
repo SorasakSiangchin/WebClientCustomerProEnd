@@ -32,7 +32,7 @@ export const addCartItemAsync = createAsyncThunk<Cart, { productId: string, acco
         }
     });
 
-export const removeCartItemAsync = createAsyncThunk<void, { productId: string, accountId?: string, amount?: number , name?: string}>("cart/removeCartItemAsync",
+export const removeCartItemAsync = createAsyncThunk<void, { productId: string, accountId?: string, amount?: number, name?: string }>("cart/removeCartItemAsync",
     async ({ productId, accountId, amount }, thunkAPI) => {
         try {
             return await agent.Cart.removeItem({ productId, accountId, amount });
@@ -66,7 +66,6 @@ export const cartSlice = createSlice({
             state.status = 'pendingRemoveItem' + action.meta.arg.productId + action.meta.arg.name;
         });
         builder.addCase(removeCartItemAsync.rejected, (state, action) => {
-            console.log(action.payload);
             state.status = 'idle';
         });
         builder.addMatcher(isAnyOf(addCartItemAsync.fulfilled, fetchCartAsync.fulfilled), (state, action) => {
@@ -74,7 +73,6 @@ export const cartSlice = createSlice({
             state.status = 'idle';
         });
         builder.addMatcher(isAnyOf(addCartItemAsync.rejected, fetchCartAsync.rejected), (state, action) => {
-            console.log(action.payload);
             state.status = 'idle';
         });
     }
