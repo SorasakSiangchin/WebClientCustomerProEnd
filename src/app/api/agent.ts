@@ -69,13 +69,13 @@ const requests = {
 
 const Product = {
     list: (params: any) => requests.post('products', params),
-    getName: (nameProduct : any) => requests.get(`product/name?name=${nameProduct}`),
+    getName: (nameProduct: any) => requests.get(`product/name?name=${nameProduct}`),
     getRares: () => requests.get('product/rare'),
-    getByIdAccount : (idAccount : any) => requests.get(`product/accountId?accountId=${idAccount}`),
+    getByIdAccount: (idAccount: any) => requests.get(`product/accountId?accountId=${idAccount}`),
     detail: (idProduct: string) => requests.get(`product/${idProduct}`),
     delete: (idProduct: string) => requests.delete(`product/${idProduct}`),
-    create:(value: any) => requests.post("product", createFormData(value)),
-    update:(value: any) => requests.put("product", createFormData(value)),
+    create: (value: any) => requests.post("product", createFormData(value)),
+    update: (value: any) => requests.put("product", createFormData(value)),
 };
 
 const CategoryProduct = {
@@ -85,7 +85,7 @@ const CategoryProduct = {
 const Account = {
     login: (value: any) => requests.post('login', createFormData(value)),
     register: (value: any) => requests.post('register', createFormData(value)),
-    currentAccount: (idAccount : any) => requests.get(`account/${idAccount}`), // ข้อมูลคนปัจจุบัน
+    currentAccount: (idAccount: any) => requests.get(`account/${idAccount}`), // ข้อมูลคนปัจจุบัน
     update: (value: any) => requests.put("account", createFormData(value)),
     updatePassword: (value: any) => requests.put("account/password", createFormData(value)),
 };
@@ -97,10 +97,10 @@ const Cart = {
 };
 
 const Order = {
-    getIdAccount: (value: any) => requests.post(`/orders/accountId`,value),
-    create: (value: any) => requests.post(`orders`,value),
+    getIdAccount: (value: any) => requests.post(`/orders/accountId`, value),
+    create: (value: any) => requests.post(`orders`, value),
     getByIdAccount: (accountId: any) => requests.get(`orders?accountId=${accountId}`),
-    detail : (idOrder: any) => requests.get(`order/${idOrder}`)
+    detail: (idOrder: any) => requests.get(`order/${idOrder}`)
 }
 
 const Role = {
@@ -112,28 +112,40 @@ const WeightUnit = {
 };
 
 const LevelProduct = {
-    list : () => requests.get('levelProducts'),
+    list: () => requests.get('levelProducts'),
 }
 
 const DetailProduct = {
-    getByIdProduct : (idProduct: any) => requests.get(`detailProduct/idProduct?idProduct=${idProduct}`),
-    create : (value: any) => requests.post("detailProduct" , value),
-    update : (value: any) => requests.put("detailProduct" , value),
+    getByIdProduct: (idProduct: any) => requests.get(`detailProduct/idProduct?idProduct=${idProduct}`),
+    create: (value: any) => requests.post("detailProduct", value),
+    update: (value: any) => requests.put("detailProduct", value),
     delete: (idProduct: any) => requests.delete(`detailProduct/${idProduct}`)
 }
 
 const ImageProduct = {
     get: (idProduct: any) => requests.get(`imageproduct/${idProduct}`),
-    create: (value: any) => requests.post("imageproduct" , createFormData(value)),
+    create: (value: any) => requests.post("imageproduct", createFormData(value)),
     delete: (idProduct: any) => requests.delete(`imageproduct/${idProduct}`)
 };
 
 const Address = {
-    list: (value : any) => requests.get(`addresses?accountId=${value.accountId}&numRender=${value.numRender}`),
-    create :  (value : any) => requests.post("address" , value) ,
-    update :  (value : any) => requests.put("address" , value) ,
-    updateStatus :  (value : any) => requests.put("address/status" , value) ,
-    delete :  (id : any) => requests.delete(`address/${id}`) ,
+    list: (value: any) => requests.get(`addresses?accountId=${value.accountId}&numRender=${value.numRender}`),
+    create: (value: any) => requests.post("address", value),
+    update: (value: any) => requests.put("address", value),
+    updateStatus: (value: any) => requests.put("address/status", value),
+    delete: (id: any) => requests.delete(`address/${id}`),
+}
+
+const EvidenceMoneyTransfer = {
+    create: (value: any) => requests.post("evidenceMoneyTransfer", createFormData(value)),
+    get: (orderId: any) => requests.get(`evidenceMoneyTransfer/orderId?orderId=${orderId}`),
+    getCancel: (orderId: any) => requests.get(`evidenceMoneyTransfer/cancel?orderId=${orderId}`),
+    update: (value: any) => requests.put("evidenceMoneyTransfer", value),
+}
+
+const Report = {
+   getProductStatistics : (value: any) => requests.post("report/productStatistics", createFormData(value)) ,
+   getSalesStatistics : (value: any) => requests.post("report/salesStatistics", createFormData(value)) ,
 }
 
 const agent = {
@@ -142,12 +154,14 @@ const agent = {
     Role,
     CategoryProduct,
     Cart,
-    ImageProduct ,
-    Address ,
-    Order ,
-    WeightUnit  ,
-    LevelProduct ,
-    DetailProduct
+    ImageProduct,
+    Address,
+    Order,
+    WeightUnit,
+    LevelProduct,
+    DetailProduct,
+    EvidenceMoneyTransfer,
+    Report
 };
 
 export default agent;

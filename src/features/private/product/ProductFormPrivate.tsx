@@ -1,6 +1,6 @@
 import { CloseOutlined, CloudUploadOutlined, LoadingOutlined, RollbackOutlined, SaveOutlined } from '@ant-design/icons';
 import { ErrorMessage, Formik } from 'formik';
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom';
 import {
   Button,
@@ -22,7 +22,6 @@ import LayoutPrivate from '../LayoutPrivate'
 import { Row as BootstrapRow, Col as BootstrapCol, Container } from 'react-bootstrap';
 import { beforeUploadAntd, Ts } from '../../../app/util/util';
 import { RcFile } from 'antd/es/upload';
-import ImgCrop from 'antd-img-crop';
 import useProducts from '../../../app/hooks/useProducts';
 import { ProductPrivateValidate } from './ProductPrivateValidate';
 import { useAppDispatch, useAppSelector } from '../../../app/store/configureStore';
@@ -38,9 +37,10 @@ const ProductFormPrivate = () => {
   const { account } = useAppSelector(state => state.account);
   const { weightUnits, categoryProducts, levelProducts } = useProducts();
   const [imageUrl, setImageUrl] = useState<string>("");
+  const [loading, setLoading] = useState(false);
   const defaultUnit = weightUnits?.find(e => e.id);
   const defaultLevelProduct = levelProducts?.find(e => e.id);
-  const [loading, setLoading] = useState(false);
+  
 
   const values = {
     id: state ? state.key : '',
@@ -114,6 +114,7 @@ const ProductFormPrivate = () => {
             setFieldValue("formFiles", info.file.originFileObj);
           }
         };
+        
         const selectAfter = (
           <Select defaultValue={defaultUnit?.name} onChange={(id) => setFieldValue("weightUnitID", id)} >
             {weightUnits?.map((weightUnit, index) => <Option className="text-st" key={index} value={weightUnit.id}>{weightUnit.name}</Option>)}
@@ -304,49 +305,46 @@ const ProductFormPrivate = () => {
                       </Form.Item >
                     </Col>
                   </Row>
-
                 </BootstrapCol>
                 <BootstrapCol sm={4}  >
-                  <ImgCrop rotate modalTitle='แก้ไขรูปภาพ' modalOk='ตกลง' modalCancel='ยกเลิก' >
-                    <Upload.Dragger height={250} {...props} beforeUpload={beforeUploadAntd} showUploadList={false}>
-                      {!imageUrl ?
-                        !state ? (<> <p className="ant-upload-drag-icon">
-                          {!loading ? <CloudUploadOutlined style={{ fontSize: "60px" }} /> : <LoadingOutlined style={{ fontSize: "60px" }} />}
-                        </p>
-                          <p className="ant-upload-text text-st">
-                            เพิ่มรูปภาพสินค้า
-                          </p> </>)
-                          : (<Badge count={<Button
-                            type="primary"
-                            shape="circle"
-                            htmlType='button'
-                            danger icon={<CloseOutlined />}
-                            onClick={RemoveImage}
-                            size="small"
-                            style={{ marginLeft: "5px" }} />}>
-                            <img
-                              src={state.imageUrl}
-                              className='img-thumbnail'
-                              alt='...'
-                              style={{ width: '100%', height: "200px" }}
-                            />
-                          </Badge>) : (<Badge count={<Button
-                            type="primary"
-                            shape="circle"
-                            htmlType='button'
-                            danger icon={<CloseOutlined />}
-                            onClick={RemoveImage}
-                            size="small"
-                            style={{ marginLeft: "5px" }} />}>
-                            <img
-                              src={imageUrl}
-                              className='img-thumbnail'
-                              alt='...'
-                              style={{ width: '100%', height: "200px" }}
-                            />
-                          </Badge>)}
-                    </Upload.Dragger>
-                  </ImgCrop>
+                  <Upload.Dragger height={250} {...props} beforeUpload={beforeUploadAntd} showUploadList={false}>
+                    {!imageUrl ?
+                      !state ? (<> <p className="ant-upload-drag-icon">
+                        {!loading ? <CloudUploadOutlined style={{ fontSize: "60px" }} /> : <LoadingOutlined style={{ fontSize: "60px" }} />}
+                      </p>
+                        <p className="ant-upload-text text-st">
+                          เพิ่มรูปภาพสินค้า
+                        </p> </>)
+                        : (<Badge count={<Button
+                          type="primary"
+                          shape="circle"
+                          htmlType='button'
+                          danger icon={<CloseOutlined />}
+                          onClick={RemoveImage}
+                          size="small"
+                          style={{ marginLeft: "5px" }} />}>
+                          <img
+                            src={state.imageUrl}
+                            className='img-thumbnail'
+                            alt='...'
+                            style={{ width: '100%', height: "200px" }}
+                          />
+                        </Badge>) : (<Badge count={<Button
+                          type="primary"
+                          shape="circle"
+                          htmlType='button'
+                          danger icon={<CloseOutlined />}
+                          onClick={RemoveImage}
+                          size="small"
+                          style={{ marginLeft: "5px" }} />}>
+                          <img
+                            src={imageUrl}
+                            className='img-thumbnail'
+                            alt='...'
+                            style={{ width: '100%', height: "200px" }}
+                          />
+                        </Badge>)}
+                  </Upload.Dragger>
                   <ErrorMessage name="formFiles" component="div" className="text-danger text-st" />
                 </BootstrapCol>
               </BootstrapRow>

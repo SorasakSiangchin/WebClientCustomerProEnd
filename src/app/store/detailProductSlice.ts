@@ -1,4 +1,4 @@
-import { createAsyncThunk, createEntityAdapter, createSlice, isAnyOf } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, isAnyOf } from "@reduxjs/toolkit";
 import agent from "../api/agent";
 import { DetailProduct } from "../models/DetailProduct";
 import { Result } from "../models/Interfaces/IResponse";

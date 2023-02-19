@@ -8,9 +8,10 @@ import { currencyFormat } from '../../app/util/util';
 
 let checkTimer: any;
 
+const timeLimit : number = 1000 * 20;
+
 interface Props {
     product: Product
-    newLabel?: boolean
     saleLabel?: boolean
     isViewMode?: boolean
     productsLoaded: boolean
@@ -19,9 +20,12 @@ interface Props {
 
 const { Meta } = Card;
 
-const ProductCard = ({ product, newLabel = false, saleLabel = false, isViewMode = false, productsLoaded }: Props) => {
+
+
+const ProductCard = ({ product, saleLabel = false, isViewMode = false, productsLoaded }: Props) => {
     
-    const dateCreated = new Date(new Date(product.created).getTime() + 1000 * 20);
+
+    const dateCreated = new Date(new Date(product.created).getTime() + timeLimit);
     const date = new Date();
     const { checkFavorite, addFavorite, removeFavorite } = useFavorite();
     const [checkDate, setCheckDate] = useState<boolean>(false);
@@ -66,8 +70,8 @@ const ProductCard = ({ product, newLabel = false, saleLabel = false, isViewMode 
                             <Link to={`/product-detail/${product.id}`} title="Fresh Organic Mustard Leaves " className="product-image">
                                 <img src={product.imageUrl} alt="Fresh Organic Mustard Leaves " height="250px" />
                             </Link>
-                            {checkDate && <div className="new-label new-top-left">New</div>}
-                            {saleLabel && <div className="sale-label sale-top-right">Sale</div>}
+                            {checkDate && <div className="new-label new-top-left">ใหม่</div>}
+                            {product.stock === 0 && <div className="sale-label sale-top-right">สินค้าหมด</div>}
                         </div>
                     </div>
                     <div className="item-info">

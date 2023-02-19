@@ -1,20 +1,29 @@
 
 
-import { Card, Col, Row, Avatar, Space, Dropdown, MenuProps } from 'antd';
-import React, { useState } from "react";
+import { Card, Col, Row, Avatar, Space, Dropdown, DatePicker } from 'antd';
+import { useState } from "react";
 import { currencyFormat, Ts } from '../../app/util/util';
 import LayoutPrivate from './LayoutPrivate';
 import ReactFC from "react-fusioncharts";
 import FusionCharts from "fusioncharts";
 import Charts from "fusioncharts/fusioncharts.charts";
 import FusionTheme from "fusioncharts/themes/fusioncharts.theme.fusion";
-import Doughnut3D from '../../app/components/charts/Doughnut3D';
-import Column3D from '../../app/components/charts/Column3D';
+import Chart1 from '../../app/components/charts/Chart1';
+import Chart2 from '../../app/components/charts/Chart2';
 import useProducts from '../../app/hooks/useProducts';
-
+import useReport, { TypeRequest } from '../../app/hooks/useReport';
+import locale from 'antd/es/date-picker/locale/th_TH';
+import { useAppDispatch } from '../../app/store/configureStore';
+import { reSetProductStatistics } from '../../app/store/reportSlice';
 ReactFC.fcRoot(FusionCharts, Charts, FusionTheme);
 
-const chartData = [
+interface TypeDataChart {
+    label: any;
+    value: any;
+    color: any;
+}
+
+const chartData: TypeDataChart[] = [
     {
         label: "Venezuela",
         value: "290",
@@ -59,34 +68,60 @@ const chartData = [
 
 const DashboardPage = () => {
     const { products } = useProducts();
-    const [typeChart, setTypeChart] = useState<string>("doughnut3d");
+    const dispatch = useAppDispatch();
+    const [typeChart, setTypeChart] = useState<string>("doughnut");
+    const [perspective, setPerspective] = useState<string>("2d");
+    const { productStatistics, dispatchProduct, salesStatistics, stateProduct } = useReport();
 
-    const items: MenuProps['items'] = [
+    const dataChartProductStatistics: TypeDataChart[] = productStatistics?.map(info => ({
+        label: info.product.name,
+        value: info.numPercen,
+    })) as TypeDataChart[];
+
+    const items01 = [
         {
             key: '1',
             label: <Ts>โดนัท</Ts>,
-            onClick: () => setTypeChart("doughnut3d")
+            onClick: () => setTypeChart("doughnut")
 
         },
         {
             key: '2',
             label: <Ts>คอลัมน์</Ts>,
-            onClick: () => setTypeChart("column3d")
+            onClick: () => setTypeChart("column")
         },
         {
             key: '3',
             label: <Ts>พาย</Ts>,
-            onClick: () => setTypeChart("pie3d")
+            onClick: () => setTypeChart("pie")
         },
         {
             key: '4',
             label: <Ts>บาร์</Ts>,
-            onClick: () => setTypeChart("bar3d")
+            onClick: () => setTypeChart("bar")
         },
     ];
 
-    const DropdownChart01 = <Dropdown.Button menu={{ items }} >
-        <Ts>เลือก</Ts>
+    const items02 = [
+        {
+            key: '1',
+            label: <Ts>2D</Ts>,
+            onClick: () => setPerspective("2d")
+
+        },
+        {
+            key: '2',
+            label: <Ts>3D</Ts>,
+            onClick: () => setPerspective("3d")
+        }
+    ];
+
+    const DropdownChartTypeProductStatistics = <Dropdown.Button menu={{ items: items01 }} >
+        <Ts>{typeChart}</Ts>
+    </Dropdown.Button>;
+
+    const DropdownChartPerspectiveProductStatistics = <Dropdown.Button menu={{ items: items02 }} >
+        <Ts>{perspective}</Ts>
     </Dropdown.Button>;
 
     return (
@@ -129,13 +164,48 @@ const DashboardPage = () => {
                 <div>
                     <Row gutter={16}>
                         <Col className="gutter-row center" span={12}>
-                            <Card title="สถิติสินค้า" extra={DropdownChart01} className='text-st' bordered={false} style={{ width: "100%" }}>
-                                <Doughnut3D data={chartData} ReactFC={ReactFC} typeChart={typeChart} />
+                            <Card title="สถิติสินค้า" extra={
+                                <Space>
+                                    <DatePicker.RangePicker
+                                        style={{ width: "25rem" }}
+                                        locale={locale}
+                                        className="text-st"
+                                        onChange={(_, dateString) => {
+                                            dispatchProduct({ type: TypeRequest.DateStart, payload: new Date(dateString[0]).toLocaleDateString("th-TH") });
+                                            dispatchProduct({ type: TypeRequest.DateEnd, payload: new Date(dateString[1]).toLocaleDateString("th-TH") });
+                                            dispatch(reSetProductStatistics());
+                                        }}
+                                    />
+                                    {DropdownChartTypeProductStatistics}
+                                    {DropdownChartPerspectiveProductStatistics}
+                                </Space>
+                            } className='text-st' bordered={false} style={{ width: "100%" }}>
+                                <Chart1
+                                    data={dataChartProductStatistics}
+                                    ReactFC={ReactFC}
+                                    typeChart={typeChart}
+                                    perspective={perspective}
+                                />
                             </Card>
                         </Col>
                         <Col className="gutter-row center" span={12}>
-                            <Card title="สถิติการขาย" className='text-st' bordered={false} style={{ width: "100%" }}>
-                                <Column3D data={chartData} ReactFC={ReactFC} />
+                            <Card title="สถิติการขาย" extra={
+                                <Space>
+                                    <DatePicker.RangePicker
+                                        style={{ width: "25rem" }}
+                                        locale={locale}
+                                        className="text-st"
+                                        onChange={(_, dateString) => {
+                                            dispatchProduct({ type: TypeRequest.DateStart, payload: new Date(dateString[0]).toLocaleDateString("th-TH") });
+                                            dispatchProduct({ type: TypeRequest.DateEnd, payload: new Date(dateString[1]).toLocaleDateString("th-TH") });
+                                            dispatch(reSetProductStatistics());
+                                        }}
+                                    />
+                                    {DropdownChartTypeProductStatistics}
+                                    {DropdownChartPerspectiveProductStatistics}
+                                </Space>
+                            } className='text-st' bordered={false} style={{ width: "100%" }}>
+                                <Chart2 data={chartData} ReactFC={ReactFC} />
                             </Card>
                         </Col>
                     </Row>

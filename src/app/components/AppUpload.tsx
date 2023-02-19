@@ -1,6 +1,5 @@
 import { message, Upload } from 'antd';
 import { RcFile } from 'antd/es/upload';
-import React from 'react'
 
 interface Props {
     children?: any;

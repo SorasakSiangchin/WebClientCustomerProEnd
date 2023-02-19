@@ -170,7 +170,8 @@ const initParams = (): ProductParams => {
         category: "",
         rangePriceStart: 0,
         rangePriceEnd: 0,
-        searchTerm: ""
+        searchTerm: "" ,
+        accountID : ""
     }
 };
 

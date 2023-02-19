@@ -26,19 +26,28 @@ const AccountPurchase = () => {
         },
         {
             key: '3',
-            label: `ที่ต้องจัดส่ง`,
+            label: `ที่ต้องได้รับ`,
             children: <Orders orders={orders?.filter(e => e.orderStatus === 1)} setOrderPage={setOrderPage} setOrderId={setOrderId} />,
         },
+        {
+            key: '4',
+            label: `สำเร็จแล้ว`,
+            children: <Orders orders={orders?.filter(e => e.orderStatus === 1)} setOrderPage={setOrderPage} setOrderId={setOrderId} />,
+        },
+        {
+            key: '5',
+            label: `ยกเลิก`,
+            children: <Orders orders={orders?.filter(e => e.orderStatus === 1)} setOrderPage={setOrderPage} setOrderId={setOrderId} />,
+        }
     ];
 
     const ShowData = () => {
-        if (!orderPage) {
-            return <Container>
+        if (!orderPage) return (
+            <Container>
                 <Tabs className='text-st' defaultActiveKey="1" items={items} />
             </Container>
-        } else {
-            return <OrderDetail orderId={orderId} setOrderPage={setOrderPage}  />
-        }
+        )
+        else return <OrderDetail orderId={orderId} setOrderPage={setOrderPage} />
     }
 
     return (

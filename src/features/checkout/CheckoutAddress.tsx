@@ -1,6 +1,5 @@
 import { Empty, Space } from 'antd';
 import { Fragment } from 'react';
-import useAddress from '../../app/hooks/useAddress';
 import { Address } from '../../app/models/Address';
 
 interface Props {

@@ -1,5 +1,5 @@
 import { LeftOutlined } from '@ant-design/icons'
-import { Button, Col, Descriptions, Divider, Row, Radio, Card, List, Space } from 'antd'
+import { Button, Col, Descriptions, Divider, Row, Radio, Card, List, Space, Tag } from 'antd'
 import React, { Fragment, useEffect } from 'react'
 import { Container } from 'react-bootstrap';
 import { useAppDispatch, useAppSelector } from '../../../../app/store/configureStore';
@@ -80,14 +80,14 @@ const OrderDetail = ({ orderId, setOrderPage }: any) => {
             bordered
             column={1}
           >
-            {React.Children.toArray(infoSummary.map(summary => <Descriptions.Item
+            {React.Children.toArray(infoSummary.map((summary , index) => <Descriptions.Item
               className='text-st'
               label={<div style={{ display : "flex" , justifyContent : "end"}}>
                 {summary.title}
               </div>}
               style={{ width: "80%" }}
             >
-              {currencyFormat(summary.info)}
+              {index === 2 ? <Tag className='text-st center' color="success" style={{ fontSize : "20px" , padding : "5px" }}>{currencyFormat(summary.info)}</Tag> : currencyFormat(summary.info)}
             </Descriptions.Item>))}
           </Descriptions>
         </Container>

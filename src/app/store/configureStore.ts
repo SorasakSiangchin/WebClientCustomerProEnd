@@ -9,6 +9,8 @@ import { productSlice } from "./productSlice";
 import { homeSlice } from './homeSlice';
 import { detailProductSlice } from './detailProductSlice';
 import { orderSlice } from './orderSlice';
+import { evidenceMoneyTransferSlice } from './evidenceMoneyTransferSlice';
+import { reportSlice } from './reportSlice';
 
 export const store = configureStore({
     reducer:{
@@ -18,7 +20,9 @@ export const store = configureStore({
        address : addressSlice.reducer ,
        home : homeSlice.reducer ,
        detailProduct : detailProductSlice.reducer ,
-       order : orderSlice.reducer
+       order : orderSlice.reducer ,
+       evidenceMoneyTransfer : evidenceMoneyTransferSlice.reducer,
+       report : reportSlice.reducer
     }
 })
 

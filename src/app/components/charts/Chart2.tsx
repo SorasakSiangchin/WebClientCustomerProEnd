@@ -3,7 +3,7 @@ interface Props {
     ReactFC: any;
     data: any;
   }
-const Column3D = ({ ReactFC, data }: Props) => {
+const Chart2 = ({ ReactFC, data }: Props) => {
     const chartConfigs = {
         type: "column3d",
         width: "100%",
@@ -25,4 +25,4 @@ const Column3D = ({ ReactFC, data }: Props) => {
   )
 }
 
-export default Column3D
+export default Chart2

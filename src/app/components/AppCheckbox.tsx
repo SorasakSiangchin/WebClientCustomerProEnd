@@ -10,12 +10,12 @@ interface Props {
 const AppCheckbox = ({ data, onChange }: Props) => {
     return (
         <Fragment>
-            <Checkbox.Group onChange={onChange}>
-                <ol>
+            <Checkbox.Group  onChange={onChange} >
+                <ol >
                     {data?.map((event: any, index : number) =>
-                        <li key={index}>
+                        <li key={index} >
                             <Col span={8}>
-                                <Checkbox className="text-st" style={{ width: "100%" }} value={event.name}><p>{event.name}</p></Checkbox>
+                                <Checkbox  className="text-st" style={{ width: "500px" }} value={event.name}><p>{event.name}</p></Checkbox>
                             </Col>
                         </li>
                     )}

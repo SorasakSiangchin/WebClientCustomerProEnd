@@ -4,11 +4,13 @@ interface Props {
   ReactFC: any;
   data: any;
   typeChart: string;
+  perspective : string;
 }
 
-const Doughnut3D = ({ ReactFC, data, typeChart }: Props) => {
+const Chart1 = ({ ReactFC, data, typeChart , perspective}: Props) => {
   const chartConfigs = {
-    type: typeChart,
+    className: "text-st" ,
+    type: `${typeChart}${perspective}`,
     width: "100%",
     height: "400",
     dataFormat: "json",
@@ -20,9 +22,10 @@ const Doughnut3D = ({ ReactFC, data, typeChart }: Props) => {
       data
     }
   };
+  
   return (
-    <ReactFC  {...chartConfigs} />
+    <ReactFC   {...chartConfigs} />
   )
 }
 
-export default Doughnut3D
+export default Chart1;

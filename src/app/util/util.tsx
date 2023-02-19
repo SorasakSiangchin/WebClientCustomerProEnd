@@ -118,3 +118,8 @@ export const beforeUploadAntd = (file: RcFile) => {
 
 export const Text = `ภายในระบบของเราจะมีสินค้าทางเกษตกรรมให้ทุกท่านเลือกชอปปิ้งอย่างมากมาย อีกทั้งยังมีการจองสินค้าที่มีเฉพาะในฤดูกาลนั้นๆและสินค้าที่คุณอาจจะเข้าถึงได้ยากอีกด้วย ขอให้ทุกท่านมีความสุขกับการชอปปิ้งนะครับ`;
 
+export const getBase64 = (img: RcFile, callback: (url: string) => void) => {
+    const reader = new FileReader();
+    reader.addEventListener('load', () => callback(reader.result as string));
+    reader.readAsDataURL(img);
+};

@@ -6,6 +6,7 @@ import { Result } from '../../../../app/models/Interfaces/IResponse';
 import { Order } from '../../../../app/models/Order';
 import { Product } from '../../../../app/models/Product';
 import { currencyFormat, Ts } from '../../../../app/util/util';
+import ModalPayment from './ModalPayment';
 
 interface Props {
     orders: Order[]
@@ -14,15 +15,18 @@ interface Props {
 }
 
 const Orders = ({ orders, setOrderPage, setOrderId }: Props) => {
+    const [openModal, setOpenModal] = useState<boolean>(false);
+    const [id, setId] = useState<string>("");
     const showOrder = orders?.length > 0 ? <Space direction='vertical' size="large" style={{ width: "100%" }}>
         {React.Children.toArray(orders?.map((order: Order) => {
-
             const CheckButton = () => {
                 switch (order.orderStatus) {
                     case 0:
-                        return "รออนุมัติ"
+                        return "ชำระเงินตอนนี้"
                     case 1:
-                        return "ตรวจสอบ"
+                        return "รออนุมัติ"
+                    case 2:
+                        return "รออนุมัติ"
                     default:
                         return "";
                 }
@@ -38,6 +42,11 @@ const Orders = ({ orders, setOrderPage, setOrderId }: Props) => {
                         return "";
                 }
             };
+            
+            const onClickButton = (orderId : any) => {
+                setOpenModal(true);
+                setId(orderId);
+            };
 
             return (
                 <Card
@@ -45,8 +54,9 @@ const Orders = ({ orders, setOrderPage, setOrderId }: Props) => {
                     type="inner"
                     size='small'
                     extra={<Ts><div style={{ color: "#ff4d4f" }}>{CheckStatus()}</div></Ts>}
-                    title={<AvatarAccountByProductId productId={order.orderItems[0].productID} />}
+                    title={<AvatarAccountByProductId productId={order.orderItems[0].productID}  />}
                 >
+                    <ModalPayment openModal={openModal} setOpenModal={setOpenModal} orderId={id} setOrderId={setId} />
                     <List
                         itemLayout="horizontal"
                         size='small'
@@ -81,7 +91,7 @@ const Orders = ({ orders, setOrderPage, setOrderId }: Props) => {
                             </Col>
                             <Col span={14} style={{ display: "flex", justifyContent: "end" }}>
                                 <Space>
-                                    <Button className='text-st' disabled={order.orderStatus === 0} style={{ width: 100 }}>{CheckButton()}</Button>
+                                    <Button className='text-st' onClick={() => onClickButton(order.id)} type='primary' style={{ width: "100%", backgroundColor: "#58944C" }}>{CheckButton()}</Button>
                                     <Button className='text-st'>ยกเลิก</Button>
                                 </Space>
                             </Col>

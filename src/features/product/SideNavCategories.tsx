@@ -22,7 +22,7 @@ const SideNavCategories = ({ categorys, onCateChange , onRangeChange}: Props) =>
                     <div className="block-content">
                         <dl id="narrow-by-list">
                             <dt className="odd">ชนิดสินค้า</dt>
-                            <dd className="odd">
+                            <dd className="odd" >
                                 <AppCheckbox  onChange={onChangeCheckbox} data={categorys} />
                             </dd>
                             <dt className="even">ช่วงราคา</dt>

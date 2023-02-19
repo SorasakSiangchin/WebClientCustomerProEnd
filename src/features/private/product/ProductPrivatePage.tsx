@@ -1,5 +1,5 @@
 
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { DeleteFilled, EditFilled, InfoCircleFilled, PlusCircleFilled, SearchOutlined } from '@ant-design/icons';
 import { Col, Divider, Dropdown, Image, InputRef, MenuProps, Row, Tag } from 'antd';
 import { Button, Input, Space, Table } from 'antd';
@@ -12,7 +12,7 @@ import { currencyFormat, Ts } from '../../../app/util/util';
 import { useNavigate } from 'react-router-dom';
 import LayoutPrivate from '../LayoutPrivate';
 import Swal from 'sweetalert2';
-import { useAppDispatch } from '../../../app/store/configureStore';
+import { useAppDispatch, useAppSelector } from '../../../app/store/configureStore';
 import { removeProductAsync, setParams } from '../../../app/store/productSlice';
 import AppPagination from '../../../app/components/AppPagination';
 export interface DataType {
@@ -43,12 +43,17 @@ const columnDatas = [
 ];
 
 const ProductPrivatePage = () => {
-  const { categoryProducts, metaData, products, productsLoaded } = useProducts();
+  const { metaData, products } = useProducts();
+  const { account } = useAppSelector(state => state.account);
   const dispatch = useAppDispatch();
   const [searchText, setSearchText] = useState('');
   const navigate = useNavigate();
   const [searchedColumn, setSearchedColumn] = useState('');
   const searchInput = useRef<InputRef>(null);
+
+  useEffect(() => {
+    dispatch(setParams({ accountID: account?.id }));
+  }, [dispatch]);
 
   const handleSearch = (
     selectedKeys: string[],

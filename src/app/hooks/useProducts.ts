@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { fetchCategoryProductsAsync, fetchLevelProductsAsync, fetchProductRaresAsync, fetchProductsAsync, fetchWeightUnitsAsync, productSelectors } from '../../app/store/productSlice';
+import { fetchCategoryProductsAsync, fetchLevelProductsAsync, fetchProductRaresAsync, fetchProductsAsync, fetchWeightUnitsAsync, productSelectors, resetProductParams } from '../../app/store/productSlice';
 import { useAppDispatch, useAppSelector } from '../store/configureStore';
 
 const useProducts = () => {
@@ -36,6 +36,10 @@ const useProducts = () => {
     useEffect(() => {
         if (!levelProductLoaded) dispatch(fetchLevelProductsAsync());
     }, [levelProductLoaded, dispatch]);
+
+    useEffect(() => {
+        dispatch(resetProductParams());
+    }, [dispatch]);
 
     return {
         metaData,

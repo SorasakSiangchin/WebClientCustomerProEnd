@@ -39,6 +39,7 @@ export interface ProductParams {
     rangePriceStart: number;
     rangePriceEnd: number;
     searchTerm?: string;
+    accountID?:string;
 }
 
 export interface ImageProduct {
