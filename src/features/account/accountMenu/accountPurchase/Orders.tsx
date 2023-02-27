@@ -1,12 +1,18 @@
-import { Avatar, Button, Card, Col, Divider, Empty, List, Row, Space } from 'antd';
+import { Avatar, Button, Card, Col, Divider, Empty, List, Popconfirm, Row, Space, Tooltip } from 'antd';
 import React, { Fragment, useEffect, useState } from 'react';
 import agent from '../../../../app/api/agent';
 import { Account } from '../../../../app/models/Account';
 import { Result } from '../../../../app/models/Interfaces/IResponse';
 import { Order } from '../../../../app/models/Order';
 import { Product } from '../../../../app/models/Product';
+import { EvidenceMoneyTransfer } from '../../../../app/models/EvidenceMoneyTransfer';
 import { currencyFormat, Ts } from '../../../../app/util/util';
 import ModalPayment from './ModalPayment';
+import ModalEvidence from './ModalEvidence';
+import { useAppDispatch } from '../../../../app/store/configureStore';
+import { fetchOrdersAsync, updateOrderAsync } from '../../../../app/store/orderSlice';
+import { ContainerOutlined } from '@ant-design/icons';
+import ModalTransferHistory from './ModalTransferHistory';
 
 interface Props {
     orders: Order[]
@@ -15,48 +21,124 @@ interface Props {
 }
 
 const Orders = ({ orders, setOrderPage, setOrderId }: Props) => {
+    const dispatch = useAppDispatch();
     const [openModal, setOpenModal] = useState<boolean>(false);
     const [id, setId] = useState<string>("");
+
+    const onClickButton = (orderId: any) => {
+        setOpenModal(true);
+        setId(orderId);
+    };
+
     const showOrder = orders?.length > 0 ? <Space direction='vertical' size="large" style={{ width: "100%" }}>
         {React.Children.toArray(orders?.map((order: Order) => {
+
+            const [openModalEvidence, setOpenModalEvidence] = useState<boolean>(false);
+            const [openModalHistory, setOpenModalHistory] = useState<boolean>(false);
+            const [dataCancelEvidence, setDataCancelEvidence] = useState<EvidenceMoneyTransfer[]>();
+            const [dataEvidence, setDataEvidence] = useState<EvidenceMoneyTransfer | null>(null);
+
+            const onCancelOrder = () => {
+                const data = {
+                    ...order,
+                    orderCancel: true
+                };
+                dispatch(updateOrderAsync(data)).then(() => dispatch(fetchOrdersAsync()));
+            };
+
             const CheckButton = () => {
-                switch (order.orderStatus) {
-                    case 0:
-                        return "ชำระเงินตอนนี้"
-                    case 1:
-                        return "รออนุมัติ"
-                    case 2:
-                        return "รออนุมัติ"
-                    default:
-                        return "";
+                if (order.orderStatus === 0) {
+                    return "กำลังรอการชำระเงิน"
+                } else if (dataEvidence !== null && order.orderStatus === 1) {
+                    return "รอการอนุมัติ"
+                } else if (dataEvidence !== null && order.orderStatus === 2) {
+                    return "ชำระเงินสำเร็จ"
+                } else {
+                    return ""
                 }
             };
 
             const CheckStatus = () => {
-                switch (order.orderStatus) {
-                    case 0:
-                        return "ที่ต้องชำระเงิน"
-                    case 1:
-                        return "ที่ต้องจัดส่ง"
-                    default:
-                        return "";
-                }
+                if (!order.orderCancel) {
+                    switch (order.orderStatus) {
+                        case 0:
+                            return "ที่ต้องชำระเงิน"
+                        case 1:
+                            return "ที่ต้องจัดส่ง"
+                        default:
+                            return "";
+                    }
+                } else return "ยกเลิก"
             };
-            
-            const onClickButton = (orderId : any) => {
-                setOpenModal(true);
-                setId(orderId);
-            };
+
+            const extraCard = (
+                <>
+                    <div
+                        className='text-st'
+                        style={{
+                            display: "inline",
+                            color: "#ff4d4f"
+                        }}
+                    >
+                        {CheckStatus()}
+                    </div>
+
+                    {" "}
+
+                    {
+                        dataCancelEvidence &&
+                            dataCancelEvidence?.length > 0 ?
+                            <Tooltip
+                                placement="top"
+                                title={<Ts>ประวัติการโอน</Ts>}
+                                className="text-st"
+                            >
+                                <Button
+                                    style={{ display: "inline" }}
+                                    type='text'
+                                    className='center'
+                                    shape="circle"
+                                    icon={<ContainerOutlined />}
+                                    size={"small"}
+                                    onClick={() => setOpenModalHistory(true)}
+                                />
+                            </Tooltip> : ""
+                    }
+
+                </>
+            );
+
+            useEffect(() => {
+                const setEvidence = async () => setDataEvidence(await loadEvidence(order.id));
+                setEvidence();
+            }, []);
+
+            useEffect(() => {
+                const setCancelEvidence = async () => setDataCancelEvidence(await loadCancelEvidence(order.id));
+                setCancelEvidence();
+            }, []);
 
             return (
                 <Card
 
                     type="inner"
                     size='small'
-                    extra={<Ts><div style={{ color: "#ff4d4f" }}>{CheckStatus()}</div></Ts>}
-                    title={<AvatarAccountByProductId productId={order.orderItems[0].productID}  />}
+                    extra={extraCard}
+                    title={<AvatarAccountByProductId productId={order.orderItems[0].productID} />}
                 >
                     <ModalPayment openModal={openModal} setOpenModal={setOpenModal} orderId={id} setOrderId={setId} />
+                    {dataEvidence &&
+                        <ModalEvidence
+                            evidence={dataEvidence}
+                            openModal={openModalEvidence}
+                            setOpenModal={setOpenModalEvidence}
+                        />}
+
+                    <ModalTransferHistory
+                        setOpenModal={setOpenModalHistory}
+                        openModal={openModalHistory}
+                        cancelEvidence={dataCancelEvidence}
+                    />
                     <List
                         itemLayout="horizontal"
                         size='small'
@@ -77,6 +159,7 @@ const Orders = ({ orders, setOrderPage, setOrderId }: Props) => {
                         )}
                     />
                     <Divider />
+
                     <Space direction='vertical' style={{ width: "100%" }}>
                         <div style={{ display: "flex", justifyContent: "end" }}>
                             <Ts>
@@ -90,10 +173,37 @@ const Orders = ({ orders, setOrderPage, setOrderId }: Props) => {
                             <Col span={10}>
                             </Col>
                             <Col span={14} style={{ display: "flex", justifyContent: "end" }}>
-                                <Space>
-                                    <Button className='text-st' onClick={() => onClickButton(order.id)} type='primary' style={{ width: "100%", backgroundColor: "#58944C" }}>{CheckButton()}</Button>
-                                    <Button className='text-st'>ยกเลิก</Button>
-                                </Space>
+                                {
+                                    !order.orderCancel ?
+                                        <Space>
+                                            <Button
+                                                className='text-st'
+                                                onClick={() => onClickButton(order.id)}
+                                                type='primary'
+                                                disabled={order.orderStatus === 1}
+                                                style={{ width: "100%", backgroundColor: "#58944C" }}
+                                            >
+                                                {CheckButton()}
+                                            </Button>
+                                            {dataEvidence ? <Button
+                                                className='text-st'
+                                                onClick={() => setOpenModalEvidence(true)}
+                                            >
+                                                สรวจสอบหลักฐาน
+                                            </Button> : ""}
+                                            <Popconfirm
+                                                className='text-st'
+                                                title={<Ts>ยกเลิกการสั่งซื้อ</Ts>}
+                                                onConfirm={onCancelOrder}
+                                                okText={<Ts>ตกลง</Ts>}
+                                                cancelText={<Ts>ยกเลิก</Ts>}
+                                            >
+                                                <Button
+                                                    className='text-st'
+                                                >ยกเลิก</Button>
+                                            </Popconfirm>
+                                        </Space> : ""
+                                }
                             </Col>
                         </Row>
                     </Space>
@@ -116,7 +226,7 @@ export const AvatarAccountByProductId = ({ productId }: any) => {
             const { result, isSuccess, statusCode }: Result = await agent.Product.detail(productId);
             if (isSuccess === true && statusCode === 200) {
                 const { accountID } = result as Product
-                const resultAccount: Result = await agent.Account.currentAccount(accountID);
+                const resultAccount: Result = await agent.Account.currentAccount({ accountId: accountID });
                 if (resultAccount.isSuccess === true && resultAccount.statusCode === 200) setAccount(resultAccount.result);
             };
         }
@@ -126,6 +236,18 @@ export const AvatarAccountByProductId = ({ productId }: any) => {
         avatar={<Avatar src={account?.imageUrl} />}
         title={account?.firstName}
     />;
+}
+
+const loadEvidence = async (orderId: any) => {
+    const { isSuccess, statusCode, result }: Result = await agent.EvidenceMoneyTransfer.get(orderId);
+    if (isSuccess === true && statusCode === 200) return result;
+    return null;
+};
+
+const loadCancelEvidence = async (orderId: any) => {
+    const { isSuccess, statusCode, result }: Result = await agent.EvidenceMoneyTransfer.getCancel(orderId);
+    if (isSuccess === true && statusCode === 200) return result;
+    return null;
 }
 
 export default Orders

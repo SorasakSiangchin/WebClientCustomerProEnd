@@ -1,50 +1,70 @@
 import { useAppDispatch, useAppSelector } from './../store/configureStore';
-import { useEffect, useReducer } from 'react'
+import { useEffect, useReducer, useState } from 'react'
 import { fetchProductStatisticsAsync, fetchSalesStatisticsAsync } from "../store/reportSlice";
-import { RequestStatistics } from '../models/Report';
+import { RequestProductStatistics, RequestSalesStatistics, TypeProductStatisticsRequest, TypeSalesStatisticsRequest } from '../models/Report';
 
-export enum TypeRequest {
-    DateStart = 'DateStart',
-    DateEnd = 'DateEnd',
-}
-interface Action {
-    type: TypeRequest;
+
+
+interface ActionProductStatistics {
+    type: TypeProductStatisticsRequest;
     payload: any;
-}
+};
+
+interface ActionSalesStatistics {
+    type: TypeSalesStatisticsRequest;
+    payload: any;
+};
+
+const updateProductStatistic = (state: RequestProductStatistics, action: ActionProductStatistics) => {
+    const { type, payload } = action;
+    switch (type) {
+        case TypeProductStatisticsRequest.DateStart:
+            return {
+                ...state,
+                dateStart: payload,
+            };
+        case TypeProductStatisticsRequest.DateEnd:
+            return {
+                ...state,
+                dateEnd: payload,
+            };
+        default:
+            return state;
+    }
+};
+
+const updateSalesStatistic = (state: RequestSalesStatistics, action: ActionSalesStatistics) => {
+    const { type, payload } = action;
+    switch (type) {
+        case TypeSalesStatisticsRequest.DateYear:
+            return {
+                ...state,
+                year: payload,
+            };
+
+        default:
+            return state;
+    }
+};
+
 const useReport = () => {
     const dispatch = useAppDispatch();
     const { account } = useAppSelector(state => state.account);
+    
 
-    const infoProductStatistic: RequestStatistics = {
+    const infoProductStatistic: RequestProductStatistics = {
         accountId: account?.id,
         dateEnd: null,
         dateStart: null,
+
     };
-    const infoSalesStatistic: RequestStatistics = {
+    const infoSalesStatistic: RequestSalesStatistics = {
         accountId: account?.id,
-        dateEnd: null,
-        dateStart: null,
+        year: null
     };
-    const updateProductStatistic = (state: RequestStatistics, action: Action) => {
-        const { type, payload } = action;
-        switch (type) {
-            case TypeRequest.DateStart:
-                return {
-                    ...state,
-                    dateStart: payload,
-                };
-            case TypeRequest.DateEnd:
-                return {
-                    ...state,
-                    dateEnd: payload,
-                };
-            default:
-                return state;
-        }
-    }
+
     const [stateProduct, dispatchProduct] = useReducer(updateProductStatistic, infoProductStatistic);
-
-
+    const [stateSales, dispatchSales] = useReducer(updateSalesStatistic, infoSalesStatistic);
 
     const {
         productStatistics,
@@ -54,19 +74,20 @@ const useReport = () => {
     } = useAppSelector(state => state.report);
 
     useEffect(() => {
-        if (!productStatisticsLoaded) dispatch(fetchProductStatisticsAsync(stateProduct));
-        //console.log(stateProduct)
-    }, [dispatch, productStatisticsLoaded , stateProduct]);
+        dispatch(fetchProductStatisticsAsync(stateProduct));
+    }, [dispatch, productStatisticsLoaded, stateProduct]);
 
     useEffect(() => {
-        if (!salesStatisticsLoaded) dispatch(fetchSalesStatisticsAsync({}));
-    }, [dispatch, salesStatisticsLoaded]);
+       dispatch(fetchSalesStatisticsAsync(stateSales));
+    }, [dispatch, salesStatisticsLoaded, stateSales]);
 
     return {
         productStatistics,
         salesStatistics,
         dispatchProduct,
-        stateProduct
+        dispatchSales,
+        stateProduct,
+        stateSales,
     }
 }
 

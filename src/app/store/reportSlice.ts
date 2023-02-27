@@ -6,7 +6,7 @@ import { ProductStatistics, SalesStatistics } from "../models/Report";
 interface ReportState {
     productStatistics: ProductStatistics[] | null;
     productStatisticsLoaded: boolean;
-    salesStatistics: SalesStatistics[] | null;
+    salesStatistics: SalesStatistics | null;
     salesStatisticsLoaded: boolean;
 };
 
@@ -47,6 +47,11 @@ export const reportSlice = createSlice({
     reducers: {
         reSetProductStatistics: (state) => {
             state.productStatisticsLoaded = false;
+            state.productStatistics = null;
+        } ,
+        reSetSalesStatistics: (state) => {
+            state.salesStatisticsLoaded = false;
+            state.salesStatistics = null;
         }
     },
     extraReducers: builder => {
@@ -65,7 +70,9 @@ export const reportSlice = createSlice({
                 state.salesStatisticsLoaded = true;
             }
         });
+
+
     }
 });
 
-export const { reSetProductStatistics } = reportSlice.actions;
+export const { reSetProductStatistics , reSetSalesStatistics } = reportSlice.actions;

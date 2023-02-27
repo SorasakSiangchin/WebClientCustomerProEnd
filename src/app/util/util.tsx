@@ -3,6 +3,10 @@ import { RcFile } from "antd/es/upload";
 import { NumericFormat } from "react-number-format";
 import { Address, CreateAddress, UpdateAddress } from "../models/Address";
 
+export const clientId = "54000393134-9j18ndph0oor1sh396dl5cd89a788klg.apps.googleusercontent.com";
+
+export const backEndUtl = "https://localhost:7265/";
+
 const padTo2Digits = (num: any) => {
     return num.toString().padStart(2, '0');
 };
@@ -32,7 +36,7 @@ export const currencyFormat = (price?: number) => {
     />
 };
 
-export const Ts = ({ children , className } : any) => <div className={`text-st ${className}`}>{children}</div>
+export const Ts = ({ children, className }: any) => <div className={`text-st ${className}`}>{children}</div>
 
 export const convertRole = (roleName: any) => {
     switch (roleName) {
@@ -47,9 +51,9 @@ export const convertRole = (roleName: any) => {
     };
 };
 
-export const convertToCreateAddress = (value : CreateAddress) => {
+export const convertToCreateAddress = (value: CreateAddress) => {
     const Result = {
-        addressInformations : {
+        addressInformations: {
             id: 0,
             subDistrict: value.subDistrict,
             district: value.district,
@@ -58,16 +62,16 @@ export const convertToCreateAddress = (value : CreateAddress) => {
             recipientName: value.recipientName,
             phoneNumber: value.phoneNumber,
             description: value.description,
-        } ,
+        },
 
-    accountID: value.accountID
+        accountID: value.accountID
     };
     return Result;
 };
 
-export const convertToUpdateAddress = (value : UpdateAddress) => {
+export const convertToUpdateAddress = (value: UpdateAddress) => {
     const Result = {
-        addressInformations : {
+        addressInformations: {
             id: value.idInformation,
             subDistrict: value.subDistrict,
             district: value.district,
@@ -76,28 +80,28 @@ export const convertToUpdateAddress = (value : UpdateAddress) => {
             recipientName: value.recipientName,
             phoneNumber: value.phoneNumber,
             description: value.description,
-        } ,
-    id : value.id ,
-    status : value.status ,
-    accountID: value.accountID
+        },
+        id: value.id,
+        status: value.status,
+        accountID: value.accountID
     };
     return Result;
 };
 
-export const convertToAddress= (value : Address) => {
+export const convertToAddress = (value: Address) => {
     let Result = {};
-    if(value){
+    if (value) {
         Result = {
             id: value.id,
-            idInformation : value.addressInformations.id ,
-            status : value.status ,
+            idInformation: value.addressInformations.id,
+            status: value.status,
             subDistrict: value.addressInformations.subDistrict,
             district: value.addressInformations.district,
             province: value.addressInformations.province,
             zipCode: value.addressInformations.zipCode,
             recipientName: value.addressInformations.recipientName,
             phoneNumber: value.addressInformations.phoneNumber,
-            description:  value.addressInformations.description,
+            description: value.addressInformations.description,
             accountID: value.accountID
         };
     };
@@ -107,14 +111,14 @@ export const convertToAddress= (value : Address) => {
 export const beforeUploadAntd = (file: RcFile) => {
     const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
     if (!isJpgOrPng) {
-      message.error('สามารถอัปโหลดไฟล์ JPG/PNG เท่านั้น!');
+        message.error('สามารถอัปโหลดไฟล์ JPG/PNG เท่านั้น!');
     }
     const isLt2M = file.size / 1024 / 1024 < 100;
     if (!isLt2M) {
-      message.error('รูปภาพต้องมีขนาดเล็กกว่า 100MB!');
+        message.error('รูปภาพต้องมีขนาดเล็กกว่า 100MB!');
     }
     return isJpgOrPng && isLt2M;
-  };
+};
 
 export const Text = `ภายในระบบของเราจะมีสินค้าทางเกษตกรรมให้ทุกท่านเลือกชอปปิ้งอย่างมากมาย อีกทั้งยังมีการจองสินค้าที่มีเฉพาะในฤดูกาลนั้นๆและสินค้าที่คุณอาจจะเข้าถึงได้ยากอีกด้วย ขอให้ทุกท่านมีความสุขกับการชอปปิ้งนะครับ`;
 
@@ -123,3 +127,8 @@ export const getBase64 = (img: RcFile, callback: (url: string) => void) => {
     reader.addEventListener('load', () => callback(reader.result as string));
     reader.readAsDataURL(img);
 };
+
+export const truncate = (str: any, length: any) => str.length > 10 ? str.substring(0, length) + "..." : str;
+
+
+

@@ -1,13 +1,13 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import MainContainer from '../../app/layout/MainContainer';
 import TopSection from '../../app/layout/TopSection';
-import { Text } from '../../app/util/util';
+import { clientId, Text } from '../../app/util/util';
 import { EditFilled } from '@ant-design/icons';
 import { Avatar, Card, Menu } from 'antd';
 import type { MenuProps } from 'antd/es/menu';
 import { Link, useLocation } from 'react-router-dom';
 import { VscLocation, VscAccount, VscLock, VscOutput } from "react-icons/vsc";
-import { useAppSelector } from '../../app/store/configureStore';
+import { useAppDispatch, useAppSelector } from '../../app/store/configureStore';
 import AccountPersonal from './accountMenu/AccountPersonal';
 import AccountAddress from './accountMenu/AccountAddress';
 import SetPassword from './accountMenu/SetPassword';
@@ -37,6 +37,7 @@ const items: MenuItem[] = [
 ];
 
 const AccountPage = () => {
+    const dispatch = useAppDispatch();
     const { Meta } = Card;
     const { state } = useLocation();
     const { account } = useAppSelector(state => state.account);
@@ -92,6 +93,7 @@ const AccountPage = () => {
                                 theme={"light"}
                                 items={items}
                             />
+                           
                         </div>
                     </ColAccount>
                     <ShowItem />

@@ -40,7 +40,7 @@ const ProductFormPrivate = () => {
   const [loading, setLoading] = useState(false);
   const defaultUnit = weightUnits?.find(e => e.id);
   const defaultLevelProduct = levelProducts?.find(e => e.id);
-  
+
 
   const values = {
     id: state ? state.key : '',
@@ -98,9 +98,11 @@ const ProductFormPrivate = () => {
         isSubmitting,
         setFieldValue,
       }) => {
+
         const props: UploadProps = {
           name: 'formFiles',
           multiple: false,
+          
           action: 'https://www.mocky.io/v2/5cc8019d300000980a055e76',
           onChange: (info) => {
             if (info.file.status === 'uploading') {
@@ -114,7 +116,7 @@ const ProductFormPrivate = () => {
             setFieldValue("formFiles", info.file.originFileObj);
           }
         };
-        
+
         const selectAfter = (
           <Select defaultValue={defaultUnit?.name} onChange={(id) => setFieldValue("weightUnitID", id)} >
             {weightUnits?.map((weightUnit, index) => <Option className="text-st" key={index} value={weightUnit.id}>{weightUnit.name}</Option>)}

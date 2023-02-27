@@ -7,11 +7,11 @@ import { beforeUploadAntd, getBase64, Ts } from '../../../../app/util/util';
 import { RcFile } from 'antd/es/upload';
 import { ErrorMessage, Form, Formik } from 'formik';
 import * as Yup from 'yup';
-import { useAppDispatch, useAppSelector } from '../../../../app/store/configureStore';
+import { useAppDispatch } from '../../../../app/store/configureStore';
 import Swal from 'sweetalert2';
 import { createEvidenceMoneyTransferAsync } from '../../../../app/store/evidenceMoneyTransferSlice';
 import { Result } from '../../../../app/models/Interfaces/IResponse';
-
+import { resetOrder } from '../../../../app/store/orderSlice';
 interface Props {
     openModal: boolean;
     setOpenModal: Function;
@@ -27,7 +27,6 @@ const ValidateSchema = Yup.object().shape({
 
 const ModalPayment = ({ openModal, setOpenModal, orderId, setOrderId }: Props) => {
     const dispatch = useAppDispatch();
-    const { } = useAppSelector(state => state.evidenceMoneyTransfer);
     const [messageApi, contextHolder] = message.useMessage();
     const [imageUrl, setImageUrl] = useState<string>("");
     const [loading, setLoading] = useState(false);
@@ -45,15 +44,17 @@ const ModalPayment = ({ openModal, setOpenModal, orderId, setOrderId }: Props) =
                 setOpenModal(false);
                 setOrderId("");
                 setImageUrl("");
+                dispatch(resetOrder());
             });
-        }
+        };
     };
 
     return (
         <Formik
-            initialValues={{ orderID: orderId, formFiles: '' }}
+            initialValues={{ orderID: "", formFiles: '' }}
             validationSchema={ValidateSchema}
             onSubmit={(values, { resetForm }) => {
+                values.orderID = orderId;
                 handleSubmitForm(values);
                 resetForm();
             }}
@@ -88,9 +89,9 @@ const ModalPayment = ({ openModal, setOpenModal, orderId, setOrderId }: Props) =
                 const onCancel = () => {
                     setOpenModal(false);
                     setOrderId("");
-                    setImageUrl("");
+                    RemoveImage();
                     resetForm();
-                }
+                };
 
                 return <Modal
                     title="โอนชำระ"
@@ -156,8 +157,6 @@ const ModalPayment = ({ openModal, setOpenModal, orderId, setOrderId }: Props) =
                 </Modal>
             }}
         </Formik>
-
-
     )
 }
 

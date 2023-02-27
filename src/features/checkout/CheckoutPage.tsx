@@ -7,14 +7,13 @@ import { currencyFormat, Ts } from '../../app/util/util';
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import agent from '../../app/api/agent';
 import { Result } from '../../app/models/Interfaces/IResponse';
-import { Account } from '../../app/models/Account';
 import { CartItem } from '../../app/models/Cart';
 import CheckoutAddress from './CheckoutAddress';
 import useAddress from '../../app/hooks/useAddress';
 import CheckoutInfoPayment from './CheckoutInfoPayment';
 import { OrderRequest } from '../../app/models/Order';
 import Swal from 'sweetalert2';
-import { useAppDispatch } from '../../app/store/configureStore';
+import { useAppDispatch, useAppSelector } from '../../app/store/configureStore';
 import { crateOrderAsync } from '../../app/store/orderSlice';
 import { fetchCartAsync } from '../../app/store/cartSlice';
 import AppAvatarAccount from '../../app/components/AppAvatarAccount';
@@ -72,7 +71,7 @@ const CheckoutPage = () => {
     const { addresses } = useAddress();
     const address = addresses.find(x => x.status === true)
     const navigate = useNavigate();
-
+    const { account } = useAppSelector(state => state.account);
     const loadAccountId = async () => {
         const { result, isSuccess, statusCode }: Result = await agent.Order.getIdAccount({
             cartId: state.cartId,

@@ -1,12 +1,11 @@
 import { useEffect, useCallback } from 'react';
 import {
-  useLocation,
-  useNavigate
+  useLocation
 } from "react-router-dom";
 import Footer from './Footer';
 import Header from './Header';
 import { useAppDispatch, useAppSelector } from '../store/configureStore';
-import { fetchCurrentAccount, logout, setTing, setUp } from '../store/accountSlice';
+import { fetchCurrentAccount  } from '../store/accountSlice'; //logout, setTing, setUp
 import { fetchCartAsync } from '../../app/store/cartSlice';
 import { mainRoutes } from '../routes/Routes';
 import { ToastContainer } from 'react-toastify';
@@ -17,13 +16,13 @@ import { Layout } from 'antd';
 import useSiderPrivate from '../hooks/useSiderPrivate';
 
 const App = () => {
-  const { token, tokenExpirationDate } = useAppSelector(state => state.account);
+  //const { token, tokenExpirationDate } = useAppSelector(state => state.account);
   const { Sider } = useSiderPrivate();
   const { showLayout } = useAppSelector(state => state.home);
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
+  //const navigate = useNavigate();
   const location = useLocation();
-  let logoutTimer: any;
+  // let logoutTimer: any;
 
   const initApp = useCallback(async () => {
     try {
@@ -37,33 +36,35 @@ const App = () => {
     }
   }, [dispatch]);
 
-  useEffect(() => {
-    // JSON.parse => แปลงข้อความ String ต่างๆ ให้เป็น JSON
-    const storedData = JSON.parse(localStorage.getItem("account") || '{}');
-    if (
-      storedData &&
-      storedData.token &&
-      new Date(storedData.expiration) > new Date() // เช็คว่าวันเวลาที่เราเก็บมันมากกว่าเวลาปัจจุบันหรือป่าว ถ้ามากกว่าแสดงว่า Token ยังไม่หมดอายุ
-    ) {
-      dispatch(
-        setTing(
-          { account: storedData.account, token: storedData.token, expirationDate: new Date(storedData.expiration) } as setUp
-        )
-      );
-    }
-  }, [setTing]);
+  /* #region ระบบออกจากระบบอัตโนมัติ */
+  // useEffect(() => {
+  //   // JSON.parse => แปลงข้อความ String ต่างๆ ให้เป็น JSON
+  //   const storedData = JSON.parse(localStorage.getItem("account") || '{}');
+  //   if (
+  //     storedData &&
+  //     storedData.token &&
+  //     new Date(storedData.expiration) > new Date() // เช็คว่าวันเวลาที่เราเก็บมันมากกว่าเวลาปัจจุบันหรือป่าว ถ้ามากกว่าแสดงว่า Token ยังไม่หมดอายุ
+  //   ) {
+  //     dispatch(
+  //       setTing(
+  //         { account: storedData.account, token: storedData.token, expirationDate: new Date(storedData.expiration) } as setUp
+  //       )
+  //     );
+  //   }
+  // }, [setTing]);
 
-  useEffect(() => {
-    if (token && tokenExpirationDate) {
-      const remainingTime =
-        tokenExpirationDate.getTime() - new Date().getTime();// จะได้เวลาที่จะหมดอายุของ Token
-      logoutTimer = setTimeout(() => {
-        dispatch(logout());
-        navigate("/");
-      }, remainingTime);
-    } else clearTimeout(logoutTimer);
+  // useEffect(() => {
+  //   if (token && tokenExpirationDate) {
+  //     const remainingTime =
+  //       tokenExpirationDate.getTime() - new Date().getTime();// จะได้เวลาที่จะหมดอายุของ Token
+  //     logoutTimer = setTimeout(() => {
+  //       dispatch(logout());
+  //       navigate("/");
+  //     }, remainingTime);
+  //   } else clearTimeout(logoutTimer);
 
-  }, [token, logout, tokenExpirationDate]);
+  // }, [token, logout, tokenExpirationDate]);
+  /* #endregion */
 
   useEffect(() => {
     initApp();

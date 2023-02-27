@@ -8,7 +8,7 @@ import { RcFile, UploadChangeParam, UploadFile, UploadProps } from 'antd/es/uplo
 import AppUpload, { getBase64 } from '../../../app/components/AppUpload';
 import { RegisterValidate } from '../AccountValidate';
 import { useAppDispatch, useAppSelector } from '../../../app/store/configureStore';
-import { fetchRolesAsync, loadAccountStorage, setAccount } from '../../../app/store/accountSlice';
+import { fetchRolesAsync, loadAccountStorage, setAccount, statusLogin } from '../../../app/store/accountSlice';
 import agent from '../../../app/api/agent';
 import AppTextInput from '../../../app/components/AppTextInput';
 import { ColAccount } from "../AccountPage";
@@ -19,11 +19,11 @@ const AccountPersonal = () => {
     const { account } = useAppSelector(state => state.account);
     const [statusInput, setStatusInput] = useState<boolean>(false);
     const { roleData } = useAppSelector(state => state.account);
-
+    const status = statusLogin();
     useEffect(() => {
         if (!roleData) dispatch(fetchRolesAsync());
     }, []);
-
+  
     const [loading, setLoading] = useState<boolean>(false);
 
     const value = {
@@ -34,7 +34,8 @@ const AccountPersonal = () => {
         password: account?.password || "",
         phoneNumber: account?.phoneNumber || "",
         roleID: account?.role.id || "",
-        formFiles: {} || undefined
+        formFiles: {} || undefined,
+        statusLogin : status
     };
 
     interface Props {

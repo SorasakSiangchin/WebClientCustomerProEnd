@@ -1,23 +1,28 @@
-import { Button, Input } from 'antd';
+import { Button, Input, Space } from 'antd';
 import { Formik, Form, ErrorMessage } from 'formik';
-import { Fragment } from 'react'
+import { Fragment, useEffect } from 'react'
 import TopSection from '../../app/layout/TopSection'
 import { useAppDispatch } from '../../app/store/configureStore';
-import { loginAccount } from '../../app/store/accountSlice';
+import { googleLoginAccount, loginAccount, setStatusLogin } from '../../app/store/accountSlice';
 import { LoginValidate } from './AccountValidate';
 import { Link, useNavigate } from 'react-router-dom';
 import swal from 'sweetalert';
 import { Result } from '../../app/models/Interfaces/IResponse';
 import { LockFilled, UserAddOutlined } from '@ant-design/icons';
 import AppButton from '../../app/components/AppButton';
-import { Text } from '../../app/util/util';
+import { clientId, Text, Ts } from '../../app/util/util';
 import MainContainer from '../../app/layout/MainContainer';
-
+import { GoogleLogin, GoogleLogout } from "react-google-login";
+import { gapi } from "gapi-script";
+import { GoogleLoginRequest } from '../../app/models/Account';
 const value = { email: '', password: '' };
+
+const valueGoogle: GoogleLoginRequest = { email: '', password: '', firstName: '', lastName: '', imageUrl: '' };
 
 const Login = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+
   const submitForm = async (data: any) => {
     const result: Result = await dispatch(loginAccount(data)).unwrap();
     if (result.isSuccess === true || !result.errorMessages) {
@@ -34,6 +39,41 @@ const Login = () => {
       });
     };
   };
+
+  useEffect(() => {
+    const initClient = () => {
+      gapi.client.init({
+        clientId: clientId,
+        scope: ''
+      })
+    }
+    gapi.load("client:auth2", initClient);
+  }, []);
+
+  const onSuccess = async (res: any) => {
+    AddValueGoogle(res.profileObj);
+    const result: Result = await dispatch(googleLoginAccount(valueGoogle)).unwrap();
+    if (result.isSuccess === true || !result.errorMessages)
+      swal({
+        title: "เข้าสู่ระบบสำเร็จ",
+        icon: "success",
+        buttons: [false, "ตกลง"],
+      });
+    dispatch(setStatusLogin());
+  };
+
+  const onFailure = (res: any) => {
+    console.log(res);
+  };
+
+  const AddValueGoogle = (profileObj: any) => {
+    valueGoogle.email = profileObj.email;
+    valueGoogle.firstName = profileObj.givenName
+    valueGoogle.lastName = profileObj.familyName
+    valueGoogle.password = profileObj.googleId
+    valueGoogle.imageUrl = profileObj.imageUrl
+  };
+
   return (
     <Fragment>
       <TopSection text={Text} title="เข้าสู่ระบบ" backToPageTitle="หน้าแรก" backToPageUrl="/" />
@@ -106,12 +146,20 @@ const Login = () => {
                         </li>
                       </ul>
                       <div className="buttons-set" style={{ marginTop: "5%" }}>
-                        <AppButton type="primary" htmlType="submit" loading={isSubmitting} icon={<LockFilled style={{ fontSize: '110%' }} />} size="large">
+                       <Space>
+                       <AppButton type="primary" htmlType="submit" loading={isSubmitting} icon={<LockFilled style={{ fontSize: '110%' }} />} size="large">
                           ตกลง
                         </AppButton>
-                        <Link to="" className="forgot-word text-st">
-                          ลืมรหัสผ่านหรือไม่?
-                        </Link>
+                        <div>
+                          <GoogleLogin
+                            clientId={clientId}
+                            onSuccess={onSuccess}
+                            onFailure={onFailure}
+                            cookiePolicy={"single_host_origin"}
+                            isSignedIn={true}
+                          />
+                        </div>
+                       </Space>
                       </div>
                     </div>
                   </div>

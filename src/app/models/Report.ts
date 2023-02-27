@@ -21,8 +21,22 @@ export interface Sale {
     year: number;
 }
 
-export interface RequestStatistics {
+export interface RequestProductStatistics {
     accountId: any ;
     dateStart: Date | null;
     dateEnd: Date | null;
 }
+
+export interface RequestSalesStatistics {
+    accountId: any ;
+    year: Date | null ;
+}
+
+export enum TypeProductStatisticsRequest {
+    DateStart = 'DateStart',
+    DateEnd = 'DateEnd',
+};
+
+export enum TypeSalesStatisticsRequest {
+    DateYear = 'DateYear',
+};

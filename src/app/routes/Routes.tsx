@@ -16,6 +16,8 @@ import ProductsSimilar from "../../features/product/ProductsSimilar";
 import TestPage from "../../features/TestPage";
 import ProductFormPrivate from "../../features/private/product/ProductFormPrivate";
 import { RoleInfo } from "../models/Role";
+import UserPrivatePage from "../../features/private/user/UserPrivatePage";
+import OrderPrivatePage from "../../features/private/order/OrderPrivatePage";
 
 export const mainRoutes = <Routes>
     <Route path='/' element={<HomePage />} />
@@ -36,6 +38,8 @@ export const mainRoutes = <Routes>
     </Route>
     <Route element={<PrivateRoute roles={[RoleInfo.admin, RoleInfo.seller]} />} >
         <Route path='/private/dashboard' element={<DashboardPage />} />
+        <Route path='/private/user' element={<UserPrivatePage />} />
+        <Route path='/private/order' element={<OrderPrivatePage />} />
         <Route path='/private/product' element={<ProductPrivatePage />} />
         <Route path='/private/product/detail/:idProduct' element={<ProductDetailPrivatePage />} />
         <Route path='/private/product/form' element={<ProductFormPrivate />} />

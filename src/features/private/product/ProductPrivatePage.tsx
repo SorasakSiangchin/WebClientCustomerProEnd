@@ -11,10 +11,10 @@ import { WeightUnit, CategoryProduct } from "../../../app/models/Product";
 import { currencyFormat, Ts } from '../../../app/util/util';
 import { useNavigate } from 'react-router-dom';
 import LayoutPrivate from '../LayoutPrivate';
-import Swal from 'sweetalert2';
 import { useAppDispatch, useAppSelector } from '../../../app/store/configureStore';
 import { removeProductAsync, setParams } from '../../../app/store/productSlice';
 import AppPagination from '../../../app/components/AppPagination';
+import AppSwal from '../../../app/components/AppSwal';
 export interface DataType {
   key: string;
   name: string;
@@ -53,7 +53,7 @@ const ProductPrivatePage = () => {
 
   useEffect(() => {
     dispatch(setParams({ accountID: account?.id }));
-  }, [dispatch]);
+  }, [dispatch, account]);
 
   const handleSearch = (
     selectedKeys: string[],
@@ -179,15 +179,13 @@ const ProductPrivatePage = () => {
   });
 
   const onDelete = (id: any) => {
-    Swal.fire({
-      title: 'ลบสินค้าหรือไม่?',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      cancelButtonText: "ยกเลิก",
-      confirmButtonText: 'ตกลง'
-    }).then((result: any) => result.isConfirmed && dispatch(removeProductAsync(id)))
+    AppSwal(
+      {
+        icon: "warning",
+        onThen: (result: any) => { result.isConfirmed && dispatch(removeProductAsync(id)) },
+        title: 'ลบสินค้าหรือไม่'
+      }
+    );
   };
 
   const columns: ColumnsType<DataType> = columnDatas.map(column => {
@@ -237,14 +235,14 @@ const ProductPrivatePage = () => {
           <Ts>เลือก</Ts>
         </Dropdown.Button>
       }
-    }
+    };
     return {
       title: <Ts>{column.title}</Ts>,
       dataIndex: column.key,
       key: column.key,
       width: '30%',
       ...getColumnSearchProps(column.key as DataIndex, column.title),
-    }
+    };
   }) as ColumnsType<DataType>;
 
   return (

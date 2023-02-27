@@ -1,7 +1,8 @@
+import { ShoppingOutlined } from '@ant-design/icons';
 import { Image, Layout, Menu, MenuProps } from 'antd';
 import React, { useState } from 'react'
 import { Container } from 'react-bootstrap';
-import { VscChevronLeft, VscDashboard, VscPackage } from 'react-icons/vsc';
+import { VscAccount, VscChevronLeft, VscDashboard, VscPackage } from 'react-icons/vsc';
 import { useNavigate } from 'react-router-dom';
 import { resetProductParams } from '../../app/store/productSlice';
 import { useAppDispatch } from '../store/configureStore';
@@ -28,7 +29,9 @@ const useSiderPrivate = () => {
   const navigate = useNavigate();
   const items: MenuItem[] = [
     getItem('แดชบอร์ด', '1', <VscDashboard style={{ fontSize: "20px" }} />,),
+    getItem('ผู้ใช้งาน', '3', <VscAccount style={{ fontSize: "20px" }} />),
     getItem('สินค้า', '2', <VscPackage style={{ fontSize: "20px" }} />),
+    getItem('การสั่งซื้อ', '4', <ShoppingOutlined style={{ fontSize: "20px" }} />),
     getItem('กลับ', '9', <VscChevronLeft style={{ fontSize: "20px" }} />),
   ];
 
@@ -44,10 +47,17 @@ const useSiderPrivate = () => {
       case "2":
         navigate("/private/product");
         break;
+      case "3":
+        navigate("/private/user");
+        break;
+      case "4":
+        navigate("/private/order");
+        break;
       case "9":
         navigate("/");
         dispatch(resetProductParams());
         break;
+
       default:
         break;
     }

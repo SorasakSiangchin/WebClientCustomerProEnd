@@ -41,3 +41,12 @@ export enum OrderStatus {
     PaymentReceived, // การชำระเงินที่ได้รับ
     PaymentFailed // การชำระเงินล้มเหลว
 }
+
+export interface OrderParams {
+    pageNumber: number;
+    pageSize: number;
+    id: string;
+    orderCancel: string;
+    accountId: string;
+    orderStatus: string;
+}

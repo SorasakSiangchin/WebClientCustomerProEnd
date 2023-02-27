@@ -85,9 +85,12 @@ const CategoryProduct = {
 const Account = {
     login: (value: any) => requests.post('login', createFormData(value)),
     register: (value: any) => requests.post('register', createFormData(value)),
-    currentAccount: (idAccount: any) => requests.get(`account/${idAccount}`), // ข้อมูลคนปัจจุบัน
-    update: (value: any) => requests.put("account", createFormData(value)),
+    currentAccount: (value: any) => requests.get(`account/${value.accountId}?statusLogin=${value.statusLogin ? value.statusLogin : ""}`), // ข้อมูลคนปัจจุบัน
+    update: (value: any) => requests.put("account", createFormData(value))
+    ,
     updatePassword: (value: any) => requests.put("account/password", createFormData(value)),
+    googleLogin: (value: any) => requests.post("googleLogin", value),
+    list: () => requests.get('account'),
 };
 
 const Cart = {
@@ -98,10 +101,12 @@ const Cart = {
 
 const Order = {
     getIdAccount: (value: any) => requests.post(`/orders/accountId`, value),
-    create: (value: any) => requests.post(`orders`, value),
-    getByIdAccount: (accountId: any) => requests.get(`orders?accountId=${accountId}`),
-    detail: (idOrder: any) => requests.get(`order/${idOrder}`)
-}
+    create: (value: any) => requests.post(`order`, value),
+    update: (value: any) => requests.put(`order`, value),
+    getByIdAccount: (accountId: any) => requests.get(`orders/accountId?accountId=${accountId}`),
+    detail: (idOrder: any) => requests.get(`order/${idOrder}`),
+    list: (params: any) => requests.post('orders', params),
+};
 
 const Role = {
     list: () => requests.get('roles'),
@@ -144,8 +149,8 @@ const EvidenceMoneyTransfer = {
 }
 
 const Report = {
-   getProductStatistics : (value: any) => requests.post("report/productStatistics", createFormData(value)) ,
-   getSalesStatistics : (value: any) => requests.post("report/salesStatistics", createFormData(value)) ,
+    getProductStatistics: (value: any) => requests.post("report/productStatistics", createFormData(value)),
+    getSalesStatistics: (value: any) => requests.post("report/salesStatistics", createFormData(value)),
 }
 
 const agent = {
