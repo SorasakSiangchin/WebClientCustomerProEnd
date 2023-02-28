@@ -8,7 +8,7 @@ import { formatDate } from '../../app/util/util';
 import { setCart } from '../../app/store/cartSlice';
 import { RootState } from './configureStore';
 
-export const value = { firstName: "", lastName: "", email: "", password: "", phoneNumber: "", roleID: "", formFiles: File };
+export const value = { stats : true , firstName: "", lastName: "", email: "", password: "", phoneNumber: "", roleID: "", formFiles: File };
 
 interface AccountState {
     account: Account | null;

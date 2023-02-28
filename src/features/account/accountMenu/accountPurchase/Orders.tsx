@@ -11,16 +11,19 @@ import ModalPayment from './ModalPayment';
 import ModalEvidence from './ModalEvidence';
 import { useAppDispatch } from '../../../../app/store/configureStore';
 import { fetchOrdersAsync, updateOrderAsync } from '../../../../app/store/orderSlice';
-import { ContainerOutlined } from '@ant-design/icons';
+import { ContainerOutlined, QuestionCircleOutlined } from '@ant-design/icons';
 import ModalTransferHistory from './ModalTransferHistory';
-
+import { Delivery } from '../../../../app/models/Delivery';
+import { TfiTruck } from 'react-icons/tfi';
+import moment from 'moment-timezone';
 interface Props {
     orders: Order[]
     setOrderPage?: any;
     setOrderId?: any;
+    setDataDelivery?: any;
 }
 
-const Orders = ({ orders, setOrderPage, setOrderId }: Props) => {
+const Orders = ({ orders, setOrderPage, setOrderId, setDataDelivery }: Props) => {
     const dispatch = useAppDispatch();
     const [openModal, setOpenModal] = useState<boolean>(false);
     const [id, setId] = useState<string>("");
@@ -32,11 +35,19 @@ const Orders = ({ orders, setOrderPage, setOrderId }: Props) => {
 
     const showOrder = orders?.length > 0 ? <Space direction='vertical' size="large" style={{ width: "100%" }}>
         {React.Children.toArray(orders?.map((order: Order) => {
-
             const [openModalEvidence, setOpenModalEvidence] = useState<boolean>(false);
             const [openModalHistory, setOpenModalHistory] = useState<boolean>(false);
             const [dataCancelEvidence, setDataCancelEvidence] = useState<EvidenceMoneyTransfer[]>();
             const [dataEvidence, setDataEvidence] = useState<EvidenceMoneyTransfer | null>(null);
+            const [delivery, setDelivery] = useState<Delivery | null>(null);
+            useEffect(() => {
+                loadData();
+            }, []);
+
+            const loadData = async () => {
+                const { isSuccess, result, statusCode }: Result = await agent.Delivery.getByIdOrder(order.id);
+                if (isSuccess === true && statusCode === 200) setDelivery(result);
+            };
 
             const onCancelOrder = () => {
                 const data = {
@@ -82,8 +93,37 @@ const Orders = ({ orders, setOrderPage, setOrderId }: Props) => {
                 } else return "ยกเลิก"
             };
 
+            const extraDelivery = (
+                <>
+                    <Button
+                        icon={<><TfiTruck size={18} />{"  "}</>}
+                        className="text-st"
+                        type='text'
+                        size='small'
+                        style={{
+                            color: "#75BC4E"
+                        }}
+                    >
+                        {delivery?.statusDelivery.name}
+                    </Button>
+                    <Tooltip title={<p className='text-st' style={{ width: "100rem" }}>
+                        จะได้รับภายใน {moment.utc(delivery?.timeArrive).tz('Asia/Bangkok').format('YYYY-MM-DD HH:mm:ss')}
+                    </p>}
+                    >
+                        <Button
+                            size='small'
+                            icon={<QuestionCircleOutlined />}
+                            className="text-st"
+                            type='text'
+                        />
+                    </Tooltip>
+                    <Divider type='vertical' />
+                </>
+            )
+
             const extraCard = (
                 <>
+                    {delivery ? extraDelivery : ""}
                     <div
                         className='text-st'
                         style={{
@@ -154,6 +194,7 @@ const Orders = ({ orders, setOrderPage, setOrderId }: Props) => {
                             <List.Item onClick={() => {
                                 setOrderId(order.id);
                                 setOrderPage(true);
+                                setDataDelivery(delivery);
                             }} >
                                 <List.Item.Meta
                                     avatar={<img width={70} height={70} src={item.imageUrl} />}

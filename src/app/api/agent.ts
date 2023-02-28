@@ -110,6 +110,9 @@ const Order = {
 
 const StatusDelivery = {
     list: () => requests.get('statusDeliverys'),
+    create: (value: any) => requests.post(`statusDelivery`, value),
+    update: (value: any) => requests.put(`statusDelivery`, value),
+    detail: (id: any) => requests.get(`statusDelivery/${id}`),
 }
 
 const Role = {
@@ -159,8 +162,8 @@ const Report = {
 
 const Delivery = {
     getByIdOrder: (orderId: any) => requests.get(`delivery/orderId?orderId=${orderId}`),
-    create: (value: any) => requests.post("delivery", value),
-    update: (value: any) => requests.put("delivery", value)
+    create: (value: any) => requests.post("delivery", createFormData(value)),
+    update: (value: any) => requests.put("delivery", createFormData(value))
 }
 
 const agent = {

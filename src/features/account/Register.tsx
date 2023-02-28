@@ -38,7 +38,7 @@ const Register = () => {
 
   const submitForm = async (data: any) => {
     const result: Result = await dispatch(registerAccount(data)).unwrap();
-    if (result.isSuccess === true || !result.errorMessages) {
+    if (result.isSuccess === true || result.statusCode === 200) {
       swal({
         title: "บันทึกข้อมูลสำเร็จ",
         icon: "success",

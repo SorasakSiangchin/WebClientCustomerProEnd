@@ -1,17 +1,22 @@
-import { LeftOutlined } from '@ant-design/icons'
-import { Button, Col, Descriptions, Divider, Row, Radio, Card, List, Space, Tag } from 'antd'
-import React, { Fragment, useEffect } from 'react'
+import { CheckCircleOutlined, LeftOutlined } from '@ant-design/icons'
+import { Button, Col, Descriptions, Divider, Row, List, Tag } from 'antd'
+import React, { Fragment, useEffect, useState } from 'react'
 import { Container } from 'react-bootstrap';
 import { useAppDispatch, useAppSelector } from '../../../../app/store/configureStore';
 import { fetchOrderAsync, orderSelectors } from '../../../../app/store/orderSlice';
 import { Timeline } from 'antd';
 import { currencyFormat, Ts } from '../../../../app/util/util';
-import { AvatarAccountByProductId } from './Orders';
+import agent from '../../../../app/api/agent';
+import { Result } from '../../../../app/models/Interfaces/IResponse';
+import useDelivery from '../../../../app/hooks/useDelivery';
+import { Delivery } from '../../../../app/models/Delivery';
+import moment from 'moment-timezone';
 
-const OrderDetail = ({ orderId, setOrderPage }: any) => {
+const OrderDetail = ({ orderId, setOrderPage, delivery }: any) => {
   const dispatch = useAppDispatch();
+  const { statusDelivery } = useDelivery();
   const order = useAppSelector(state => orderSelectors.selectById(state, orderId));
-
+  const [dataDelivery, setDataDelivery] = useState<Delivery>(delivery);
   useEffect(() => {
     if (!order) dispatch(fetchOrderAsync(orderId));
   }, [orderId, order, dispatch]);
@@ -29,6 +34,7 @@ const OrderDetail = ({ orderId, setOrderPage }: any) => {
     { title: 'ค่าจัดส่ง', info: order?.deliveryFee },
     { title: 'รวมการสั่งซื้อ', info: order?.total },
   ];
+
 
   return (
     <Fragment>
@@ -49,12 +55,24 @@ const OrderDetail = ({ orderId, setOrderPage }: any) => {
               <Divider style={{ height: "100%" }} type='vertical' />
             </Col>
             <Col span={13} >
-              <Timeline mode='left' className='text-st' >
-                <Timeline.Item label="2015-09-01">Create a services</Timeline.Item>
-                <Timeline.Item label="2015-09-01 09:12:11">Solve initial network problems</Timeline.Item>
-                <Timeline.Item label="2015-09-01 09:12:11">Technical testing</Timeline.Item>
-                <Timeline.Item label="2015-09-01 09:12:11">Network problems being solved</Timeline.Item>
+              <Timeline mode='alternate' className='text-st' >
+                {statusDelivery?.map(status => {
+                  const check = dataDelivery.statusDeliveryID !== status.id;
+                  return <Timeline.Item
+                    dot={!check && <CheckCircleOutlined />}
+                    color={check ? 'rgba(0,0,0,.20)' : "#EA8E2D"}
+                    style={{ color: check ? 'rgba(0,0,0,.20)' : "#EA8E2D" }}
+                  >
+                    {status.name}
+                  </Timeline.Item>
+                })}
               </Timeline>
+              <p className='text-st ' style={{
+                display: "flex",
+                justifyContent: "end"
+              }}>
+                จะถึงภายใน {moment.utc(delivery?.timeArrive).tz('Asia/Bangkok').format('YYYY-MM-DD HH:mm:ss')}
+              </p>
             </Col>
           </Row>
           <br />
@@ -80,14 +98,14 @@ const OrderDetail = ({ orderId, setOrderPage }: any) => {
             bordered
             column={1}
           >
-            {React.Children.toArray(infoSummary.map((summary , index) => <Descriptions.Item
+            {React.Children.toArray(infoSummary.map((summary, index) => <Descriptions.Item
               className='text-st'
-              label={<div style={{ display : "flex" , justifyContent : "end"}}>
+              label={<div style={{ display: "flex", justifyContent: "end" }}>
                 {summary.title}
               </div>}
               style={{ width: "80%" }}
             >
-              {index === 2 ? <Tag className='text-st center' color="success" style={{ fontSize : "20px" , padding : "5px" }}>{currencyFormat(summary.info)}</Tag> : currencyFormat(summary.info)}
+              {index === 2 ? <Tag className='text-st center' color="success" style={{ fontSize: "20px", padding: "5px" }}>{currencyFormat(summary.info)}</Tag> : currencyFormat(summary.info)}
             </Descriptions.Item>))}
           </Descriptions>
         </Container>

@@ -1,6 +1,6 @@
 import { CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons';
 import { AutoComplete, Button, Card, Col, Divider, Empty, Image, Input, List, Modal, Popconfirm, Row, Select, Space } from 'antd';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Container } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import useOrder from '../../../app/hooks/useOrder';
@@ -37,7 +37,11 @@ const OrderPrivatePage = () => {
         dispatch(resetParams());
         break;
     }
-  }
+  };
+
+  useEffect(() => {
+    dispatch(resetParams());
+  }, []);
 
   return (
     <LayoutPrivate>
@@ -84,7 +88,7 @@ const OrderPrivatePage = () => {
       <Divider />
       <Container>
         <Row gutter={24}>
-          {orders?.length > 0 ? React.Children.toArray(orders?.filter(e => e.orderStatus !== 0).map(order => {
+          {orders?.filter(e => e.orderStatus !== 0).length > 0 ? React.Children.toArray(orders?.filter(e => e.orderStatus !== 0).map(order => {
 
             const onUpdateEvidence = (evidence: any) => {
               dispatch(updateEvidenceMoneyTransferAsync({

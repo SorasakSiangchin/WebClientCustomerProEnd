@@ -14,7 +14,7 @@ const useProducts = () => {
         weightUnits,
         levelProductLoaded,
         levelProducts
-    } = useAppSelector(state => state.product);//
+    } = useAppSelector(state => state.product);
     const { productRare, productRareLoaded } = useAppSelector(state => state.product);
 
     useEffect(() => {

@@ -78,9 +78,7 @@ const OrderDetailPrivate = () => {
                             className="text-st"
                             bordered
                             style={{ width: "100%" }}
-                            actions={[
-                                actionCard
-                            ]}
+                            actions={state.status !== "delivery" ? [actionCard] : []}
                         >
                             <Descriptions className='text-st' size='small' column={1} >
                                 {React.Children.toArray(infoAddress.map(address => <Descriptions.Item label={address.title}>{address.info}</Descriptions.Item>))}

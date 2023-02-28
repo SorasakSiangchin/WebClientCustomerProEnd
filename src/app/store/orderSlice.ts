@@ -116,7 +116,6 @@ export const orderSlice = createSlice({
         builder.addCase(fetchOrdersAsync.fulfilled, (state, action) => {
             orderAdapter.setAll(state, action.payload); // set products
             state.ordersLoaded = true;
-            console.log(action.payload)
         });
         builder.addCase(updateOrderAsync.fulfilled, (state, action) => {
             state.ordersLoaded = true;

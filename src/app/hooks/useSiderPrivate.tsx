@@ -6,8 +6,8 @@ import { FiTruck } from 'react-icons/fi';
 import { VscAccount, VscChevronLeft, VscDashboard, VscPackage } from 'react-icons/vsc';
 import { useNavigate } from 'react-router-dom';
 import { resetProductParams } from '../../app/store/productSlice';
-import { useAppDispatch } from '../store/configureStore';
-import { resetParams } from '../store/orderSlice';
+import { useAppDispatch, useAppSelector } from '../store/configureStore';
+import { resetParams, setParams } from '../store/orderSlice';
 const { Sider } = Layout;
 type MenuItem = Required<MenuProps>['items'][number];
 
@@ -27,16 +27,23 @@ function getItem(
 
 const useSiderPrivate = () => {
   const [collapsed, setCollapsed] = useState(false);
+  const { account } = useAppSelector(state => state.account);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const items: MenuItem[] = [
-    getItem('แดชบอร์ด', '1', <VscDashboard style={{ fontSize: "20px" }} />,),
-    getItem('ผู้ใช้งาน', '3', <VscAccount style={{ fontSize: "20px" }} />),
-    getItem('สินค้า', '2', <VscPackage style={{ fontSize: "20px" }} />),
-    getItem('การสั่งซื้อ', '4', <ShoppingOutlined style={{ fontSize: "20px" }} />),
-    getItem('การจัดส่ง', '5', <FiTruck style={{ fontSize: "20px" }} />),
-    getItem('กลับ', '9', <VscChevronLeft style={{ fontSize: "20px" }} />),
-  ];
+  const items: MenuItem[] = account?.roleID !== 2 ?
+    [
+      getItem('แดชบอร์ด', '1', <VscDashboard style={{ fontSize: "20px" }} />,),
+      getItem('ผู้ใช้งาน', '3', <VscAccount style={{ fontSize: "20px" }} />),
+      getItem('สินค้า', '2', <VscPackage style={{ fontSize: "20px" }} />),
+      getItem('การสั่งซื้อ', '4', <ShoppingOutlined style={{ fontSize: "20px" }} />),
+      getItem('กลับ', '9', <VscChevronLeft style={{ fontSize: "20px" }} />),
+    ] :
+    [
+      getItem('แดชบอร์ด', '1', <VscDashboard style={{ fontSize: "20px" }} />,),
+      getItem('สินค้า', '2', <VscPackage style={{ fontSize: "20px" }} />),
+      getItem('การจัดส่ง', '5', <FiTruck style={{ fontSize: "20px" }} />),
+      getItem('กลับ', '9', <VscChevronLeft style={{ fontSize: "20px" }} />),
+    ];
 
   interface Page {
     key?: string;
@@ -54,7 +61,6 @@ const useSiderPrivate = () => {
         navigate("/private/user");
         break;
       case "4":
-        dispatch(resetParams());
         navigate("/private/order");
         break;
       case "5":
@@ -64,7 +70,6 @@ const useSiderPrivate = () => {
         navigate("/");
         dispatch(resetProductParams());
         break;
-
       default:
         break;
     }

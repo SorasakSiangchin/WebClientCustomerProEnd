@@ -3,6 +3,7 @@ import { ResultProps } from "antd";
 import agent from "../api/agent";
 import { Delivery, StatusDelivery } from "../models/Delivery";
 import { Result } from "../models/Interfaces/IResponse";
+import { RootState } from "./configureStore";
 
 interface DeliveryState {
     delivery: Delivery | null;
@@ -60,7 +61,9 @@ export const deliverySlice = createSlice({
         statusDeliveryLoaded: false
     }),
     reducers: {
-   
+        resetStatusDelivery: (state) => {
+            state.deliveryLoaded = false;
+        }
     },
     extraReducers: builder => {
         builder.addCase(fetchStatusDeliverysAsync.fulfilled, (state, action) => {
@@ -80,4 +83,5 @@ export const deliverySlice = createSlice({
     }
 });
 
-export const { } = deliverySlice.actions;
+export const { resetStatusDelivery } = deliverySlice.actions;
+export const deliverySelectors = deliverysAdapter.getSelectors((state: RootState) => state.delivery); 
