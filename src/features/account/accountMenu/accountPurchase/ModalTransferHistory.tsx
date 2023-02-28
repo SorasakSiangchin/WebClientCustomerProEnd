@@ -1,4 +1,4 @@
-import { Image, List, Modal } from 'antd';
+import { Image, List, Modal, Space } from 'antd';
 import { currencyFormat, Ts } from '../../../../app/util/util';
 import { EvidenceMoneyTransfer } from '../../../../app/models/EvidenceMoneyTransfer';
 const ModalTransferHistory = ({ openModal, setOpenModal, cancelEvidence }: any) => {
@@ -22,10 +22,7 @@ const ModalTransferHistory = ({ openModal, setOpenModal, cancelEvidence }: any) 
                         size='small'
                         dataSource={cancelEvidence as EvidenceMoneyTransfer[]}
                         renderItem={(item) => (
-                            <List.Item onClick={() => {
-                                // setOrderId(order.id);
-                                // setOrderPage(true);
-                            }} >
+                            <List.Item>
                                 <List.Item.Meta
                                     avatar={
                                         <>
@@ -43,9 +40,17 @@ const ModalTransferHistory = ({ openModal, setOpenModal, cancelEvidence }: any) 
                                         </>
                                     }
                                 />
-                                <h2 className='text-st'>
-                                    {currencyFormat(item.order.subtotal + item.order.deliveryFee)}
-                                </h2>
+                                <Space direction='vertical' size={'small'}>
+                                    <h4 className='text-st'>
+                                        ค่าสินค้า : {currencyFormat(item.order.subtotal)}
+                                    </h4>
+                                    <h4 className='text-st'>
+                                        ค่าจัดส่ง : {currencyFormat(item.order.deliveryFee)}
+                                    </h4>
+                                    <h4 className='text-st'>
+                                        รวม : {currencyFormat(item.order.subtotal + item.order.deliveryFee)}
+                                    </h4>
+                                </Space>
                             </List.Item>
                         )}
                     /> :

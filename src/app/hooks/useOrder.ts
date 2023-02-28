@@ -8,7 +8,7 @@ import agent from '../api/agent';
 const useOrder = () => {
     const dispatch = useAppDispatch();
     const orders = useAppSelector(orderSelectors.selectAll);
-    const { ordersLoaded } = useAppSelector(state => state.order);
+    const { ordersLoaded, metaData } = useAppSelector(state => state.order);
 
     useEffect(() => {
         if (!ordersLoaded) dispatch(fetchOrdersAsync());
@@ -19,7 +19,6 @@ const useOrder = () => {
             dispatch(resetOrder());
         }
     }, [dispatch]);
-
     const getEvidenceMoneyTransfers = async (orderId: any) => {
         const { isSuccess, statusCode, result }: Result = await agent.EvidenceMoneyTransfer.get(orderId);
         if (isSuccess === true && statusCode === 200) return result;
@@ -30,7 +29,8 @@ const useOrder = () => {
         orders,
         ordersLoaded,
         resetOrder,
-        getEvidenceMoneyTransfers
+        getEvidenceMoneyTransfers,
+        metaData
     };
 }
 

@@ -77,7 +77,8 @@ const initParams = (): OrderParams => {
         accountId: "",
         id: "",
         orderCancel: "",
-        orderStatus: ""
+        orderStatus: "",
+        sellerId : ""
     }
 };
 

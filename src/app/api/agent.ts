@@ -108,6 +108,10 @@ const Order = {
     list: (params: any) => requests.post('orders', params),
 };
 
+const StatusDelivery = {
+    list: () => requests.get('statusDeliverys'),
+}
+
 const Role = {
     list: () => requests.get('roles'),
 };
@@ -153,6 +157,12 @@ const Report = {
     getSalesStatistics: (value: any) => requests.post("report/salesStatistics", createFormData(value)),
 }
 
+const Delivery = {
+    getByIdOrder: (orderId: any) => requests.get(`delivery/orderId?orderId=${orderId}`),
+    create: (value: any) => requests.post("delivery", value),
+    update: (value: any) => requests.put("delivery", value)
+}
+
 const agent = {
     Product,
     Account,
@@ -166,7 +176,9 @@ const agent = {
     LevelProduct,
     DetailProduct,
     EvidenceMoneyTransfer,
-    Report
+    Report,
+    Delivery,
+    StatusDelivery
 };
 
 export default agent;

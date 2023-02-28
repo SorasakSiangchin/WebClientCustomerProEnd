@@ -18,6 +18,9 @@ import ProductFormPrivate from "../../features/private/product/ProductFormPrivat
 import { RoleInfo } from "../models/Role";
 import UserPrivatePage from "../../features/private/user/UserPrivatePage";
 import OrderPrivatePage from "../../features/private/order/OrderPrivatePage";
+import OrderDetailPrivate from "../../features/private/order/OrderDetailPrivate";
+import DeliveryPrivatePage from "../../features/private/delivery/DeliveryPrivatePage";
+import DeliveryFormPrivate from "../../features/private/delivery/DeliveryFormPrivate";
 
 export const mainRoutes = <Routes>
     <Route path='/' element={<HomePage />} />
@@ -43,6 +46,9 @@ export const mainRoutes = <Routes>
         <Route path='/private/product' element={<ProductPrivatePage />} />
         <Route path='/private/product/detail/:idProduct' element={<ProductDetailPrivatePage />} />
         <Route path='/private/product/form' element={<ProductFormPrivate />} />
+        <Route path='/private/delivery' element={<DeliveryPrivatePage />} />
+        <Route path='/private/delivery/form/:idOrder' element={<DeliveryFormPrivate />} />
+        <Route path='/private/order/detail' element={<OrderDetailPrivate />} />
     </Route>
     <Route path='/product-favorite' element={<ProductFavorite />} />
     <Route path='/product-list' element={<ProductList />} />

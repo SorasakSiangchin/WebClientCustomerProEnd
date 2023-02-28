@@ -1,11 +1,13 @@
 import { ShoppingOutlined } from '@ant-design/icons';
-import { Image, Layout, Menu, MenuProps } from 'antd';
+import { Layout, Menu, MenuProps } from 'antd';
 import React, { useState } from 'react'
 import { Container } from 'react-bootstrap';
+import { FiTruck } from 'react-icons/fi';
 import { VscAccount, VscChevronLeft, VscDashboard, VscPackage } from 'react-icons/vsc';
 import { useNavigate } from 'react-router-dom';
 import { resetProductParams } from '../../app/store/productSlice';
 import { useAppDispatch } from '../store/configureStore';
+import { resetParams } from '../store/orderSlice';
 const { Sider } = Layout;
 type MenuItem = Required<MenuProps>['items'][number];
 
@@ -32,6 +34,7 @@ const useSiderPrivate = () => {
     getItem('ผู้ใช้งาน', '3', <VscAccount style={{ fontSize: "20px" }} />),
     getItem('สินค้า', '2', <VscPackage style={{ fontSize: "20px" }} />),
     getItem('การสั่งซื้อ', '4', <ShoppingOutlined style={{ fontSize: "20px" }} />),
+    getItem('การจัดส่ง', '5', <FiTruck style={{ fontSize: "20px" }} />),
     getItem('กลับ', '9', <VscChevronLeft style={{ fontSize: "20px" }} />),
   ];
 
@@ -51,7 +54,11 @@ const useSiderPrivate = () => {
         navigate("/private/user");
         break;
       case "4":
+        dispatch(resetParams());
         navigate("/private/order");
+        break;
+      case "5":
+        navigate("/private/delivery");
         break;
       case "9":
         navigate("/");

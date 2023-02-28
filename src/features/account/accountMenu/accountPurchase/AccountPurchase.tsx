@@ -41,7 +41,7 @@ const AccountPurchase = () => {
         {
             key: '4',
             label: `สำเร็จแล้ว`,
-            children: <Orders orders={orders?.filter(e => e.orderCancel === false && e.customerStatus === false && e.sellerStatus === true)} setOrderPage={setOrderPage} setOrderId={setOrderId} />,
+            children: <Orders orders={orders?.filter(e => e.orderCancel === false && e.customerStatus === true)} setOrderPage={setOrderPage} setOrderId={setOrderId} />,
         },
         {
             key: '5',

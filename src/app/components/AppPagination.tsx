@@ -11,7 +11,7 @@ interface Props {
 }
 
 export default function AppPagination({ metaData, onPageChange , isSimple= true }: Props) {
-    const { currentPage, totalCount, pageSize } = metaData;
+    const { currentPage, totalCount , pageSize } = metaData;
     return (
         <div className="toolbar bottom">
             <div className="display-product-option">

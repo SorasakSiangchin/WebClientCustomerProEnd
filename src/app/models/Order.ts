@@ -49,4 +49,5 @@ export interface OrderParams {
     orderCancel: string;
     accountId: string;
     orderStatus: string;
+    sellerId :string;
 }

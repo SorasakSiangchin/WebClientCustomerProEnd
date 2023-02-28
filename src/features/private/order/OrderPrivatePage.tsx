@@ -1,20 +1,23 @@
 import { CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons';
-import { AutoComplete, Button, Card, Col, Divider, Image, Input, List, Modal, Popconfirm, Row, Select, Space } from 'antd';
+import { AutoComplete, Button, Card, Col, Divider, Empty, Image, Input, List, Modal, Popconfirm, Row, Select, Space } from 'antd';
 import React, { useState } from 'react';
 import { Container } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
 import useOrder from '../../../app/hooks/useOrder';
 import { EvidenceMoneyTransfer } from '../../../app/models/EvidenceMoneyTransfer';
 import { useAppDispatch } from '../../../app/store/configureStore';
 import { updateEvidenceMoneyTransferAsync } from '../../../app/store/evidenceMoneyTransferSlice';
-import { fetchOrdersAsync, resetParams, setParams, updateOrderAsync } from '../../../app/store/orderSlice';
+import { fetchOrdersAsync, resetParams, setParams, updateOrderAsync, resetOrder } from '../../../app/store/orderSlice';
 import { currencyFormat, truncate, Ts } from '../../../app/util/util';
-import LayoutPrivate from '../LayoutPrivate'
+import LayoutPrivate from '../LayoutPrivate';
 
 const OrderPrivatePage = () => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const { orders, getEvidenceMoneyTransfers } = useOrder();
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [dataEvidence, setDataEvidence] = useState<EvidenceMoneyTransfer | null>(null);
+
   const options = orders.map(e => {
     return {
       key: e.id,
@@ -34,15 +37,6 @@ const OrderPrivatePage = () => {
         dispatch(resetParams());
         break;
     }
-  }
-
-  const onUpdateEvidence = (evidence: EvidenceMoneyTransfer | null) => {
-    const data = {
-      id: evidence?.id,
-      orderID: evidence?.orderID,
-      status: false
-    };
-    dispatch(updateEvidenceMoneyTransferAsync(data)).then(() => dispatch(fetchOrdersAsync()));
   }
 
   return (
@@ -90,14 +84,23 @@ const OrderPrivatePage = () => {
       <Divider />
       <Container>
         <Row gutter={24}>
-          {orders !== null ? React.Children.toArray(orders?.filter(e => e.orderStatus !== 0).map(order => {
-            const data = {
+          {orders?.length > 0 ? React.Children.toArray(orders?.filter(e => e.orderStatus !== 0).map(order => {
+
+            const onUpdateEvidence = (evidence: any) => {
+              dispatch(updateEvidenceMoneyTransferAsync({
+                id: evidence?.id,
+                orderID: evidence?.orderID,
+                status: false
+              })).then(() => dispatch(resetOrder()));
+            };
+
+            const dataUpdate = {
               ...order,
               orderStatus: 2
             };
 
             const onConfirm = () => {
-              dispatch(updateOrderAsync(data)).then(() => dispatch(fetchOrdersAsync()));
+              dispatch(updateOrderAsync(dataUpdate)).then(() => dispatch(fetchOrdersAsync()));
             };
 
             const action = order.orderStatus !== 2 ? [
@@ -107,10 +110,11 @@ const OrderPrivatePage = () => {
                 textBtn={"ยืนยัน"}
                 title={"ยืนยันการชำระเงิน?"}
                 color="#75BC4E"
-              />
-              ,
+              />,
               <ConfirmButton
-                onConfirm={() => onUpdateEvidence(dataEvidence)}
+                onConfirm={async () => {
+                  onUpdateEvidence(await getEvidenceMoneyTransfers(order.id));
+                }}
                 icon={<CloseCircleOutlined />}
                 textBtn={"ยกเลิก"}
                 title={"ยกเลิกการชำระเงิน?"}
@@ -130,9 +134,9 @@ const OrderPrivatePage = () => {
             ];
 
             const showModal = () => {
-              setIsModalOpen(true);
               setEvidence();
-            };
+              setIsModalOpen(true);
+            }
 
             const handleOk = () => setIsModalOpen(false);
 
@@ -167,6 +171,7 @@ const OrderPrivatePage = () => {
                   bordered
                   style={{
                     width: "100%",
+                    marginTop: "2rem"
                   }}
                 >
                   <List
@@ -179,7 +184,9 @@ const OrderPrivatePage = () => {
                         </p> : <p><br /></p>
                     }
                     renderItem={(item: any) => (
-                      <List.Item>
+                      <List.Item
+                        onClick={() => navigate('/private/order/detail', { state: { orderId: order.id } })}
+                      >
                         <List.Item.Meta
                           className='text-st'
                           avatar={<Image width={50} height={60} src={item.imageUrl} />}
@@ -222,9 +229,14 @@ const OrderPrivatePage = () => {
                   </Row>
                 </Card>
               </Col>
-
             </>
-          })) : ""}
+          })) : <div className='center' style={{ width: "100%", height: "44rem" }}>
+            <Empty
+              image={Empty.PRESENTED_IMAGE_SIMPLE}
+              className="text-st"
+              description="ไม่มีการสั่งซื้อ"
+            />
+          </div>}
         </Row>
       </Container>
     </LayoutPrivate>

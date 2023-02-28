@@ -105,6 +105,4 @@ const AccountPage = () => {
 
 export const ColAccount = ({ children, className }: any) => <div className={`${className} col-xs-12 wow bounceInUp animated animated`}>{children}</div>
 
-
-
 export default AccountPage;

@@ -46,13 +46,22 @@ const Orders = ({ orders, setOrderPage, setOrderId }: Props) => {
                 dispatch(updateOrderAsync(data)).then(() => dispatch(fetchOrdersAsync()));
             };
 
+            const onConfirmCustomer = () => {
+                const data = {
+                    ...order,
+                    customerStatus: true
+                };
+                dispatch(updateOrderAsync(data)).then(() => dispatch(fetchOrdersAsync()));
+            };
+
             const CheckButton = () => {
                 if (order.orderStatus === 0) {
                     return "กำลังรอการชำระเงิน"
                 } else if (dataEvidence !== null && order.orderStatus === 1) {
                     return "รอการอนุมัติ"
                 } else if (dataEvidence !== null && order.orderStatus === 2) {
-                    return "ชำระเงินสำเร็จ"
+                    if (!order.customerStatus) return "ฉันได้ตรวจสอบและยอมรับสินค้า";
+                    else return "ให้คะแนน";
                 } else {
                     return ""
                 }
@@ -65,6 +74,8 @@ const Orders = ({ orders, setOrderPage, setOrderId }: Props) => {
                             return "ที่ต้องชำระเงิน"
                         case 1:
                             return "ที่ต้องจัดส่ง"
+                        case 2:
+                            return "ที่ต้องได้รับ"
                         default:
                             return "";
                     }
@@ -82,9 +93,7 @@ const Orders = ({ orders, setOrderPage, setOrderId }: Props) => {
                     >
                         {CheckStatus()}
                     </div>
-
                     {" "}
-
                     {
                         dataCancelEvidence &&
                             dataCancelEvidence?.length > 0 ?
@@ -104,7 +113,6 @@ const Orders = ({ orders, setOrderPage, setOrderId }: Props) => {
                                 />
                             </Tooltip> : ""
                     }
-
                 </>
             );
 
@@ -120,7 +128,6 @@ const Orders = ({ orders, setOrderPage, setOrderId }: Props) => {
 
             return (
                 <Card
-
                     type="inner"
                     size='small'
                     extra={extraCard}
@@ -178,7 +185,13 @@ const Orders = ({ orders, setOrderPage, setOrderId }: Props) => {
                                         <Space>
                                             <Button
                                                 className='text-st'
-                                                onClick={() => onClickButton(order.id)}
+                                                onClick={() => {
+                                                    if (order.orderStatus !== 2) {
+                                                        onClickButton(order.id);
+                                                    } else {
+                                                        onConfirmCustomer();
+                                                    }
+                                                }}
                                                 type='primary'
                                                 disabled={order.orderStatus === 1}
                                                 style={{ width: "100%", backgroundColor: "#58944C" }}
@@ -191,17 +204,19 @@ const Orders = ({ orders, setOrderPage, setOrderId }: Props) => {
                                             >
                                                 สรวจสอบหลักฐาน
                                             </Button> : ""}
-                                            <Popconfirm
-                                                className='text-st'
-                                                title={<Ts>ยกเลิกการสั่งซื้อ</Ts>}
-                                                onConfirm={onCancelOrder}
-                                                okText={<Ts>ตกลง</Ts>}
-                                                cancelText={<Ts>ยกเลิก</Ts>}
-                                            >
-                                                <Button
+                                            {order.orderStatus !== 2 ?
+                                                <Popconfirm
                                                     className='text-st'
-                                                >ยกเลิก</Button>
-                                            </Popconfirm>
+                                                    title={<Ts>ยกเลิกการสั่งซื้อ</Ts>}
+                                                    onConfirm={onCancelOrder}
+                                                    okText={<Ts>ตกลง</Ts>}
+                                                    cancelText={<Ts>ยกเลิก</Ts>}
+                                                >
+                                                    <Button
+                                                        className='text-st'
+                                                    >ยกเลิก</Button>
+                                                </Popconfirm> : ""
+                                            }
                                         </Space> : ""
                                 }
                             </Col>
