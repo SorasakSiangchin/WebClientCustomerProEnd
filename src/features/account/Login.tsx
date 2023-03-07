@@ -6,7 +6,6 @@ import { useAppDispatch } from '../../app/store/configureStore';
 import { googleLoginAccount, loginAccount, setStatusLogin } from '../../app/store/accountSlice';
 import { LoginValidate } from './AccountValidate';
 import { Link, useNavigate } from 'react-router-dom';
-import swal from 'sweetalert';
 import { Result } from '../../app/models/Interfaces/IResponse';
 import { LockFilled, UserAddOutlined } from '@ant-design/icons';
 import AppButton from '../../app/components/AppButton';
@@ -15,6 +14,7 @@ import MainContainer from '../../app/layout/MainContainer';
 import { GoogleLogin, GoogleLogout } from "react-google-login";
 import { gapi } from "gapi-script";
 import { GoogleLoginRequest } from '../../app/models/Account';
+import AppSwal from '../../app/components/AppSwal';
 const value = { email: '', password: '' };
 
 const valueGoogle: GoogleLoginRequest = { email: '', password: '', firstName: '', lastName: '', imageUrl: '' };
@@ -26,16 +26,16 @@ const Login = () => {
   const submitForm = async (data: any) => {
     const result: Result = await dispatch(loginAccount(data)).unwrap();
     if (result.isSuccess === true || !result.errorMessages) {
-      swal({
-        title: "เข้าสู่ระบบสำเร็จ",
-        icon: "success",
-        buttons: [false, "ตกลง"],
+      AppSwal({
+        icon : "success" ,
+        onThen : () => dispatch(setStatusLogin()) ,
+        title : "เข้าสู่ระบบสำเร็จ" ,
       });
     } else {
-      swal({
-        title: result.errorMessages[0],
-        icon: "warning",
-        buttons: [false, "ตกลง"],
+      AppSwal({
+        icon : "warning" ,
+        onThen : () => dispatch(setStatusLogin()) ,
+        title : result.errorMessages[0] ,
       });
     };
   };
@@ -53,13 +53,13 @@ const Login = () => {
   const onSuccess = async (res: any) => {
     AddValueGoogle(res.profileObj);
     const result: Result = await dispatch(googleLoginAccount(valueGoogle)).unwrap();
-    if (result.isSuccess === true || !result.errorMessages)
-      swal({
-        title: "เข้าสู่ระบบสำเร็จ",
-        icon: "success",
-        buttons: [false, "ตกลง"],
-      });
-    dispatch(setStatusLogin());
+    if (result.isSuccess === true || !result.errorMessages){
+      AppSwal({
+        icon : "success" ,
+        onThen : () => dispatch(setStatusLogin()) ,
+        title : "เข้าสู่ระบบสำเร็จ" ,
+      })
+    };
   };
 
   const onFailure = (res: any) => {

@@ -71,6 +71,7 @@ const Product = {
     list: (params: any) => requests.post('products', params),
     getName: (nameProduct: any) => requests.get(`product/name?name=${nameProduct}`),
     getRares: () => requests.get('product/rare'),
+    getRecommend: (number: any) => requests.get(`product/recommend?num=${number}`),
     getByIdAccount: (idAccount: any) => requests.get(`product/accountId?accountId=${idAccount}`),
     detail: (idProduct: string) => requests.get(`product/${idProduct}`),
     delete: (idProduct: string) => requests.delete(`product/${idProduct}`),
@@ -113,6 +114,7 @@ const StatusDelivery = {
     create: (value: any) => requests.post(`statusDelivery`, value),
     update: (value: any) => requests.put(`statusDelivery`, value),
     detail: (id: any) => requests.get(`statusDelivery/${id}`),
+    delete: (id: any) => requests.delete(`statusDelivery/${id}`)
 }
 
 const Role = {

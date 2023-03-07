@@ -1,7 +1,7 @@
 import { useAppDispatch } from './../store/configureStore';
 import { useAppSelector } from "../store/configureStore";
 import { useEffect } from 'react';
-import { fetchOrdersAsync, orderSelectors, resetOrder } from '../store/orderSlice';
+import { fetchOrdersAsync, orderSelectors, resetOrder, resetParams } from '../store/orderSlice';
 import { Result } from '../models/Interfaces/IResponse';
 import agent from '../api/agent';
 
@@ -17,6 +17,7 @@ const useOrder = () => {
     useEffect(() => {
         return () => {
             dispatch(resetOrder());
+            dispatch(resetParams());
         }
     }, [dispatch]);
     const getEvidenceMoneyTransfers = async (orderId: any) => {

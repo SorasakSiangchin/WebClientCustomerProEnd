@@ -1,5 +1,5 @@
 import { RollbackOutlined } from '@ant-design/icons';
-import { Avatar, Button, Card, Col, Descriptions, Divider, List, Row, Tag } from 'antd';
+import { Button, Card, Col, Descriptions, Divider, List, Row, Tag } from 'antd';
 import { Container } from 'react-bootstrap';
 import { useLocation, useNavigate } from 'react-router-dom';
 import LayoutPrivate from '../LayoutPrivate';
@@ -12,6 +12,7 @@ import { Account } from '../../../app/models/Account';
 import { currencyFormat, Ts } from '../../../app/util/util';
 import Lottie from "lottie-react";
 import IconLocation from "../../../assets/icons/Location.json";
+
 const OrderDetailPrivate = () => {
     const navigate = useNavigate();
     const { state } = useLocation();
@@ -49,7 +50,7 @@ const OrderDetailPrivate = () => {
             <span>สั่งซื้อโดย : </span>
             <span>{`${account?.firstName}  ${account?.lastName}`}</span>
         </>
-    )
+    );
 
     const loadInfoCustomer = async (order: any) => {
         const { isSuccess, result }: Result = await agent.Account.currentAccount({

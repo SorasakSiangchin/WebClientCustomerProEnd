@@ -11,7 +11,6 @@ import { useAppDispatch, useAppSelector } from '../../../../app/store/configureS
 import { resetParams, setParams } from '../../../../app/store/orderSlice';
 import { Delivery } from '../../../../app/models/Delivery';
 
-
 const AccountPurchase = () => {
     const dispatch = useAppDispatch();
     const { account } = useAppSelector(state => state.account);

@@ -1,5 +1,5 @@
 import { CheckCircleOutlined, LeftOutlined } from '@ant-design/icons'
-import { Button, Col, Descriptions, Divider, Row, List, Tag } from 'antd'
+import { Button, Col, Descriptions, Divider, Row, List, Tag, Empty } from 'antd'
 import React, { Fragment, useEffect, useState } from 'react'
 import { Container } from 'react-bootstrap';
 import { useAppDispatch, useAppSelector } from '../../../../app/store/configureStore';
@@ -41,7 +41,21 @@ const OrderDetail = ({ orderId, setOrderPage, delivery }: any) => {
       <div className="welcome-msg">
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           <Button icon={<LeftOutlined />} onClick={() => setOrderPage(false)} className="text-st" type="text">ย้อนกลับ</Button>
-          <p>หมายเลขคำสั่งซื้อ. {order?.id}</p>
+          <div >
+            <p style={{ display: "inline" }}>หมายเลขคำสั่งซื้อ. {order?.id}</p>
+            {
+              dataDelivery && <>
+                <br />
+                <p style={{
+                  display: "flex",
+                  justifyContent: "end",
+                  color: 'rgba(0,0,0,.45)'
+                }}>
+                  ขนส่งโดย {dataDelivery.shippingServiceName}
+                </p>
+              </>
+            }
+          </div>
         </div>
         <Divider />
         <Container>
@@ -55,24 +69,30 @@ const OrderDetail = ({ orderId, setOrderPage, delivery }: any) => {
               <Divider style={{ height: "100%" }} type='vertical' />
             </Col>
             <Col span={13} >
-              <Timeline mode='alternate' className='text-st' >
-                {statusDelivery?.map(status => {
-                  const check = dataDelivery.statusDeliveryID !== status.id;
-                  return <Timeline.Item
-                    dot={!check && <CheckCircleOutlined />}
-                    color={check ? 'rgba(0,0,0,.20)' : "#EA8E2D"}
-                    style={{ color: check ? 'rgba(0,0,0,.20)' : "#EA8E2D" }}
-                  >
-                    {status.name}
-                  </Timeline.Item>
-                })}
-              </Timeline>
-              <p className='text-st ' style={{
-                display: "flex",
-                justifyContent: "end"
-              }}>
-                จะถึงภายใน {moment.utc(delivery?.timeArrive).tz('Asia/Bangkok').format('YYYY-MM-DD HH:mm:ss')}
-              </p>
+              {dataDelivery ? <>
+                <Timeline mode='alternate' className='text-st' >
+                  {statusDelivery?.map(status => {
+                    const check = dataDelivery.statusDeliveryID !== status.id;
+                    return <Timeline.Item
+                      dot={!check && <CheckCircleOutlined />}
+                      color={check ? 'rgba(0,0,0,.20)' : "#EA8E2D"}
+                      style={{ color: check ? 'rgba(0,0,0,.20)' : "#EA8E2D" }}
+                    >
+                      {status.name}
+                    </Timeline.Item>
+                  })}
+                </Timeline>
+                <p className='text-st ' style={{
+                  display: "flex",
+                  justifyContent: "end"
+                }}>
+                  จะถึงภายใน {moment.utc(delivery?.timeArrive).tz('Asia/Bangkok').format('YYYY-MM-DD HH:mm:ss')}
+                </p>
+              </> : <Empty
+                className='text-st'
+                image={Empty.PRESENTED_IMAGE_SIMPLE}
+                description="ยังไม่มีการจัดส่ง"
+              />}
             </Col>
           </Row>
           <br />

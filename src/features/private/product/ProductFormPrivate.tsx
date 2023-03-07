@@ -1,6 +1,6 @@
 import { CloseOutlined, CloudUploadOutlined, LoadingOutlined, RollbackOutlined, SaveOutlined } from '@ant-design/icons';
 import { ErrorMessage, Formik } from 'formik';
-import { useState } from 'react'
+import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import {
   Button,
@@ -18,16 +18,16 @@ import {
   InputNumber,
   Badge
 } from 'antd';
-import LayoutPrivate from '../LayoutPrivate'
+import LayoutPrivate from '../LayoutPrivate';
 import { Row as BootstrapRow, Col as BootstrapCol, Container } from 'react-bootstrap';
 import { beforeUploadAntd, Ts } from '../../../app/util/util';
 import { RcFile } from 'antd/es/upload';
 import useProducts from '../../../app/hooks/useProducts';
 import { ProductPrivateValidate } from './ProductPrivateValidate';
 import { useAppDispatch, useAppSelector } from '../../../app/store/configureStore';
-import { createProductAsync, editProductAsync } from '../../../app/store/productSlice';
+import { createProductAsync, updateProductAsync } from '../../../app/store/productSlice';
 import { Result } from '../../../app/models/Interfaces/IResponse';
-import Swal from 'sweetalert2';
+import AppSwal from '../../../app/components/AppSwal';
 const { Option } = Select;
 
 const ProductFormPrivate = () => {
@@ -65,15 +65,13 @@ const ProductFormPrivate = () => {
   const handleSubmitForm = async (value: any) => {
     let result: Result;
     if (!state) result = await dispatch(createProductAsync(value)).unwrap();
-    else result = await dispatch(editProductAsync(value)).unwrap();
+    else result = await dispatch(updateProductAsync(value)).unwrap();
     if (result!.isSuccess)
-      Swal.fire({
-        position: 'center',
-        icon: 'success',
-        title: 'บันทึกข้อมูลสำเร็จ',
-        showConfirmButton: false,
-        timer: 1500
-      }).then(() => navigate(-1));
+      AppSwal({
+        icon: "success",
+        onThen: () => navigate(-1),
+        title: "บันทึกข้อมูลสำเร็จ",
+      })
   };
 
   return (

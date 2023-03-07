@@ -1,4 +1,7 @@
 /* code color #58944C */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 .img-opacity {
   opacity: 0.4;

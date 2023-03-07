@@ -10,11 +10,11 @@ import { currencyFormat, Ts } from '../../../app/util/util';
 import LayoutPrivate from '../LayoutPrivate';
 import locale from 'antd/es/date-picker/locale/th_TH';
 import { Result } from '../../../app/models/Interfaces/IResponse';
-import Swal from 'sweetalert2';
-import { createDeliveryAsync, fetchStatusDeliverysAsync, resetStatusDelivery, updateDeliveryAsync } from '../../../app/store/deliverySlice';
+import { createDeliveryAsync, fetchStatusDeliverysAsync, updateDeliveryAsync } from '../../../app/store/deliverySlice';
 import dayjs from 'dayjs';
 import { DeliveryValidate } from './DeliveryValidate';
 import agent from '../../../app/api/agent';
+import AppSwal from '../../../app/components/AppSwal';
 
 const DeliveryFormPrivate = () => {
     const navigate = useNavigate();
@@ -44,13 +44,12 @@ const DeliveryFormPrivate = () => {
         if (!state) result = await dispatch(createDeliveryAsync(value)).unwrap();
         else result = await dispatch(updateDeliveryAsync(value)).unwrap();
         if (result!.isSuccess)
-            Swal.fire({
-                position: 'center',
-                icon: 'success',
-                title: 'บันทึกข้อมูลสำเร็จ',
-                showConfirmButton: false,
-                timer: 1500
-            }).then(() => navigate(-1));
+        AppSwal({
+            icon : "success" ,
+            onThen : () => navigate(-1) ,
+            title : "บันทึกข้อมูลสำเร็จ" ,
+            timer : 1500 
+        });
     };
     const onNameChange = (event: any) => {
         setName(event.target.value);
@@ -91,7 +90,7 @@ const DeliveryFormPrivate = () => {
             }) => {
 
                 useEffect(() => {
-                    if (state) setValues(state)
+                    if (state) setValues(state);
                 }, []);
 
                 return <LayoutPrivate>
@@ -175,7 +174,9 @@ const DeliveryFormPrivate = () => {
                                                 <Select
                                                     style={{ width: "100%" }}
                                                     size="middle"
-                                                    onChange={(data) => setFieldValue("statusDeliveryID", data)}
+                                                    onChange={(data) =>{
+                                                        setFieldValue("statusDeliveryID", data);
+                                                    }}
                                                     value={values.statusDeliveryID}
                                                     onBlur={handleBlur}
                                                     dropdownRender={(menu) => (
@@ -206,16 +207,15 @@ const DeliveryFormPrivate = () => {
                                                     status={touched.statusDeliveryID && errors.statusDeliveryID
                                                         ? "error"
                                                         : ""}
-                                                    //options={items.map((item) => ({ label: item, value: item }))}
-                                                    options={
-                                                        statusDelivery?.map(data => {
-                                                            return {
-                                                                value: data.id,
-                                                                label: data.name,
-                                                            }
-                                                        })
-                                                    }
-                                                />
+                                                >
+                                                    {statusDelivery?.map(data => {
+                                                        return (
+                                                            <Select.Option value={data.id} >
+                                                                {data.name} 
+                                                            </Select.Option>
+                                                        )
+                                                    })}
+                                                </Select>
                                                 <ErrorMessage
                                                     name="statusDeliveryID"
                                                     component="div"

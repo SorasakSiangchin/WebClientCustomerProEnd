@@ -1,4 +1,4 @@
-import React , {Fragment} from 'react'
+import {Fragment} from 'react'
 import Slide2 from "../../assets/images/slide2.jpg";
 const CustomSlider = () => {
   return (

@@ -1,41 +1,26 @@
 
 import { Fragment, useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
 import useProducts from '../../app/hooks/useProducts';
 import SlideImage from '../../app/layout/SlideImage';
+import { EditOutlined, EllipsisOutlined, SettingOutlined } from '@ant-design/icons';
+import { Avatar, Card, Col, Row } from 'antd';
 import TopRareGood from './TopRareGood';
+import { currencyFormat } from '../../app/util/util';
+
 const HomePage = () => {
   const [isReload, setIsReload] = useState(false);
-  const { productRare } = useProducts();
+  const { productRare, productRecommend } = useProducts();
+  const { Meta } = Card;
   useEffect(() => {
     setTimeout(() => {
       setIsReload(true);
     }, 500);
   }, []);
 
-
-
-  return (
-    <Fragment>
-      {!isReload && <div id="preloader"></div>}
-      <div className="container">
-        <SlideImage />
-      </div>
-      <div className="content">
-        {/*สินค้าหายาก */}
-        <TopRareGood productRare={productRare} />
-        <section className="best-pro">
-          <div className="slider-items-products container">
-            <div className="new_title top-border">
-              <h2>Best Seller</h2>
-              <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy habitant morbi.</p>
-            </div>
-            <div id="best-seller" className="product-flexslider hidden-buttons">
-              <div className="slider-items slider-width-col4 products-grid">
-                <div className="item">
+  {/* <div className="item">
                   <div className="item-inner">
                     <div className="item-img">
-                      <div className="item-img-info"><Link to=""  title="Fresh Organic Mustard Leaf " className="product-image"><img src="products-images/p27.jpg" alt="sample dish" /></Link>
+                      <div className="item-img-info"><Link to="" title="Fresh Organic Mustard Leaf " className="product-image"><img src="products-images/p27.jpg" alt="sample dish" /></Link>
                         <div className="new-label new-top-left">Hot</div>
                         <div className="sale-label sale-top-left">-15%</div>
                       </div>
@@ -62,152 +47,63 @@ const HomePage = () => {
                     </div>
                     <div className="restuarent"><Link to="#"><i className="fas fa-heart"></i> Wishlist</Link> <Link to="#"><i className="fas fa-signal"></i> Compare</Link></div>
                   </div>
-                </div>
-                <div className="item">
-                  <div className="item-inner">
-                    <div className="item-img">
-                      <div className="item-img-info"><Link to="product-detail.html" title="Fresh Organic Mustard Leaf " className="product-image"><img src="products-images/p17.jpg" alt="sample dish" /></Link> </div>
-                      <div className="add_cart">
-                        <button className="button btn-cart" type="button"><span>Add to Cart</span></button>
-                      </div>
-                    </div>
-                    <div className="item-info">
-                      <div className="info-inner">
-                        <div className="item-title"><Link to="product-detail.html" title="Fresh Organic Mustard Leaf">Fresh Organic Mustard Leaf</Link> </div>
-                        <div className="rating">
-                          <div className="ratings">
-                            <div className="rating-box">
-                              <div className="rating" style={{ width: "80%" }}></div>
-                            </div>
-                          </div>
-                        </div>
-                        <div className="item-content">
-                          <div className="item-price">
-                            <div className="price-box"><span className="regular-price" ><span className="price">$125.00</span> </span> </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="restuarent"><Link to="#"><i className="fas fa-heart"></i> Wishlist</Link> <Link to="#"><i className="fas fa-signal"></i> Compare</Link></div>
-                  </div>
-                </div>
-                <div className="item">
-                  <div className="item-inner">
-                    <div className="item-img">
-                      <div className="item-img-info"><Link to="product-detail.html" title="Fresh Organic Mustard Leaf " className="product-image"><img src="products-images/p7.jpg" alt="sample dish" /></Link> </div>
-                      <div className="add_cart">
-                        <button className="button btn-cart" type="button"><span>Add to Cart</span></button>
-                      </div>
-                    </div>
-                    <div className="item-info">
-                      <div className="info-inner">
-                        <div className="item-title"><Link to="product-detail.html" title="Fresh Organic Mustard Leaf">Fresh Organic Mustard Leaf </Link> </div>
-                        <div className="rating">
-                          <div className="ratings">
-                            <div className="rating-box">
-                              <div className="rating" style={{ width: "80%" }}></div>
-                            </div>
-                          </div>
-                        </div>
-                        <div className="item-content">
-                          <div className="item-price">
-                            <div className="price-box"><span className="regular-price" ><span className="price">$125.00</span> </span> </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="restuarent"><Link to="#"><i className="fas fa-heart"></i> Wishlist</Link> <Link to="#"><i className="fas fa-signal"></i> Compare</Link></div>
-                  </div>
-                </div>
-                <div className="item">
-                  <div className="item-inner">
-                    <div className="item-img">
-                      <div className="item-img-info"><Link to="product-detail.html" title="Fresh Organic Mustard Leaf " className="product-image"><img src="products-images/p26.jpg" alt="sample dish" /></Link> </div>
-                      <div className="add_cart">
-                        <button className="button btn-cart" type="button"><span>Add to Cart</span></button>
-                      </div>
-                    </div>
-                    <div className="item-info">
-                      <div className="info-inner">
-                        <div className="item-title"><Link to="product-detail.html" title="Fresh Organic Mustard Leaf">Fresh Organic Mustard Leaf </Link> </div>
-                        <div className="rating">
-                          <div className="ratings">
-                            <div className="rating-box">
-                              <div className="rating" style={{ width: "80%" }}></div>
-                            </div>
-                          </div>
-                        </div>
-                        <div className="item-content">
-                          <div className="item-price">
-                            <div className="price-box"><span className="regular-price" ><span className="price">$125.00</span> </span> </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="restuarent"><Link to="#"><i className="fas fa-heart"></i> Wishlist</Link> <Link to="#"><i className="fas fa-signal"></i> Compare</Link></div>
-                  </div>
-                </div>
-                <div className="item">
-                  <div className="item-inner">
-                    <div className="item-img">
-                      <div className="item-img-info"><Link to="product-detail.html" title="Fresh Organic Mustard Leaf " className="product-image"><img src="products-images/p6.jpg" alt="sample dish" /></Link> </div>
-                      <div className="add_cart">
-                        <button className="button btn-cart" type="button"><span>Add to Cart</span></button>
-                      </div>
-                    </div>
-                    <div className="item-info">
-                      <div className="info-inner">
-                        <div className="item-title"><Link to="product-detail.html" title="Fresh Organic Mustard Leaf">Fresh Organic Mustard Leaf </Link> </div>
-                        <div className="rating">
-                          <div className="ratings">
-                            <div className="rating-box">
-                              <div className="rating" style={{ width: "80%" }}></div>
-                            </div>
-                          </div>
-                        </div>
-                        <div className="item-content">
-                          <div className="item-price">
-                            <div className="price-box"><span className="regular-price" ><span className="price">$125.00</span> </span> </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="restuarent"><Link to="#"><i className="fas fa-heart"></i> Wishlist</Link> <Link to="#"><i className="fas fa-signal"></i> Compare</Link></div>
-                  </div>
-                </div>
-                <div className="item">
-                  <div className="item-inner">
-                    <div className="item-img">
-                      <div className="item-img-info"><Link to="product-detail.html" title="Fresh Organic Mustard Leaf " className="product-image"><img src="products-images/p5.jpg" alt="sample dish" /></Link> </div>
-                      <div className="add_cart">
-                        <button className="button btn-cart" type="button"><span>Add to Cart</span></button>
-                      </div>
-                    </div>
-                    <div className="item-info">
-                      <div className="info-inner">
-                        <div className="item-title"><Link to="product-detail.html" title="Fresh Organic Mustard Leaf">Fresh Organic Mustard Leaf </Link> </div>
-                        <div className="rating">
-                          <div className="ratings">
-                            <div className="rating-box">
-                              <div className="rating" style={{ width: "80%" }}></div>
-                            </div>
-                          </div>
-                        </div>
-                        <div className="item-content">
-                          <div className="item-price">
-                            <div className="price-box"><span className="regular-price" ><span className="price">$125.00</span> </span> </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="restuarent"><Link to="#"><i className="fas fa-heart"></i> Wishlist</Link> <Link to="#"><i className="fas fa-signal"></i> Compare</Link></div>
-                  </div>
-                </div>
+                </div> */}
+
+  return (
+    <Fragment>
+      {!isReload && <div id="preloader"></div>}
+      <div className="container">
+        <SlideImage />
+      </div>
+      <div className="content">
+        {/*สินค้าหายาก */}
+        {productRare ? <TopRareGood productRare={productRare} /> : ""}
+        <section className="best-pro">
+          <div className="slider-items-products container">
+            <div className="new_title top-border">
+              <h2>สินค้าแนะนำ</h2>
+              <p>สินค้าบางชนิดหาได้เฉพาะตามฤดูกาลเท่านั้น !</p>
+            </div>
+            <div id="best-seller" className="product-flexslider hidden-buttons">
+              <div className="slider-width-col4 products-grid">
+                <Row gutter={24}>
+                  {productRecommend?.map(product => <Col key={product.id} span={6}>
+                    <Card
+                      hoverable
+                      bordered
+                      style={{ width: "100%" }}
+                      cover={
+                        <img
+                          alt="product-image"
+                          src={product.imageUrl}
+                          style={{
+                            height: "20rem"
+                          }}
+                        />
+                      }
+                      actions={[
+                        <SettingOutlined key="setting" />,
+                        <EditOutlined key="edit" />,
+                        <EllipsisOutlined key="ellipsis" />,
+                      ]}
+                    >
+                      <Meta
+                        className='text-st'
+                        title={product.name}
+                        description={
+                          <span id="product-price-212" className="price">
+                            {currencyFormat(product.price)}
+                          </span>
+                        }
+                      />
+                    </Card>
+                  </Col>)}
+                </Row>
               </div>
             </div>
           </div>
         </section>
-        <div className="mid-section">
+        {/* <div className="mid-section">
           <div className="container">
             <div className="row">
               <h3>Why Organic?</h3>
@@ -479,7 +375,7 @@ const HomePage = () => {
               </div>
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
 
     </Fragment>

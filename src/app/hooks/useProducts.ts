@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { fetchCategoryProductsAsync, fetchLevelProductsAsync, fetchProductRaresAsync, fetchProductsAsync, fetchWeightUnitsAsync, productSelectors, resetProductParams } from '../../app/store/productSlice';
+import { fetchCategoryProductsAsync, fetchLevelProductsAsync, fetchProductRaresAsync, fetchProductRecommendAsync, fetchProductsAsync, fetchWeightUnitsAsync, productSelectors, resetProductParams } from '../../app/store/productSlice';
 import { useAppDispatch, useAppSelector } from '../store/configureStore';
 
 const useProducts = () => {
@@ -13,13 +13,19 @@ const useProducts = () => {
         weightUnitLoaded,
         weightUnits,
         levelProductLoaded,
-        levelProducts
+        levelProducts ,
+        productRecommend ,
+        productRecommendLoaded
     } = useAppSelector(state => state.product);
     const { productRare, productRareLoaded } = useAppSelector(state => state.product);
 
     useEffect(() => {
         if (!productRareLoaded) dispatch(fetchProductRaresAsync());
     }, [productRareLoaded, dispatch]);
+
+    useEffect(() => {
+        if (!productRecommendLoaded) dispatch(fetchProductRecommendAsync(4));
+    }, [productRecommendLoaded, dispatch]);
 
     useEffect(() => {
         if (!productsLoaded) dispatch(fetchProductsAsync());
@@ -52,7 +58,9 @@ const useProducts = () => {
         weightUnits,
         weightUnitLoaded,
         levelProductLoaded,
-        levelProducts
+        levelProducts ,
+        productRecommend ,
+        productRecommendLoaded
     };
 }
 

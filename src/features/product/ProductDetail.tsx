@@ -17,7 +17,7 @@ import MainContainer from '../../app/layout/MainContainer';
 import TitleTap from '../../app/layout/TitleTap';
 import ContentTap from '../../app/layout/ContentTap';
 import { addCartItemAsync, removeCartItemAsync } from '../../app/store/cartSlice';
-import Swal from 'sweetalert2';
+import AppSwal from '../../app/components/AppSwal';
 
 interface IImageGallery {
   original: any;
@@ -109,20 +109,18 @@ const ProductDetail = () => {
   }
 
   const handleOnCart = () => {
-    if (account) Swal.fire({
-      position: 'center',
-      icon: 'success',
-      title: 'บันทึกสำเร็จ',
-      showConfirmButton: false,
-      timer: 1000
-    }).then(handleButtonClick);
-    else Swal.fire({
-      position: 'center',
-      icon: 'warning',
-      title: 'กรุณาเข้าสู่ระบบ',
-      showConfirmButton: false,
-      timer: 1000
-    });
+    if (account) AppSwal({
+      icon : "success" ,
+      onThen : handleButtonClick ,
+      title : "บันทึกสำเร็จ" ,
+      timer : 1000
+    })
+    else AppSwal({
+      icon : "warning" ,
+      onThen : () => {} ,
+      title : "กรุณาเข้าสู่ระบบ" ,
+      timer : 1000
+    })
   };
 
   const checkTypeAlert = (levelID: any) => {

@@ -1,5 +1,5 @@
 import { Col, Row, Space } from 'antd';
-import React, { Fragment } from 'react';
+import { Fragment } from 'react';
 import { currencyFormat, Ts } from '../../app/util/util';
 
 interface Props {

@@ -8,8 +8,7 @@ import agent from '../../../app/api/agent';
 import { useAppDispatch, useAppSelector } from '../../../app/store/configureStore';
 import { loadAccountStorage, setAccount } from '../../../app/store/accountSlice';
 import { Result } from '../../../app/models/Interfaces/IResponse';
-import swal from 'sweetalert';
-
+import AppSwal from '../../../app/components/AppSwal';
 
 interface IValues {
     newPassword?: string;
@@ -37,15 +36,14 @@ const SetPassword = () => {
             const data = { ...account, passwordNew: values.newPassword }
             const { result, isSuccess, statusCode }: Result = await agent.Account.updatePassword(data);
             if (isSuccess === true && statusCode === 200) {
-                swal({
-                    title: "บันทึกข้อมูลสำเร็จ",
+                AppSwal({
                     icon: "success",
-                    buttons: [false, "ตกลง"],
-                }).then(() => {
-                    localStorage.setItem('account', JSON.stringify({ ...accountStorage, account: result }));
-                    dispatch(setAccount({ account: result }))
+                    onThen: () => {
+                        localStorage.setItem('account', JSON.stringify({ ...accountStorage, account: result }));
+                        dispatch(setAccount({ account: result }));
+                    },
+                    title: "บันทึกข้อมูลสำเร็จ",
                 });
-                ;
             }
         }
     };

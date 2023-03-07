@@ -8,10 +8,11 @@ import { RcFile } from 'antd/es/upload';
 import { ErrorMessage, Form, Formik } from 'formik';
 import * as Yup from 'yup';
 import { useAppDispatch } from '../../../../app/store/configureStore';
-import Swal from 'sweetalert2';
 import { createEvidenceMoneyTransferAsync } from '../../../../app/store/evidenceMoneyTransferSlice';
 import { Result } from '../../../../app/models/Interfaces/IResponse';
 import { resetOrder } from '../../../../app/store/orderSlice';
+import AppSwal from '../../../../app/components/AppSwal';
+
 interface Props {
     openModal: boolean;
     setOpenModal: Function;
@@ -34,17 +35,16 @@ const ModalPayment = ({ openModal, setOpenModal, orderId, setOrderId }: Props) =
     const handleSubmitForm = async (value: any) => {
         const result: Result = await dispatch(createEvidenceMoneyTransferAsync(value)).unwrap();
         if (result.isSuccess === true) {
-            Swal.fire({
-                position: 'center',
-                icon: 'success',
-                title: 'บันทึกข้อมูลสำเร็จ',
-                showConfirmButton: false,
+            AppSwal({
+                icon: "success",
+                onThen: () => {
+                    setOpenModal(false);
+                    setOrderId("");
+                    setImageUrl("");
+                    dispatch(resetOrder());
+                },
+                title: "บันทึกข้อมูลสำเร็จ",
                 timer: 1500
-            }).then(() => {
-                setOpenModal(false);
-                setOrderId("");
-                setImageUrl("");
-                dispatch(resetOrder());
             });
         };
     };

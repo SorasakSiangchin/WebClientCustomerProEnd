@@ -1,4 +1,4 @@
-import { AutoComplete, Button, Card, Col, Divider, Empty, Image, Input, List, Modal, Row, Select, Space } from 'antd';
+import { AutoComplete, Button, Card, Col, Divider, Empty, Image, Input, List, Modal, Row, Space } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { Container } from 'react-bootstrap';
 import useOrder from '../../../app/hooks/useOrder';
@@ -14,7 +14,6 @@ import { Delivery } from '../../../app/models/Delivery';
 import { EvidenceMoneyTransfer } from '../../../app/models/EvidenceMoneyTransfer';
 
 const DeliveryPrivatePage = () => {
-    const navigate = useNavigate();
     const dispatch = useAppDispatch();
     const { orders, getEvidenceMoneyTransfers } = useOrder();
     const { account } = useAppSelector(state => state.account);
@@ -24,7 +23,7 @@ const DeliveryPrivatePage = () => {
         dispatch(setParams({ sellerId: account?.id, orderStatus: "2" }));
     }, [dispatch]);
 
-    const options = orders.filter(e => e.orderStatus !== 0).map(e => {
+    const options = orders.filter(e =>  e.orderStatus === 2).map(e => {
         return {
             key: e.id,
             value: e.id
@@ -64,7 +63,7 @@ const DeliveryPrivatePage = () => {
             <Divider />
             <Container>
                 <Row gutter={24}>
-                    {orders?.length > 0 ? React.Children.toArray(orders?.map(order => {
+                    {orders?.length > 0 ? React.Children.toArray(orders.filter(e => e.orderStatus === 2)?.map(order => {
                         return (
                             <Col span={8}>
                                 <CardDelivery order={order} getEvidenceMoneyTransfers={getEvidenceMoneyTransfers} />

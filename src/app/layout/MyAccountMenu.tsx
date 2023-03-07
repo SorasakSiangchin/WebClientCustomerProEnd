@@ -68,7 +68,7 @@ export const MyAccountMenu = ({ account }: Prop) => {
         }
 
     ];
-    const dataPrivate = account?.role.name.toLowerCase() !== "seller" ? customer : seller;
+    const dataPrivate = account?.role.name.toLowerCase() !== "seller" && account?.role.name.toLowerCase() !== "admin" ? customer : seller;
 
     const dataPublic = [
         { title: "เข้าสู่ระบบ", path: "/login", icon: <LoginOutlined />, onClick: () => { } }

@@ -1,4 +1,4 @@
-import { Badge, Button, message, Select, Space, Upload } from 'antd';
+import { Badge, Button, Select, Space, Upload } from 'antd';
 import { Formik, Form, ErrorMessage } from 'formik';
 import { Fragment, useCallback, useState, useEffect } from 'react'
 import TopSection from '../../app/layout/TopSection'
@@ -10,14 +10,14 @@ import { RcFile, UploadProps, UploadFile } from 'antd/es/upload';
 import { uniqueNamesGenerator, names } from 'unique-names-generator';
 import type { UploadChangeParam } from 'antd/es/upload';
 import { CiShuffle } from "react-icons/ci";
-import "./Register.css";
 import AppTextInput from '../../app/components/AppTextInput';
 import { fetchRolesAsync, registerAccount, value } from '../../app/store/accountSlice';
 import { useAppDispatch, useAppSelector } from '../../app/store/configureStore';
 import AppPasswordInput from '../../app/components/AppPasswordInput';
-import swal from 'sweetalert';
 import { Result } from '../../app/models/Interfaces/IResponse';
 import { beforeUploadAntd, Text } from '../../app/util/util';
+import AppSwal from '../../app/components/AppSwal';
+import "./Register.css";
 
 const Register = () => {
   const dispatch = useAppDispatch();
@@ -39,16 +39,16 @@ const Register = () => {
   const submitForm = async (data: any) => {
     const result: Result = await dispatch(registerAccount(data)).unwrap();
     if (result.isSuccess === true || result.statusCode === 200) {
-      swal({
-        title: "บันทึกข้อมูลสำเร็จ",
-        icon: "success",
-        buttons: [false, "ตกลง"],
-      }).then(() => navigate("/login"));
+      AppSwal({
+        icon : "success" ,
+        onThen : () => navigate("/login") ,
+        title : "บันทึกข้อมูลสำเร็จ" ,
+      });
     } else {
-      swal({
-        title: result.errorMessages[0],
+      AppSwal({
         icon: "warning",
-        buttons: [false, "ตกลง"],
+        onThen : () => {},
+        title : result.errorMessages[0] ,
       });
     };
   };

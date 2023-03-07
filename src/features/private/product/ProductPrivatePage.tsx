@@ -14,7 +14,7 @@ import LayoutPrivate from '../LayoutPrivate';
 import { useAppDispatch, useAppSelector } from '../../../app/store/configureStore';
 import { removeProductAsync, setParams } from '../../../app/store/productSlice';
 import AppPagination from '../../../app/components/AppPagination';
-import AppSwal from '../../../app/components/AppSwal';
+import AppSwalConfirm from '../../../app/components/AppSwalConfirm';
 export interface DataType {
   key: string;
   name: string;
@@ -179,7 +179,7 @@ const ProductPrivatePage = () => {
   });
 
   const onDelete = (id: any) => {
-    AppSwal(
+    AppSwalConfirm(
       {
         icon: "warning",
         onThen: (result: any) => { result.isConfirmed && dispatch(removeProductAsync(id)) },

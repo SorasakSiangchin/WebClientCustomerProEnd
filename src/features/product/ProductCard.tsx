@@ -1,4 +1,4 @@
-import { HeartFilled, HeartOutlined, ShoppingCartOutlined } from '@ant-design/icons';
+import { HeartFilled, ShoppingCartOutlined } from '@ant-design/icons';
 import { Avatar, Card } from 'antd';
 import { Fragment, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
@@ -8,13 +8,13 @@ import { currencyFormat } from '../../app/util/util';
 
 let checkTimer: any;
 
-const timeLimit : number = 1000 * 20;
+const timeLimit: number = 1000 * 20;
 
 interface Props {
     product: Product
     saleLabel?: boolean
     isViewMode?: boolean
-    productsLoaded: boolean
+    productsLoaded?: boolean
     col?: string
 }
 
@@ -22,8 +22,8 @@ const { Meta } = Card;
 
 
 
-const ProductCard = ({ product, saleLabel = false, isViewMode = false, productsLoaded }: Props) => {
-    
+const ProductCard = ({ product, saleLabel = false, isViewMode = false, productsLoaded = true }: Props) => {
+
 
     const dateCreated = new Date(new Date(product.created).getTime() + timeLimit);
     const date = new Date();
@@ -38,7 +38,7 @@ const ProductCard = ({ product, saleLabel = false, isViewMode = false, productsL
     useEffect(() => {
         if (new Date(dateCreated) > date) {
             const remainingTime =
-            dateCreated.getTime() - date.getTime();
+                dateCreated.getTime() - date.getTime();
             setCheckDate(true);
             checkTimer = setTimeout(() => {
                 setCheckDate(false);

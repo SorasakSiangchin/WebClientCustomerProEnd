@@ -12,11 +12,11 @@ import CheckoutAddress from './CheckoutAddress';
 import useAddress from '../../app/hooks/useAddress';
 import CheckoutInfoPayment from './CheckoutInfoPayment';
 import { OrderRequest } from '../../app/models/Order';
-import Swal from 'sweetalert2';
 import { useAppDispatch, useAppSelector } from '../../app/store/configureStore';
 import { crateOrderAsync } from '../../app/store/orderSlice';
 import { fetchCartAsync } from '../../app/store/cartSlice';
 import AppAvatarAccount from '../../app/components/AppAvatarAccount';
+import AppSwal from '../../app/components/AppSwal';
 
 interface DataType {
     key: string;
@@ -112,21 +112,21 @@ const CheckoutPage = () => {
         if (address) {
             const result: Result = await dispatch(crateOrderAsync(orderRequest)).unwrap();
             if (result.isSuccess === true && result.statusCode === 200) {
-                Swal.fire({
-                    position: 'center',
-                    icon: 'success',
-                    title: 'สำเร็จ',
-                    showConfirmButton: false,
+                AppSwal({
+                    icon: "success",
+                    onThen: () => {
+                        navigate("/account", { state: "4" });
+                        dispatch(fetchCartAsync(address.accountID));
+                    },
+                    title: "สำเร็จ",
                     timer: 1000
-                }).then(() => {
-                    navigate("/account", { state: "4" });
-                    dispatch(fetchCartAsync(address.accountID));
                 });
             };
         } else {
-            Swal.fire({
-                icon: 'warning',
-                title: 'กรุณาเลือกที่อยู่',
+            AppSwal({
+                icon: "warning",
+                onThen: () => { },
+                title: "กรุณาเลือกที่อยู่"
             });
         }
     }

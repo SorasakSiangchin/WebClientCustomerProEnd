@@ -16,7 +16,7 @@ import { beforeUploadAntd } from '../../../app/util/util';
 import { IconButton, ImageListItemBar } from '@mui/material';
 import { fetchDetailProductByIdProductAsync, reSetDetailProduct, deleteDetailProductAsync } from '../../../app/store/detailProductSlice';
 import ModalFormDetailProduct from './ModalFormDetailProduct';
-import Swal from 'sweetalert2';
+import AppSwalConfirm from '../../../app/components/AppSwalConfirm';
 
 interface IValue {
   id: string;
@@ -93,20 +93,15 @@ const ProductDetailPrivatePage = () => {
   const textButton = !detailProduct ? "เพิ่ม" : "แก้ไข";
 
   const onDelete = (id: any) => {
-    Swal.fire({
-      title: 'ลบรายละเอียดหรือไม่?',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      cancelButtonText: "ยกเลิก",
-      confirmButtonText: 'ตกลง'
-    }).then((result: any) => {
-      if (result.isConfirmed) {
-        dispatch(deleteDetailProductAsync(id));
-        dispatch(reSetDetailProduct());
-      }
-    })
+    AppSwalConfirm({
+      icon : "warning" ,
+      onThen :(result: any) => {
+           if (result.isConfirmed) {
+             dispatch(deleteDetailProductAsync(id));
+             dispatch(reSetDetailProduct());
+           }} ,
+      title : "ลบรายละเอียดหรือไม่?"
+    });
   };
 
   const extraDetail = <Space>

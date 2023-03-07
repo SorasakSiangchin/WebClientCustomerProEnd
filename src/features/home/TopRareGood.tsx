@@ -37,8 +37,8 @@ const TopRareGood = ({ productRare }: Props) => {
                         <div className="row">
                             <div className="slider-items-products">
                                 <div id="top-categories" className="product-flexslider hidden-buttons">
-                                    <Carousel className='center' responsive={responsive} autoPlay autoPlaySpeed={1000} transitionDuration={500} infinite={true} >
-                                        {React.Children.toArray(productRare?.map(product => <SliderItem name={product.name} path='' urlImage={product.imageUrl} />))}
+                                    <Carousel  className='center' responsive={responsive} autoPlay autoPlaySpeed={1000} transitionDuration={500} infinite={true} >
+                                        {React.Children.toArray(productRare?.map(product => <SliderItem name={product.name} path={`/product-detail/${product.id}`} urlImage={product.imageUrl} />))}
                                     </Carousel>
                                 </div>
                             </div>

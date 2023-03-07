@@ -83,7 +83,7 @@ const ProductList = () => {
                     </Form>
                   </div>
                 </div>
-                {/* #region  product list */}
+                {/* #region product list */}
                 <div className="category-products">
                   {showProducts.length > 0 && !isViewMode ? <ul className={"products-grid"}  >
                     {showProducts}

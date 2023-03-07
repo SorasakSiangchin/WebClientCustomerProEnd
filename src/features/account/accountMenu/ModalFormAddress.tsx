@@ -44,8 +44,6 @@ const options: Option[] = dtProvince.province.map(province => {
     }
 });
 
-
-
 const ModalFormAddress = ({ modalOpen, setModalOpen, address }: Props) => {
     const { account } = useAppSelector(state => state.account);
     const dispatch = useAppDispatch();
@@ -129,7 +127,7 @@ const ModalFormAddress = ({ modalOpen, setModalOpen, address }: Props) => {
                             setModalOpen(false);
                             resetForm();
                         }}
-                        onOk={handleSubmit }
+                        onOk={handleSubmit}
                         title="ที่อยู่ใหม่"
                         content={<div style={{ padding: "20px" }}>
                             <Space direction="vertical" size="middle" style={{ display: 'flex' }}>

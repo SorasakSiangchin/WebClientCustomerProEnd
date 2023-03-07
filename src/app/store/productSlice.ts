@@ -10,6 +10,8 @@ interface ProductState {
     productsLoaded: boolean;
     productRare: Product[] | null;
     productRareLoaded: boolean;
+    productRecommend: Product[] | null;
+    productRecommendLoaded: boolean;
     categoryProductLoaded: boolean;
     categoryProducts: CategoryProduct[] | null;
     imageProductLoaded: boolean;
@@ -95,6 +97,16 @@ export const fetchProductRaresAsync = createAsyncThunk("product/fetchProductRare
         }
     });
 
+export const fetchProductRecommendAsync = createAsyncThunk<Result , number>("product/fetchProductRecommendAsync",
+    async (number, thunkAPI) => {
+        try {
+            const result : Result = await agent.Product.getRecommend(number);
+            return result;
+        } catch (error: any) {
+            return thunkAPI.rejectWithValue({ error: error.data })
+        }
+    });
+
 export const fetchProductByNameAsync = createAsyncThunk<Product[], string>("product/fetchProductByNameAsync",
     async (nameProduct, thunkAPI) => {
         try {
@@ -123,7 +135,7 @@ export const createProductAsync = createAsyncThunk<Result, any>("product/createP
     }
 });
 
-export const editProductAsync = createAsyncThunk<Result, any>("product/editProductAsync", async (product, thunkAPI) => {
+export const updateProductAsync = createAsyncThunk<Result, any>("product/editProductAsync", async (product, thunkAPI) => {
     try {
         const results: Result = await agent.Product.update(product);
         return results;
@@ -170,8 +182,8 @@ const initParams = (): ProductParams => {
         category: "",
         rangePriceStart: 0,
         rangePriceEnd: 0,
-        searchTerm: "" ,
-        accountID : ""
+        searchTerm: "",
+        accountID: ""
     }
 };
 
@@ -196,6 +208,8 @@ export const productSlice = createSlice({
         weightUnitLoaded: false,
         levelProducts: null,
         levelProductLoaded: false,
+        productRecommend: null,
+        productRecommendLoaded: false
     }),
     reducers: {
         setMetaData: (state, action) => {
@@ -230,6 +244,11 @@ export const productSlice = createSlice({
             state.productRare = action.payload;
             state.productRareLoaded = true;
         });
+        builder.addCase(fetchProductRecommendAsync.fulfilled, (state, action) => {
+            const { isSuccess , result , statusCode } = action.payload;
+            if(isSuccess && statusCode === 200) state.productRecommend = result;
+            state.productRecommendLoaded = true;
+        });
         builder.addCase(fetchProductByNameAsync.fulfilled, (state, action) => {
             state.productNames = action.payload;
             state.productNameLoaded = true;
@@ -249,7 +268,7 @@ export const productSlice = createSlice({
             if (isSuccess === true && statusCode === 200) state.levelProducts = result;
             state.levelProductLoaded = true;
         });
-        builder.addMatcher(isAnyOf(removeProductAsync.fulfilled, createProductAsync.fulfilled, editProductAsync.fulfilled), (state, action) => {
+        builder.addMatcher(isAnyOf(removeProductAsync.fulfilled, createProductAsync.fulfilled, updateProductAsync.fulfilled), (state, action) => {
             const { isSuccess } = action.payload;
             if (isSuccess === true) state.productsLoaded = false;
         });

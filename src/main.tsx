@@ -7,11 +7,10 @@ import './index.css';
 import "swiper/css";
 import "swiper/css/pagination";
 import "react-image-gallery/styles/css/image-gallery.css";
-
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <BrowserRouter>
     <Provider store={store}>
-      <App />
+        <App />
     </Provider>
   </BrowserRouter>
 )
