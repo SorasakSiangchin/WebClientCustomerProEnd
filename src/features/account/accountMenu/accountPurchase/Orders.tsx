@@ -16,6 +16,7 @@ import ModalTransferHistory from './ModalTransferHistory';
 import { Delivery } from '../../../../app/models/Delivery';
 import { TfiTruck } from 'react-icons/tfi';
 import moment from 'moment-timezone';
+import ModalFormReview from './ModalFormReview';
 interface Props {
     orders: Order[]
     setOrderPage?: any;
@@ -39,6 +40,7 @@ const Orders = ({ orders, setOrderPage, setOrderId, setDataDelivery }: Props) =>
             const [openModalHistory, setOpenModalHistory] = useState<boolean>(false);
             const [dataCancelEvidence, setDataCancelEvidence] = useState<EvidenceMoneyTransfer[]>();
             const [dataEvidence, setDataEvidence] = useState<EvidenceMoneyTransfer | null>(null);
+            const [openModalFormReview, setOpenModalFormReview] = useState<boolean>(false);
             const [delivery, setDelivery] = useState<Delivery | null>(null);
             useEffect(() => {
                 loadData();
@@ -46,7 +48,7 @@ const Orders = ({ orders, setOrderPage, setOrderId, setDataDelivery }: Props) =>
 
             const loadData = async () => {
                 const { isSuccess, result, statusCode }: Result = await agent.Delivery.getByIdOrder(order.id);
-                if (isSuccess === true && statusCode === 200) setDelivery(result);
+                if (isSuccess && statusCode === 200) setDelivery(result);
             };
 
             const onCancelOrder = () => {
@@ -173,18 +175,22 @@ const Orders = ({ orders, setOrderPage, setOrderId, setDataDelivery }: Props) =>
                     extra={extraCard}
                     title={<AvatarAccountByProductId productId={order.orderItems[0].productID} />}
                 >
-                    <ModalPayment openModal={openModal} setOpenModal={setOpenModal} orderId={id} setOrderId={setId} />
                     {dataEvidence &&
                         <ModalEvidence
                             evidence={dataEvidence}
                             openModal={openModalEvidence}
                             setOpenModal={setOpenModalEvidence}
                         />}
-
+                    <ModalPayment openModal={openModal} setOpenModal={setOpenModal} orderId={id} setOrderId={setId} />
                     <ModalTransferHistory
                         setOpenModal={setOpenModalHistory}
                         openModal={openModalHistory}
                         cancelEvidence={dataCancelEvidence}
+                    />
+                    <ModalFormReview 
+                        openModal={openModalFormReview}
+                        setOpenModal={setOpenModalFormReview}
+                        orderItems={order.orderItems}
                     />
                     <List
                         itemLayout="horizontal"
@@ -227,11 +233,11 @@ const Orders = ({ orders, setOrderPage, setOrderId, setDataDelivery }: Props) =>
                                             <Button
                                                 className='text-st'
                                                 onClick={() => {
-                                                    if (order.orderStatus !== 2) {
-                                                        onClickButton(order.id);
-                                                    } else {
-                                                        onConfirmCustomer();
-                                                    }
+                                                    if (order.orderStatus !== 2) onClickButton(order.id);
+                                                    else {
+                                                        if (!order.customerStatus) onConfirmCustomer();
+                                                        else  setOpenModalFormReview(true);
+                                                    };
                                                 }}
                                                 type='primary'
                                                 disabled={order.orderStatus === 1}
@@ -280,10 +286,10 @@ export const AvatarAccountByProductId = ({ productId }: any) => {
     useEffect(() => {
         const loadAccount = async () => {
             const { result, isSuccess, statusCode }: Result = await agent.Product.detail(productId);
-            if (isSuccess === true && statusCode === 200) {
+            if (isSuccess && statusCode === 200) {
                 const { accountID } = result as Product
                 const resultAccount: Result = await agent.Account.currentAccount({ accountId: accountID });
-                if (resultAccount.isSuccess === true && resultAccount.statusCode === 200) setAccount(resultAccount.result);
+                if (resultAccount.isSuccess && resultAccount.statusCode === 200) setAccount(resultAccount.result);
             };
         }
         loadAccount();
@@ -296,13 +302,13 @@ export const AvatarAccountByProductId = ({ productId }: any) => {
 
 const loadEvidence = async (orderId: any) => {
     const { isSuccess, statusCode, result }: Result = await agent.EvidenceMoneyTransfer.get(orderId);
-    if (isSuccess === true && statusCode === 200) return result;
+    if (isSuccess && statusCode === 200) return result;
     return null;
 };
 
 const loadCancelEvidence = async (orderId: any) => {
     const { isSuccess, statusCode, result }: Result = await agent.EvidenceMoneyTransfer.getCancel(orderId);
-    if (isSuccess === true && statusCode === 200) return result;
+    if (isSuccess && statusCode === 200) return result;
     return null;
 }
 

@@ -168,6 +168,16 @@ const Delivery = {
     update: (value: any) => requests.put("delivery", createFormData(value))
 }
 
+const Review = {
+    create: (value: any) => {
+        let formData = new FormData();
+        for (const key in value) formData.append(key, value[key]);
+        for (let i = 0; i < value.imageFiles.length; i++) formData.append("imageFiles", value.imageFiles[i]);
+        return requests.post("review", formData)
+    },
+    getByIdProduct: (idProduct: any) => requests.get(`review/productId?productId=${idProduct}`)
+}
+
 const agent = {
     Product,
     Account,
@@ -183,7 +193,8 @@ const agent = {
     EvidenceMoneyTransfer,
     Report,
     Delivery,
-    StatusDelivery
+    StatusDelivery,
+    Review
 };
 
 export default agent;

@@ -14,9 +14,10 @@ interface Props {
 }
 
 const BlockCart = ({ cart, itemCount, subtotal }: Props) => {
-  const heightShow = cart?.items.length  ? "250px" : "120px";
+  const heightShow = cart?.items.length ? "250px" : "120px";
   const dispatch = useAppDispatch();
   const { account } = useAppSelector(state => state.account);
+
   return (
     <Fragment>
       <ContainerCart>
@@ -62,6 +63,6 @@ const BlockCart = ({ cart, itemCount, subtotal }: Props) => {
   )
 }
 
-const ContainerCart = ({ children }: any) => <div className="block block-list block-cart" style={{ marginBottom:"30px" }}>{children}</div>
+const ContainerCart = ({ children }: any) => <div className="block block-list block-cart" style={{ marginBottom: "30px" }}>{children}</div>
 
 export default BlockCart

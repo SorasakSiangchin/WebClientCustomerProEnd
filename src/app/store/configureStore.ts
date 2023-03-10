@@ -12,6 +12,7 @@ import { orderSlice } from './orderSlice';
 import { evidenceMoneyTransferSlice } from './evidenceMoneyTransferSlice';
 import { reportSlice } from './reportSlice';
 import { deliverySlice } from './deliverySlice';
+import { reviewSlice } from './reviewSilce';
 
 export const store = configureStore({
     reducer:{
@@ -24,7 +25,8 @@ export const store = configureStore({
        order : orderSlice.reducer ,
        evidenceMoneyTransfer : evidenceMoneyTransferSlice.reducer,
        report : reportSlice.reducer ,
-       delivery : deliverySlice.reducer
+       delivery : deliverySlice.reducer ,
+       review : reviewSlice.reducer
     }
 })
 

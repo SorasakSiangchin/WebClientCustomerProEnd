@@ -120,6 +120,15 @@ export const beforeUploadAntd = (file: RcFile) => {
     return isJpgOrPng && isLt2M;
 };
 
+export const beforeUploadVdoAntd = (file: RcFile) => {
+
+    const isLt2M = file.size / 1024 / 1024 < 100;
+    if (!isLt2M) {
+        message.error('วิดิโอต้องมีขนาดเล็กกว่า 100MB!');
+    }
+    return isLt2M;
+};
+
 export const Text = `ภายในระบบของเราจะมีสินค้าทางเกษตกรรมให้ทุกท่านเลือกชอปปิ้งอย่างมากมาย อีกทั้งยังมีการจองสินค้าที่มีเฉพาะในฤดูกาลนั้นๆและสินค้าที่คุณอาจจะเข้าถึงได้ยากอีกด้วย ขอให้ทุกท่านมีความสุขกับการชอปปิ้งนะครับ`;
 
 export const getBase64 = (img: RcFile, callback: (url: string) => void) => {

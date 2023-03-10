@@ -103,9 +103,7 @@ const OrderPrivatePage = () => {
               orderStatus: 2
             };
 
-            const onConfirm = () => {
-              dispatch(updateOrderAsync(dataUpdate)).then(() => dispatch(fetchOrdersAsync()));
-            };
+            const onConfirm = () => dispatch(updateOrderAsync(dataUpdate)).then(() => dispatch(fetchOrdersAsync()));
 
             const action = order.orderStatus !== 2 ? [
               <ConfirmButton
