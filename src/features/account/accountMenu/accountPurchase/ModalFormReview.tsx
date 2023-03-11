@@ -12,7 +12,7 @@ import { useAppDispatch, useAppSelector } from '../../../../app/store/configureS
 import { ReviewRequest } from '../../../../app/models/Review';
 import { Result } from '../../../../app/models/Interfaces/IResponse';
 import AppSwal from '../../../../app/components/AppSwal';
-import { createReviewAsync, fetchReviewByProductIdAsync } from '../../../../app/store/reviewSilce';
+import { createReviewAsync, fetchReviewByProductIdAsync, setParams } from '../../../../app/store/reviewSilce';
 
 interface Props {
     openModal: boolean;
@@ -167,6 +167,7 @@ const ModalFormReview = ({ openModal, orderItems, setOpenModal }: Props) => {
                                                     />}
                                                     title={item.name}
                                                 />
+                                                {/* {check.toString()} */}
                                                 {
                                                     !check ?
                                                         <span>
@@ -193,9 +194,8 @@ const ModalFormReview = ({ openModal, orderItems, setOpenModal }: Props) => {
                                                                 onChange={(e) => setInformation(e.target.value)}
                                                             />
                                                         </Col>
-
                                                         <Col span={2}>
-                                                            <Popover placement="right" title={""} content={
+                                                            <Popover placement="right" content={
                                                                 <Picker
                                                                     data={data}
                                                                     onEmojiSelect={addEmoji}
@@ -212,7 +212,6 @@ const ModalFormReview = ({ openModal, orderItems, setOpenModal }: Props) => {
                                                             className="avatar-uploader"
                                                             showUploadList={false}
                                                             beforeUpload={beforeUploadAntd}
-                                                            action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
                                                             onChange={handleChangeImage}
                                                         >
                                                             <Button className='text-st' loading={imageLoading} disabled={imageUrls.length > 4} danger size='small' icon={<CameraFilled />}>
@@ -225,7 +224,6 @@ const ModalFormReview = ({ openModal, orderItems, setOpenModal }: Props) => {
                                                             className="avatar-uploader"
                                                             showUploadList={false}
                                                             beforeUpload={beforeUploadVdoAntd}
-                                                            action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
                                                             onChange={handleChangeVideo}
                                                         >
                                                             <Button className='text-st' loading={videoLoading} disabled={!!videoUrls} danger size='small' icon={<VideoCameraFilled />}>
@@ -281,17 +279,18 @@ const ModalFormReview = ({ openModal, orderItems, setOpenModal }: Props) => {
     )
 }
 
-const checkFormReview = (id: any) => {
+const checkFormReview = (productId: any) => {
     const dispatch = useAppDispatch();
     const [check, setCheck] = useState<boolean>(false);
 
     useEffect(() => {
+        dispatch(setParams({ productId }));
         onLoad();
-    }, []);
+    }, [dispatch]);
 
     const onLoad = async () => {
-        const { result, isSuccess, statusCode }: Result = await dispatch(fetchReviewByProductIdAsync(id)).unwrap();
-        if (isSuccess && statusCode === 200) setCheck(result.length! > 0 ? true : false);
+        const { result, isSuccess, statusCode }: Result = await dispatch(fetchReviewByProductIdAsync()).unwrap();
+        if (isSuccess && statusCode === 200) setCheck(result.reviews.length! > 0 ? true : false);
     };
 
     return {

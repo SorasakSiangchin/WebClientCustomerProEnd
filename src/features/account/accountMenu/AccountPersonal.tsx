@@ -23,7 +23,7 @@ const AccountPersonal = () => {
     useEffect(() => {
         if (!roleData) dispatch(fetchRolesAsync());
     }, []);
-  
+
     const [loading, setLoading] = useState<boolean>(false);
 
     const value = {
@@ -35,7 +35,7 @@ const AccountPersonal = () => {
         phoneNumber: account?.phoneNumber || "",
         roleID: account?.role.id || "",
         formFiles: {} || undefined,
-        statusLogin : status
+        statusLogin: status
     };
 
     interface Props {

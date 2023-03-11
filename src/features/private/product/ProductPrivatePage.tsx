@@ -258,7 +258,7 @@ const ProductPrivatePage = () => {
         </Col>
       </Row>
       <Divider />
-      <Table columns={columns} dataSource={data} pagination={false} />
+      <Table columns={columns} dataSource={data} pagination={false}  />
       {products.length > 0 && metaData && (
         <AppPagination
           isSimple={false}

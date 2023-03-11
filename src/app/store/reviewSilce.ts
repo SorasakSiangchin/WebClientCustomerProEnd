@@ -1,24 +1,41 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import agent from "../api/agent";
 import { Result } from "../models/Interfaces/IResponse";
-import { ReviewResponse } from "../models/Review";
+import { MetaData } from "../models/Pagination";
+import { ReviewParams, ReviewResponse } from "../models/Review";
+import { RootState } from "./configureStore";
+
+const initParams = (): ReviewParams => {
+    return {
+        pageNumber : 1 ,
+        pageSize : 5 ,
+        productId : "",
+        score : 0
+    };
+};
 
 interface ReviewState {
     reviews: ReviewResponse | null;
     reviewsLoaded: boolean;
+    reviewParams : ReviewParams;
+    metaData: MetaData | null;
 };
 
 const initialState: ReviewState = {
     reviews: null,
     reviewsLoaded: false,
+    reviewParams : initParams(),
+    metaData : null
 };
 
-export const fetchReviewByProductIdAsync = createAsyncThunk<Result, any>(
+export const fetchReviewByProductIdAsync = createAsyncThunk<Result, void, { state: RootState }>(
     "review/fetchReviewByProductIdAsync",
-    async (productId, thunkAPI) => {
+    async (_, thunkAPI) => {
+        const params = thunkAPI.getState().review.reviewParams;
         try {
-            const result: Result = await agent.Review.getByIdProduct(productId);
-            return result;
+            const { items , metaData } = await agent.Review.getByIdProduct(params);
+            thunkAPI.dispatch(setMetaData(metaData));
+            return items;
         } catch (error: any) {
             return thunkAPI.rejectWithValue({ error: error.data })
         }
@@ -41,8 +58,16 @@ export const reviewSlice = createSlice({
     name: "review",
     initialState,
     reducers: {
+        setMetaData: (state, action) => {
+            state.metaData = action.payload;
+        },
+        setParams: (state, action) => {
+            state.reviewsLoaded = false;
+            state.reviewParams = { ...state.reviewParams, ...action.payload };
+        },
         resetReviewByProductId: (state) => {
             state.reviews = null;
+            state.reviewParams = initParams();
             state.reviewsLoaded = false;
         }
     },
@@ -57,4 +82,4 @@ export const reviewSlice = createSlice({
     }
 });
 
-export const { resetReviewByProductId } = reviewSlice.actions;
+export const { resetReviewByProductId , setMetaData , setParams} = reviewSlice.actions;

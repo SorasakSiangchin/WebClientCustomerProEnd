@@ -207,7 +207,6 @@ const Orders = ({ orders, setOrderPage, setOrderId, setDataDelivery }: Props) =>
                                     title={item.name}
                                     description={`x${item.amount}`}
                                 />
-                                {item.id}
                                 <Ts>{currencyFormat(item.price)}</Ts>
                             </List.Item>
                         )}

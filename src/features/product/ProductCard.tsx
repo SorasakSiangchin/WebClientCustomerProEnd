@@ -50,13 +50,7 @@ const ProductCard = ({ product, saleLabel = false, isViewMode = false, productsL
         return (
             <li className="item col-lg-4 col-md-3 col-sm-4 col-xs-6">
                 <div className="item-inner">
-                    <Card style={{ width: 300, marginTop: 16 }} loading={productsLoaded}>
-                        <Meta
-                            avatar={<Avatar src="https://joeschmoe.io/api/v1/random" />}
-                            title="Card title"
-                            description="This is the description"
-                        />
-                    </Card>
+                    <Card style={{ width: 300, marginTop: 16 }} loading={productsLoaded}/>
                 </div>
             </li>
         )

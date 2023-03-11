@@ -5,13 +5,13 @@ import TopSection from '../../app/layout/TopSection'
 import { useAppDispatch } from '../../app/store/configureStore';
 import { googleLoginAccount, loginAccount, setStatusLogin } from '../../app/store/accountSlice';
 import { LoginValidate } from './AccountValidate';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Result } from '../../app/models/Interfaces/IResponse';
 import { LockFilled, UserAddOutlined } from '@ant-design/icons';
 import AppButton from '../../app/components/AppButton';
-import { clientId, Text, Ts } from '../../app/util/util';
+import { clientId, Text } from '../../app/util/util';
 import MainContainer from '../../app/layout/MainContainer';
-import { GoogleLogin, GoogleLogout } from "react-google-login";
+import { GoogleLogin } from "react-google-login";
 import { gapi } from "gapi-script";
 import { GoogleLoginRequest } from '../../app/models/Account';
 import AppSwal from '../../app/components/AppSwal';
@@ -62,9 +62,7 @@ const Login = () => {
     };
   };
 
-  const onFailure = (res: any) => {
-    console.log(res);
-  };
+  const onFailure = (res: any) => console.log(res);
 
   const AddValueGoogle = (profileObj: any) => {
     valueGoogle.email = profileObj.email;

@@ -1,14 +1,14 @@
 import { Result } from './../../app/models/Interfaces/IResponse';
 import { createAsyncThunk, createEntityAdapter, createSlice, isAnyOf } from "@reduxjs/toolkit";
 import agent from "../../app/api/agent";
-import { Account, GoogleLoginRequest } from "../../app/models/Account";
+import { Account, AccountParams, GoogleLoginRequest } from "../../app/models/Account";
 import { Role } from "../../app/models/Role";
 import { Login, Register } from '../../app/models/Interfaces/IAccount';
-import { formatDate } from '../../app/util/util';
 import { setCart } from '../../app/store/cartSlice';
 import { RootState } from './configureStore';
+import { MetaData } from '../models/Pagination';
 
-export const value = { stats : true , firstName: "", lastName: "", email: "", password: "", phoneNumber: "", roleID: "", formFiles: File };
+export const value = { stats: true, firstName: "", lastName: "", email: "", password: "", phoneNumber: "", roleID: "", formFiles: File };
 
 interface AccountState {
     account: Account | null;
@@ -18,8 +18,20 @@ interface AccountState {
     token: string | null;
     tokenExpirationDate: Date | null;
     statusLogin: string | null;
+    metaData: MetaData | null;
+    accountParams: AccountParams;
 };
 
+const initParams = (): AccountParams => {
+    return {
+        pageNumber: 1,
+        pageSize: 10,
+        searchEmail: "",
+        searchName: "",
+        searchPhoneNumber: "",
+        status: ""
+    }
+};
 
 export interface setUp {
     account: Account;
@@ -84,7 +96,6 @@ export const registerAccount = createAsyncThunk<any, Register>(
     }
 );
 
-
 export const updateAccountAsync = createAsyncThunk("account/updateAccountAsync",
     async (_, thunkAPI) => {
         try {
@@ -129,13 +140,15 @@ export const fetchCurrentAccount = createAsyncThunk<Account>(
     }
 );
 
-export const fetchAccountsAsync = createAsyncThunk<Result, void>(
+export const fetchAccountsAsync = createAsyncThunk<Result, void, { state: RootState }>(
     'account/fetchAccountsAsync',
     async (_, thunkAPI) => {
-
+        const params = thunkAPI.getState().account.accountParams;
         try {
-            const result : Result = await agent.Account.list();
-            return result;
+            const { items, metaData } = await agent.Account.list(params);
+            thunkAPI.dispatch(setMetaData(metaData));
+            console.log(items)
+            return items;
         } catch (error: any) {
             return thunkAPI.rejectWithValue({ error: error.data });
         };
@@ -157,10 +170,19 @@ export const accountSlice = createSlice({
         token: null,
         tokenExpirationDate: null,
         statusLogin: null,
-        accounts:null,
-        accountsLoaded :false
+        accounts: null,
+        accountsLoaded: false,
+        accountParams: initParams(),
+        metaData: null
     }),
     reducers: {
+        setMetaData: (state, action) => {
+            state.metaData = action.payload;
+        },
+        setParams: (state, action) => {
+            state.accountsLoaded = false;
+            state.accountParams = { ...state.accountParams, ...action.payload };
+        },
         setRoleData: (state, action) => {
             state.roleData = action.payload;
         },
@@ -178,7 +200,7 @@ export const accountSlice = createSlice({
                 JSON.stringify({
                     account: account,
                     token: token,
-                   // expiration: formatDate(tokenExpirationDate), // toISOString สามารถแปลงกลับมาเป็นวันที่ได้
+                    // expiration: formatDate(tokenExpirationDate), // toISOString สามารถแปลงกลับมาเป็นวันที่ได้
                 })
             );
         },
@@ -193,16 +215,19 @@ export const accountSlice = createSlice({
         },
         reSetStatusLogin: () => {
             localStorage.removeItem("statusLogin");
+        },
+        resetParams: (state) => {
+            state.accountsLoaded = false;
+            state.accountParams = initParams()
         }
     },
     extraReducers: (builder => {
         builder.addCase(fetchAccountsAsync.fulfilled, (state, action) => {
-            const { isSuccess , result , statusCode } = action.payload;
-            if(isSuccess === true && statusCode === 200) {
+            const { isSuccess, result, statusCode } = action.payload;
+            if (isSuccess === true && statusCode === 200) {
                 accountAdapter.setAll(state, result); // set products
                 state.accountsLoaded = true;
-            }
-            console.log(result);
+            };
         });
         builder.addMatcher(isAnyOf(loginAccount.fulfilled, googleLoginAccount.fulfilled), (state, action) => {
             if (action.payload.result) {
@@ -213,6 +238,6 @@ export const accountSlice = createSlice({
     })
 });
 
-export const { setRoleData, logout, setAccount, setStatusLogin, reSetStatusLogin , setTing } = accountSlice.actions;
+export const { resetParams, setMetaData, setParams, setRoleData, logout, setAccount, setStatusLogin, reSetStatusLogin, setTing } = accountSlice.actions;
 
 export const accountSelectors = accountAdapter.getSelectors((state: RootState) => state.account); 

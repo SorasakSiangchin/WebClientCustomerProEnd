@@ -11,7 +11,7 @@ import { ShoppingCartOutlined } from "@ant-design/icons";
 
 interface Prop {
     cart: Cart;
-}
+};
 
 export const MyCartMenu = ({ cart }: Prop) => {
     const navigate = useNavigate();
@@ -49,7 +49,7 @@ export const MyCartMenu = ({ cart }: Prop) => {
             <Link to="/cart">
                 <BoxPopover content={contentBasket} cartItem={cart?.items} >
                     <Badge count={itemCount} offset={[-3, 7]}>
-                        <Button  icon={<ShoppingCartOutlined />} style={{ height : "50%" , fontSize : "25px" , color : "white"}} className="basket center">
+                        <Button icon={<ShoppingCartOutlined />} style={{ height: "50%", fontSize: "25px", color: "white" }} className="basket center">
                             <Link to="/cart">ตะกร้าสินค้า</Link>
                         </Button>
                     </Badge>
@@ -71,5 +71,4 @@ const BoxPopover = ({ children, content, cartItem }: Props) => <>
             {children}
         </Popover> : children
     }
-
 </>

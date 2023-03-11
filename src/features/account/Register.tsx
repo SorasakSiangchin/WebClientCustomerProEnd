@@ -218,7 +218,6 @@ const Register = () => {
                                 className="avatar-uploader"
                                 showUploadList={false}
                                 beforeUpload={beforeUploadAntd}
-                                action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
                                 onChange={handleChangeImaage}
                               >
                                 <Button loading={loading} icon={<UploadOutlined />}>

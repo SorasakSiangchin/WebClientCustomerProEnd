@@ -257,7 +257,6 @@ export const productSlice = createSlice({
             state.imageProducts = action.payload;
             state.imageProductLoaded = true;
         });
-
         builder.addCase(fetchWeightUnitsAsync.fulfilled, (state, action) => {
             const { result, isSuccess, statusCode } = action.payload;
             if (isSuccess === true && statusCode === 200) state.weightUnits = result;

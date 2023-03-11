@@ -18,6 +18,7 @@ import TitleTap from '../../app/layout/TitleTap';
 import ContentTap from '../../app/layout/ContentTap';
 import { addCartItemAsync, removeCartItemAsync } from '../../app/store/cartSlice';
 import AppSwal from '../../app/components/AppSwal';
+import useReview from '../../app/hooks/useReview';
 
 interface IImageGallery {
   original: any;
@@ -31,8 +32,10 @@ const titleTap = ["ความคิดเห็น", "ข้อมูลร้
 const ProductDetail = () => {
   const dispatch = useAppDispatch();
   const { idProduct } = useParams<{ idProduct: any }>();
-  const product = useAppSelector(state => productSelectors.selectById(state, idProduct));
   const { cart } = useAppSelector(state => state.cart);
+  const { reviews, metaData, setParams, reviewsLoaded } = useReview({ productId: idProduct });
+  const [eeee, setEeeee] = useState<Number | any>(reviews?.averageScore);
+  const product = useAppSelector(state => productSelectors.selectById(state, idProduct));
   const { imageProducts, imageProductLoaded } = useAppSelector(state => state.product);
   const { account } = useAppSelector(state => state.account);
   const [images, setImages] = useState<IImageGallery[] | any>([]);
@@ -89,7 +92,7 @@ const ProductDetail = () => {
         })
       )
     };
-  }
+  };
 
   const amountChange = (data: number = 1, key: string) => {
     if (data > 0) {
@@ -106,20 +109,20 @@ const ProductDetail = () => {
           break;
       }
     }
-  }
+  };
 
   const handleOnCart = () => {
     if (account) AppSwal({
-      icon : "success" ,
-      onThen : handleButtonClick ,
-      title : "บันทึกสำเร็จ" ,
-      timer : 1000
+      icon: "success",
+      onThen: handleButtonClick,
+      title: "บันทึกสำเร็จ",
+      timer: 1000
     })
     else AppSwal({
-      icon : "warning" ,
-      onThen : () => {} ,
-      title : "กรุณาเข้าสู่ระบบ" ,
-      timer : 1000
+      icon: "warning",
+      onThen: () => { },
+      title: "กรุณาเข้าสู่ระบบ",
+      timer: 1000
     })
   };
 
@@ -134,7 +137,7 @@ const ProductDetail = () => {
       default:
         return "info";
     };
-  }
+  };
 
   return (
     <Fragment>
@@ -152,12 +155,7 @@ const ProductDetail = () => {
               <h1>{product?.name}</h1>
             </div>
             <div className="ratings">
-              <Rate disabled defaultValue={2} style={{ fontSize: "15px" }} />
-              <p className="rating-links">
-                <Link to={""}>1 {imageProductLoaded.toString()}</Link>
-                <span className="separator">|</span>
-                <Link to="">Add Your Review</Link>
-              </p>
+              <Rate disabled value={Number(reviews?.averageScore)} style={{ fontSize: "15px" }} />
             </div>
             <div className="price-block">
               <div className="price-box">
@@ -222,7 +220,14 @@ const ProductDetail = () => {
             <div className="product-collateral">
               <TitleTap titles={titleTap} keys={keysTap} />
               <div id="productTabContent" className="tab-content">
-                <ContentTap ids={keysTap} product={product} />
+                <ContentTap
+                  ids={keysTap}
+                  product={product}
+                  reviewsLoaded={reviewsLoaded}
+                  setParams={setParams}
+                  metaData={metaData}
+                  reviews={reviews}
+                />
               </div>
             </div>
           </div>

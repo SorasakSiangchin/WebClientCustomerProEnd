@@ -21,9 +21,14 @@ import OrderPrivatePage from "../../features/private/order/OrderPrivatePage";
 import OrderDetailPrivate from "../../features/private/order/OrderDetailPrivate";
 import DeliveryPrivatePage from "../../features/private/delivery/DeliveryPrivatePage";
 import DeliveryFormPrivate from "../../features/private/delivery/DeliveryFormPrivate";
+import AboutPage from "../../features/about/AboutPage";
+import Error404 from "../../features/error404/Error404";
+import UserDetailPrivatePage from "../../features/private/user/UserDetailPrivatePage";
 
 export const mainRoutes = <Routes>
     <Route path='/' element={<HomePage />} />
+    <Route path='/about' element={<AboutPage />} />
+    <Route path='*' element={<Error404 />} />
     <Route path='/login' element={
         <PrivateLogin>
             <Login />
@@ -42,6 +47,7 @@ export const mainRoutes = <Routes>
     <Route element={<PrivateRoute roles={[RoleInfo.admin, RoleInfo.seller]} />} >
         <Route path='/private/dashboard' element={<DashboardPage />} />
         <Route path='/private/user' element={<UserPrivatePage />} />
+        <Route path='/private/user/detail/:id' element={<UserDetailPrivatePage />} />
         <Route path='/private/order' element={<OrderPrivatePage />} />
         <Route path='/private/product' element={<ProductPrivatePage />} />
         <Route path='/private/product/detail/:idProduct' element={<ProductDetailPrivatePage />} />

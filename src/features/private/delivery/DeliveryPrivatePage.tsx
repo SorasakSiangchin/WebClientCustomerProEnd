@@ -179,7 +179,6 @@ const CardDelivery = ({ order, getEvidenceMoneyTransfers }: any) => {
                         title={truncate(item.name, 10)}
                         description={`x${item.amount}`}
                     />
-                    {item.id}
                     <Ts>{currencyFormat(item.price)}</Ts>
                 </List.Item>
             )}

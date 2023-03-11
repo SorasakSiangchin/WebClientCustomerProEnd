@@ -1,5 +1,7 @@
+import { Account } from "./Account";
+
 export interface ReviewResponse {
-    averageScore?: number;
+    averageScore: number;
     reviews?: Review[];
 };
 
@@ -12,6 +14,7 @@ export interface Review {
     accountID?: string;
     orderItemID?: number;
     imageReviews?: ImageReview[];
+    account?: Account;
 };
 
 export interface ReviewRequest {
@@ -30,3 +33,10 @@ export interface ImageReview {
     reviewID?: number;
     review?: null;
 };
+
+export interface ReviewParams {
+    pageNumber: number;
+    pageSize: number;
+    productId : string;
+    score : number;
+}

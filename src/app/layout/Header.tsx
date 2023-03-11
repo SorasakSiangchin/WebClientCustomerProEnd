@@ -12,13 +12,15 @@ import { setParams } from '../../app/store/productSlice';
 
 export const midLinks = [
     { title: "หน้าแรก", path: "/" },
-    { title: "เกี่ยวกับ", path: "/test" },
+    { title: "เกี่ยวกับ", path: "/about" },
     { title: "สินค้า", path: "/product-list" },
 ];
 
 const Header = () => {
+    
     const { account } = useAppSelector(state => state.account);
     const { cart } = useAppSelector(state => state.cart);
+
     return (
         <Fragment>
             <div className="container">

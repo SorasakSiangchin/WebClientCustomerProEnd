@@ -10,8 +10,6 @@
   },
   "dependencies": {
     "@ant-design/icons": "^4.8.0",
-    "@emotion/react": "^11.10.5",
-    "@emotion/styled": "^11.10.5",
     "@mui/icons-material": "^5.10.16",
     "@mui/material": "^5.10.17",
     "@reduxjs/toolkit": "^1.9.1",
@@ -60,6 +58,7 @@
     "sweetalert2": "^11.7.1",
     "swiper": "^8.4.5",
     "unique-names-generator": "^4.7.1",
+    "video-react": "^0.16.0",
     "yup": "^0.32.11",
     "zustand": "^4.3.2"
   },

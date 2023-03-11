@@ -78,7 +78,7 @@ const initParams = (): OrderParams => {
         id: "",
         orderCancel: "",
         orderStatus: "",
-        sellerId : ""
+        sellerId: ""
     }
 };
 

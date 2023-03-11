@@ -31,9 +31,8 @@ export const MyAccountMenu = ({ account }: Prop) => {
         cancelButtonText: "ยกเลิก",
         confirmButtonText: 'ตกลง'
     }).then((result) => {
-        if (result.isConfirmed) {
-            onLogout(renderProps);
-        }
+        if (result.isConfirmed) onLogout(renderProps);
+        
     });
 
     const googleLogout = <GoogleLogout

@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../store/configureStore';
-import { fetchReviewByProductIdAsync, resetReviewByProductId } from '../store/reviewSilce';
+import { fetchReviewByProductIdAsync, resetReviewByProductId, setParams } from '../store/reviewSilce';
 
 interface Props {
     productId: string;
@@ -8,21 +8,27 @@ interface Props {
 
 const useReview = ({ productId }: Props) => {
     const dispatch = useAppDispatch();
-    const { reviews, reviewsLoaded } = useAppSelector(state => state.review);
+    const { reviews, reviewsLoaded, metaData } = useAppSelector(state => state.review);
 
     useEffect(() => {
-        if (!reviewsLoaded) dispatch(fetchReviewByProductIdAsync(productId));
-    }, [reviewsLoaded, dispatch]);
+        dispatch(fetchReviewByProductIdAsync());
+    }, [reviewsLoaded ,dispatch]);
 
     useEffect(() => {
-        () => {
+        dispatch(setParams({ productId }));
+    }, [dispatch]);
+
+    useEffect(() => {
+        return () => {
             dispatch(resetReviewByProductId());
-        }
+        };
     }, []);
 
     return {
         reviewsLoaded,
-        reviews
+        reviews,
+        metaData,
+        setParams
     }
 };
 

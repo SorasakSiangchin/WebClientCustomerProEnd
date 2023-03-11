@@ -6,8 +6,6 @@ import { useAppDispatch, useAppSelector } from '../../../../app/store/configureS
 import { fetchOrderAsync, orderSelectors } from '../../../../app/store/orderSlice';
 import { Timeline } from 'antd';
 import { currencyFormat, Ts } from '../../../../app/util/util';
-import agent from '../../../../app/api/agent';
-import { Result } from '../../../../app/models/Interfaces/IResponse';
 import useDelivery from '../../../../app/hooks/useDelivery';
 import { Delivery } from '../../../../app/models/Delivery';
 import moment from 'moment-timezone';

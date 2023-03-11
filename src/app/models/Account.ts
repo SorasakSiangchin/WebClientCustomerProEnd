@@ -5,16 +5,16 @@ export interface Account {
     email: string;
     password: string;
     phoneNumber: string;
-    imageUrl: null;
+    imageUrl: string;
     status: boolean;
     roleID: number;
     role: Role;
-}
+};
 
 export interface Role {
     id: number;
     name: string;
-}
+};
 
 export interface GoogleLoginRequest {
     email: string;
@@ -22,5 +22,14 @@ export interface GoogleLoginRequest {
     imageUrl: string;
     firstName: string;
     lastName: string;
+};
+
+export interface AccountParams {
+    pageNumber: number;
+    pageSize: number;
+    status: string;
+    searchName: string;
+    searchEmail: string;
+    searchPhoneNumber: string;
 }
 
