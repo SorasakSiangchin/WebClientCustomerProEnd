@@ -2,16 +2,11 @@ import { FacebookFilled, HeartOutlined, InstagramFilled } from '@ant-design/icon
 import { Alert, Button, Image, Input, Rate, Space } from 'antd';
 import { Fragment, useState, useEffect } from 'react';
 import ImageGallery from 'react-image-gallery';
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import AppButtonCart from '../../app/components/AppButtonCart';
 import { useAppDispatch, useAppSelector } from '../../app/store/configureStore';
 import { currencyFormat, Ts } from '../../app/util/util';
-import {
-  fetchImageProductsAsync,
-  fetchProductAsync,
-  productSelectors,
-  resetImageProduct
-} from '../../app/store/productSlice';
+import { fetchProductAsync, productSelectors } from '../../app/store/productSlice';
 import { FacebookShareButton } from "react-share";
 import MainContainer from '../../app/layout/MainContainer';
 import TitleTap from '../../app/layout/TitleTap';
@@ -24,7 +19,7 @@ interface IImageGallery {
   original: any;
   thumbnail: any;
   renderItem: any;
-}
+};
 
 const keysTap = ["reviews_tabs", "product_tabs_custom", "product_detail_tabs"];
 const titleTap = ["ความคิดเห็น", "ข้อมูลร้านค้า", "เพิ่มเติม"];
@@ -34,9 +29,7 @@ const ProductDetail = () => {
   const { idProduct } = useParams<{ idProduct: any }>();
   const { cart } = useAppSelector(state => state.cart);
   const { reviews, metaData, setParams, reviewsLoaded } = useReview({ productId: idProduct });
-  const [eeee, setEeeee] = useState<Number | any>(reviews?.averageScore);
   const product = useAppSelector(state => productSelectors.selectById(state, idProduct));
-  const { imageProducts, imageProductLoaded } = useAppSelector(state => state.product);
   const { account } = useAppSelector(state => state.account);
   const [images, setImages] = useState<IImageGallery[] | any>([]);
   const [amount, setAmount] = useState<Number | any>(0); // จำนวนสินค้าที่เราจะเพิ่มใส่ตะกร้า
@@ -50,18 +43,13 @@ const ProductDetail = () => {
   }, [idProduct, item, dispatch, product]);
 
   useEffect(() => {
-    if (product) setImages([{ original: product.imageUrl, thumbnail: product.imageUrl, renderItem: () => RenderItem(product.imageUrl) }]);
-  }, [product, dispatch]);
-
-  useEffect(() => {
-    dispatch(fetchImageProductsAsync(idProduct));
-    if (imageProducts && images.length === 1) imageProducts.map(imgPro => setImages((image: any) => {
-      return [...image, { original: imgPro.imageUrl, thumbnail: imgPro.imageUrl, renderItem: () => RenderItem(imgPro.imageUrl) }]
-    }));
-    return () => {
-      if (imageProducts) dispatch(resetImageProduct());
+    if (product) {
+      setImages([{ original: product.imageUrl, thumbnail: product.imageUrl, renderItem: () => RenderItem(product.imageUrl) }]);
+      product?.imageProducts.map(imgPro => setImages((image: any) => {
+        return [...image, { original: imgPro.imageUrl, thumbnail: imgPro.imageUrl, renderItem: () => RenderItem(imgPro.imageUrl) }]
+      }));
     };
-  }, [imageProductLoaded, dispatch]);
+  }, [product, dispatch]);
 
   const handleInputChange = (event: any) => {
     if (event.target.value >= 0) {

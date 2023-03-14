@@ -86,7 +86,7 @@ const CategoryProduct = {
 const Account = {
     login: (value: any) => requests.post('login', createFormData(value)),
     register: (value: any) => requests.post('register', createFormData(value)),
-    currentAccount: (value: any) => requests.get(`account/${value.accountId}?statusLogin=${value.statusLogin ? value.statusLogin : ""}`), // ข้อมูลคนปัจจุบัน
+    currentAccount: (accountId: any) => requests.get(`account/${accountId}`), // ข้อมูลคนปัจจุบัน
     update: (value: any) => requests.put("account", createFormData(value)),
     updatePassword: (value: any) => requests.put("account/password", createFormData(value)),
     googleLogin: (value: any) => requests.post("googleLogin", value),

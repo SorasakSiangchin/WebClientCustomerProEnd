@@ -27,7 +27,7 @@ interface ProductState {
 };
 
 export const fetchProductsAsync = createAsyncThunk<Product[], void, { state: RootState }>(
-    'product/fetchProducts',
+    'product/fetchProductsAsync',
     async (_, thunkAPI) => {
         const params = thunkAPI.getState().product.productParams;
         try {
@@ -41,11 +41,11 @@ export const fetchProductsAsync = createAsyncThunk<Product[], void, { state: Roo
     }
 );
 
-export const fetchProductAsync = createAsyncThunk<Product, any>(
-    "product/fetchProduct",
+export const fetchProductAsync = createAsyncThunk<Result, any>(
+    "product/fetchProductAsync",
     async (productId, thunkAPI) => {
         try {
-            const { result }: Result = await agent.Product.detail(productId);
+            const  result : Result = await agent.Product.detail(productId);
             return result;
         } catch (error: any) {
             return thunkAPI.rejectWithValue({ error: error.data })
@@ -54,7 +54,7 @@ export const fetchProductAsync = createAsyncThunk<Product, any>(
 );
 
 export const fetchWeightUnitsAsync = createAsyncThunk<Result>(
-    "product/fetchWeightUnitAsync",
+    "product/fetchWeightUnitsAsync",
     async (_, thunkAPI) => {
         try {
             const results: Result = await agent.WeightUnit.list();
@@ -135,7 +135,7 @@ export const createProductAsync = createAsyncThunk<Result, any>("product/createP
     }
 });
 
-export const updateProductAsync = createAsyncThunk<Result, any>("product/editProductAsync", async (product, thunkAPI) => {
+export const updateProductAsync = createAsyncThunk<Result, any>("product/updateProductAsync", async (product, thunkAPI) => {
     try {
         const results: Result = await agent.Product.update(product);
         return results;
@@ -234,7 +234,8 @@ export const productSlice = createSlice({
             state.productsLoaded = true;
         });
         builder.addCase(fetchProductAsync.fulfilled, (state, action) => {
-            productsAdapter.upsertOne(state, action.payload) // set product
+            const { isSuccess , result , statusCode } = action.payload;
+            if (isSuccess === true && statusCode === 200)  productsAdapter.upsertOne(state, result) ;
         });
         builder.addCase(fetchCategoryProductsAsync.fulfilled, (state, action) => {
             state.categoryProducts = action.payload;

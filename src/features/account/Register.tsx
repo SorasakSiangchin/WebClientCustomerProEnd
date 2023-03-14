@@ -40,15 +40,15 @@ const Register = () => {
     const result: Result = await dispatch(registerAccount(data)).unwrap();
     if (result.isSuccess === true || result.statusCode === 200) {
       AppSwal({
-        icon : "success" ,
-        onThen : () => navigate("/login") ,
-        title : "บันทึกข้อมูลสำเร็จ" ,
+        icon: "success",
+        onThen: () => navigate("/login"),
+        title: "บันทึกข้อมูลสำเร็จ",
       });
     } else {
       AppSwal({
         icon: "warning",
-        onThen : () => {},
-        title : result.errorMessages[0] ,
+        onThen: () => { },
+        title: result.errorMessages[0],
       });
     };
   };
@@ -60,6 +60,7 @@ const Register = () => {
   });
 
   const [isName, setIsName] = useState(false);
+
   return (
     <Fragment>
       <TopSection text={Text} title="สมัครสมาชิก" backToPageTitle="หน้าแรก" backToPageUrl="/" />
@@ -261,8 +262,7 @@ const Register = () => {
               </div>
             </div>
           </Form>
-        }
-        }
+        }}
       </Formik>
     </Fragment>
   )

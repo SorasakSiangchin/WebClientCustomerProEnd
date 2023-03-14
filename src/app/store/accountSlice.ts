@@ -126,7 +126,7 @@ export const fetchCurrentAccount = createAsyncThunk<Account>(
         thunkAPI.dispatch(setAccount(account));
         const status = statusLogin();
         try {
-            const { result } = await agent.Account.currentAccount({ accountId: account.account.id, statusLogin: status });
+            const { result } = await agent.Account.currentAccount(account.account.id);
             localStorage.setItem('account', JSON.stringify({ ...account, account: result }));
             return result;
         } catch (error: any) {
@@ -147,7 +147,6 @@ export const fetchAccountsAsync = createAsyncThunk<Result, void, { state: RootSt
         try {
             const { items, metaData } = await agent.Account.list(params);
             thunkAPI.dispatch(setMetaData(metaData));
-            console.log(items)
             return items;
         } catch (error: any) {
             return thunkAPI.rejectWithValue({ error: error.data });
@@ -155,8 +154,21 @@ export const fetchAccountsAsync = createAsyncThunk<Result, void, { state: RootSt
     },
     {
         condition: () => {
+            // ถ้าเป็นจริงจะไปทำที่ backEnd
             if (!localStorage.getItem('account')) return false;
         }
+    }
+);
+
+export const fetchAccountAsync = createAsyncThunk<Result, any>(
+    'account/fetchAccountAsync',
+    async (accountId, thunkAPI) => {
+        try {
+            const result: Result = await agent.Account.currentAccount(accountId);
+            return result;
+        } catch (error: any) {
+            return thunkAPI.rejectWithValue({ error: error.data });
+        };
     }
 );
 
@@ -227,6 +239,13 @@ export const accountSlice = createSlice({
             if (isSuccess === true && statusCode === 200) {
                 accountAdapter.setAll(state, result); // set products
                 state.accountsLoaded = true;
+            };
+        });
+        builder.addCase(fetchAccountAsync.fulfilled, (state, action) => {
+            const { isSuccess, result, statusCode } = action.payload;
+            if (isSuccess === true && statusCode === 200) {
+                accountAdapter.upsertOne(state, result);
+                console.log(result)
             };
         });
         builder.addMatcher(isAnyOf(loginAccount.fulfilled, googleLoginAccount.fulfilled), (state, action) => {

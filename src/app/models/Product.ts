@@ -16,6 +16,7 @@ export interface Product {
     categoryProduct: CategoryProduct;
     levelProductID:number;
     levelProduct : LevelProduct;
+    imageProducts : ImageProduct[];
 }
 
 export interface CategoryProduct {

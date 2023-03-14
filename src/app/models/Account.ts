@@ -1,3 +1,5 @@
+import { Product } from "./Product";
+
 export interface Account {
     id: string;
     firstName: string;
@@ -7,7 +9,9 @@ export interface Account {
     phoneNumber: string;
     imageUrl: string;
     status: boolean;
+    loginBy?: any;
     roleID: number;
+    products?: Product[];
     role: Role;
 };
 

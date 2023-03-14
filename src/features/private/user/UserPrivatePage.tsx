@@ -31,11 +31,10 @@ enum SearchKey {
   Name = "name",
   Email = "email",
   PhoneNumber = "phoneNumber",
-}
+};
 
 const UserPrivatePage = () => {
   const { account } = useAppSelector(state => state.account);
-  const navigate = useNavigate();
   const { accounts, metaData, setParams, resetParams } = useAccount();
   const [status, setStatus] = useState<any>(null);
   const [searchKey, setSearchKey] = useState<string>("name");
@@ -63,13 +62,7 @@ const UserPrivatePage = () => {
       className: 'text-st',
       dataIndex: 'imageUrl',
       width: "20rem",
-      render: (data, more) => (
-        <>
-          {data.includes("https://lh3.googleusercontent.com") ?
-            <Image src={data} width={100} /> :
-            <Image src={backEndUtl + "account/" + data} width={100} />}
-        </>
-      ),
+      render: (data) => (<Image src={data} width={100} />),
 
     },
     {

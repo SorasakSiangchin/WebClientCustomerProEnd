@@ -139,7 +139,7 @@ const ProductStore = ({ id, accountId }: any) => {
     useEffect(() => {
         if (account === null) {
             const loadAccount = async () => {
-                const result: Result = await agent.Account.currentAccount({ accountId: accountId, statusLogin: status });
+                const result: Result = await agent.Account.currentAccount(accountId);
                 if (result.isSuccess === true && result.statusCode === 200) setAccount(result.result);
             }
             loadAccount();
@@ -151,6 +151,7 @@ const ProductStore = ({ id, accountId }: any) => {
             const loadProducts = async () => {
                 const result: Result = await agent.Product.getByIdAccount(accountId);
                 if (result.isSuccess === true && result.statusCode === 200) setProducts(result.result);
+                console.log(result.result)
             }
             loadProducts();
         }

@@ -39,6 +39,7 @@ const ProductList = () => {
   const { cart, itemCount, subtotal } = useCart();
 
   const [isViewMode, setIsViewMode] = useState(false);
+
   const setGridViewMode = () => setIsViewMode(false);
   const setListViewMode = () => setIsViewMode(true);
 
@@ -53,60 +54,66 @@ const ProductList = () => {
         <div className="row">
           <div className="col-main sidebar col-sm-9 col-sm-push-3 product-grid">
             <div className="pro-coloumn">
-              <article>
-                <div className="toolbar">
-                  <div className="sorter">
-                    <Space direction="horizontal">
-                      <Button size="middle" onClick={setGridViewMode} icon={<AppstoreOutlined />} type={!isViewMode ? "primary" : "default"}></Button>
-                      <Button size="middle" onClick={setListViewMode} icon={<UnorderedListOutlined />} type={isViewMode ? "primary" : "default"}></Button>
-                    </Space>
-                  </div>
-                  <div className="limiter">
-                    <Form>
-                      <Form.Item
-                        label="แสดง"
-                      >
-                        <Space>
-                          <Select
-                            size='middle'
-                            defaultValue="9"
-                            style={{ width: "60px" }}
-                            options={OptionPager}
-                            onChange={(page) => {
-                              var result: number = +page; // แปลงเป็น int
-                              dispatch(setParams({ pageSize: result }));
-                            }}
-                          />
-                          <Button icon={<RedoOutlined />} onClick={reset} />
-                        </Space>
-                      </Form.Item>
-                    </Form>
-                  </div>
+
+              <div className="toolbar">
+                <div className="sorter">
+                  <Space direction="horizontal">
+                    <Button size="middle" onClick={setGridViewMode} icon={<AppstoreOutlined />} type={!isViewMode ? "primary" : "default"}></Button>
+                    <Button size="middle" onClick={setListViewMode} icon={<UnorderedListOutlined />} type={isViewMode ? "primary" : "default"}></Button>
+                  </Space>
                 </div>
-                {/* #region product list */}
-                <div className="category-products">
-                  {showProducts.length > 0 && !isViewMode ? <ul className={"products-grid"}  >
+                <div className="limiter">
+                  <Form>
+                    <Form.Item
+                      label="แสดง"
+                    >
+                      <Space>
+                        <Select
+                          size='middle'
+                          defaultValue="9"
+                          style={{ width: "60px" }}
+                          options={OptionPager}
+                          onChange={(page) => {
+                            var result: number = +page; // แปลงเป็น int
+                            dispatch(setParams({ pageSize: result }));
+                          }}
+                        />
+                        <Button icon={<RedoOutlined />} onClick={reset} />
+                      </Space>
+                    </Form.Item>
+                  </Form>
+                </div>
+              </div>
+              {/* #region product list */}
+              <div className="category-products">
+                {showProducts.length > 0 && !isViewMode ?
+                  <ul className={"products-grid"}>
                     {showProducts}
-                  </ul> : <ol className={"products-list"}  >
+                  </ul> :
+                  <ol className={"products-list"}  >
                     {showProducts}
-                  </ol>}
-                  {showProducts.length <= 0 && <div className={"products-grid"} style={{
+                  </ol>
+                }
+                {showProducts.length <= 0 &&
+                  <div className={"products-grid"} style={{
                     display: "flex",
                     justifyContent: "center",
                     alignItems: "center",
                     marginTop: "50px",
-                  }}  > <Empty description="ไม่พบสินค้า" /></div>}
-                </div>
-                {/* #endregion */}
-                {showProducts.length > 0 && metaData && (
-                  <AppPagination
-                    metaData={metaData}
-                    onPageChange={(page: number) =>
-                      dispatch(setParams({ pageNumber: page }))
-                    }
-                  />
-                )}
-              </article>
+                  }}>
+                    <Empty className='text-st' description="ไม่พบสินค้า" />
+                  </div>
+                }
+              </div>
+              {/* #endregion */}
+              {showProducts.length > 0 && metaData && (
+                <AppPagination
+                  metaData={metaData}
+                  onPageChange={(page: number) =>
+                    dispatch(setParams({ pageNumber: page }))
+                  }
+                />
+              )}
             </div>
           </div>
           <aside className="col-left sidebar col-sm-3 col-xs-12 col-sm-pull-9 wow bounceInUp animated">

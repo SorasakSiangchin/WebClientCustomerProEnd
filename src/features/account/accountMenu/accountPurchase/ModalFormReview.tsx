@@ -144,6 +144,7 @@ const ModalFormReview = ({ openModal, orderItems, setOpenModal }: Props) => {
                                             onThen: () => {
                                                 setOpenModal(false);
                                                 onCancel();
+                                                onLoad();
                                             },
                                             title: "เรียบร้อย!",
                                         });

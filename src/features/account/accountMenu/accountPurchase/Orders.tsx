@@ -42,6 +42,7 @@ const Orders = ({ orders, setOrderPage, setOrderId, setDataDelivery }: Props) =>
             const [dataEvidence, setDataEvidence] = useState<EvidenceMoneyTransfer | null>(null);
             const [openModalFormReview, setOpenModalFormReview] = useState<boolean>(false);
             const [delivery, setDelivery] = useState<Delivery | null>(null);
+            
             useEffect(() => {
                 loadData();
             }, []);
@@ -287,7 +288,7 @@ export const AvatarAccountByProductId = ({ productId }: any) => {
             const { result, isSuccess, statusCode }: Result = await agent.Product.detail(productId);
             if (isSuccess && statusCode === 200) {
                 const { accountID } = result as Product
-                const resultAccount: Result = await agent.Account.currentAccount({ accountId: accountID });
+                const resultAccount: Result = await agent.Account.currentAccount(accountID);
                 if (resultAccount.isSuccess && resultAccount.statusCode === 200) setAccount(resultAccount.result);
             };
         }
@@ -297,7 +298,7 @@ export const AvatarAccountByProductId = ({ productId }: any) => {
         avatar={<Avatar src={account?.imageUrl} />}
         title={account?.firstName}
     />;
-}
+};
 
 const loadEvidence = async (orderId: any) => {
     const { isSuccess, statusCode, result }: Result = await agent.EvidenceMoneyTransfer.get(orderId);
@@ -309,6 +310,6 @@ const loadCancelEvidence = async (orderId: any) => {
     const { isSuccess, statusCode, result }: Result = await agent.EvidenceMoneyTransfer.getCancel(orderId);
     if (isSuccess && statusCode === 200) return result;
     return null;
-}
+};
 
 export default Orders

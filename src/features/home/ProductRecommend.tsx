@@ -1,5 +1,5 @@
-import { EditOutlined, EllipsisOutlined, SettingOutlined } from '@ant-design/icons';
-import { Card, Col, Row } from 'antd';
+import { EditOutlined, EllipsisOutlined, HeartFilled, SettingOutlined, ShoppingCartOutlined } from '@ant-design/icons';
+import { Button, Card, Col, Row } from 'antd';
 import { Product } from '../../app/models/Product';
 import { currencyFormat } from '../../app/util/util';
 
@@ -28,9 +28,12 @@ const ProductRecommend = ({ productRecommend }: any) => {
                   />
                 }
                 actions={[
-                  <SettingOutlined key="setting" />,
-                  <EditOutlined key="edit" />,
-                  <EllipsisOutlined key="ellipsis" />,
+                  <Button className='text-st' type="text" icon={<HeartFilled style={{ fontSize: "15px" }} />}>
+                    รายการโปรด
+                  </Button>,
+                  <Button className='text-st' type="text" icon={<ShoppingCartOutlined style={{ fontSize: "15px" }} />}>
+                    สินค้าที่คล้ายกัน
+                  </Button>,
                 ]}
               >
                 <Card.Meta

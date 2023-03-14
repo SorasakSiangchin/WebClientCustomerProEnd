@@ -77,7 +77,7 @@ const ProductDetailPrivatePage = () => {
     id: "",
     formFiles: null,
     productID: product?.id
-  }
+  };
 
   const handleChange: UploadProps['onChange'] = async (info: UploadChangeParam<UploadFile>) => {
     if (info.file.status === 'uploading') {
@@ -94,13 +94,14 @@ const ProductDetailPrivatePage = () => {
 
   const onDelete = (id: any) => {
     AppSwalConfirm({
-      icon : "warning" ,
-      onThen :(result: any) => {
-           if (result.isConfirmed) {
-             dispatch(deleteDetailProductAsync(id));
-             dispatch(reSetDetailProduct());
-           }} ,
-      title : "ลบรายละเอียดหรือไม่?"
+      icon: "warning",
+      onThen: (result: any) => {
+        if (result.isConfirmed) {
+          dispatch(deleteDetailProductAsync(id));
+          dispatch(reSetDetailProduct());
+        }
+      },
+      title: "ลบรายละเอียดหรือไม่?"
     });
   };
 

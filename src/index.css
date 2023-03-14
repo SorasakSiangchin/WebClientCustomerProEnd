@@ -3970,13 +3970,6 @@ ul.pdt-list li.item a img.image-hover {
   list-style: none;
 }
 
-.products-grid .link-wishlist:before {
-  content: "\f004";
-}
-
-.products-grid .link-compare:before {
-  content: "\f012";
-}
 
 .products-grid .link-wishlist {
   color: #252932;
@@ -5092,14 +5085,6 @@ ul.pdt-list li.item a img.image-hover {
   background: #D5447E;
 }
 
-.col-item .actions-links .add-to-links a.link-wishlist:before {
-  content: "\f004";
-}
-
-.col-item .actions-links .add-to-links a.link-compare:before {
-  content: "\f012";
-}
-
 .col-item .actions-links .add-to-links a.link-wishlist {
   color: #fff;
   font-family: "FontAwesome";
@@ -5175,7 +5160,7 @@ ul.pdt-list li.item a img.image-hover {
   opacity: 8;
   position: absolute;
   margin-top: 0px;
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  border: 1px solid #ffffff4d;
   border-top: none;
   border-bottom: none;
   width: 40px;
@@ -5222,19 +5207,6 @@ ul.pdt-list li.item a img.image-hover {
   color: #D5447E;
 }
 
-/*.actions button.button.btn-cart {
-background: #fff;
-border: 1px solid #ddd;
-margin: 10px 8px 0 8px;
-padding: 9px 10px 9px 10px;
-color: #333;
-line-height: 14px;
-transition: color 300ms ease-in-out 0s, background-color 300ms ease-in-out 0s, background-position 300ms ease-in-out 0s;
-}
-.actions button.button.btn-cart:hover {
-background: #333;
-color: #fff;
-}*/
 .products-list .desc .link-learn {
   font-size: 13px;
   font-weight: normal;
@@ -5251,14 +5223,6 @@ color: #fff;
   width: 100%;
 }
 
-/*.actions button.button.btn-cart span {
-font-family:  'Open Sans', sans-serif;;
-font-size: 11px;
-padding: 0 8px;
-font-weight: bold;
-margin-left: 0;
-text-transform: uppercase
-}*/
 .promo-banner-section {
   margin: 5px auto 25px;
 }
@@ -5882,10 +5846,6 @@ text-transform: uppercase
   z-index: 100;
   position: absolute;
   margin-top: -35px;
-}
-
-.col-item .actions .add-to-links a.link-wishlist:before {
-  content: "\f004";
 }
 
 .col-item .actions .add-to-links a.link-compare:before {
@@ -9802,12 +9762,6 @@ li .list {
 .link-edit {
   padding: 0;
   background: none;
-}
-
-.products-list .actions .add-to-links a.link-wishlist:before {
-  content: "\f004";
-  font-family: 'Mitr', sans-serif;
-  font-weight: 600;
 }
 
 .products-list .actions .add-to-links a.link-compare:before {

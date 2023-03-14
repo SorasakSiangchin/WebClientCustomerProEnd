@@ -144,9 +144,7 @@ const ProductFormPrivate = () => {
                 <BootstrapCol sm={8} >
                   <Row gutter={24}>
                     <Col span={15}>
-                      <Form.Item
-                        label={<Ts>ชื่อ</Ts>}
-                      >
+                      <Form.Item label={<Ts>ชื่อ</Ts>}>
                         <Input
                           type="text"
                           size="middle"
@@ -163,9 +161,7 @@ const ProductFormPrivate = () => {
                       </Form.Item >
                     </Col>
                     <Col span={9}>
-                      <Form.Item
-                        label={<Ts>ราคา</Ts>}
-                      >
+                      <Form.Item label={<Ts>ราคา</Ts>}>
                         <InputNumber
                           min={100}
                           size="middle"
