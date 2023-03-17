@@ -177,6 +177,11 @@ const Review = {
     getByIdProduct: (params: any) => requests.post("review/productId", params)
 };
 
+const Payments = {
+    createPaymentIntent: (accountId : any) => requests.post(`order/payment?accountId=${accountId}`, {})
+};
+
+
 const agent = {
     Product,
     Account,
@@ -193,7 +198,8 @@ const agent = {
     Report,
     Delivery,
     StatusDelivery,
-    Review
+    Review,
+    Payments
 };
 
 export default agent;

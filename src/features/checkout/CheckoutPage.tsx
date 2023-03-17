@@ -1,4 +1,4 @@
-import { Avatar, Button, Card, Image, Space, Table } from 'antd';
+import { Button, Card, Image, Space, Table } from 'antd';
 import React, { Fragment, useEffect, useState } from 'react';
 import MainContainer from '../../app/layout/MainContainer';
 import TopSection from '../../app/layout/TopSection';
@@ -17,6 +17,7 @@ import { crateOrderAsync } from '../../app/store/orderSlice';
 import { fetchCartAsync } from '../../app/store/cartSlice';
 import AppAvatarAccount from '../../app/components/AppAvatarAccount';
 import AppSwal from '../../app/components/AppSwal';
+import CardPaymentMethod from './CardPaymentMethod';
 
 interface DataType {
     key: string;
@@ -68,6 +69,7 @@ const CheckoutPage = () => {
     const { state } = useLocation();
     const dispatch = useAppDispatch();
     const [accountId, setAccountId] = useState<string[]>([]);
+    const [paymentMethod, setPaymentMethod] = useState<any>(null);
     const { addresses } = useAddress();
     const address = addresses.find(x => x.status === true)
     const navigate = useNavigate();
@@ -105,11 +107,26 @@ const CheckoutPage = () => {
             }
         }),
         accountIdFromProduct: accountId,
-        cartID: state.cartId
+        cartID: state.cartId,
+        paymentMethod: paymentMethod
     };
 
     const handleClickOrder = async () => {
-        if (address) {
+        if (!address) {
+            AppSwal({
+                icon: "warning",
+                onThen: () => { },
+                title: "กรุณาเลือกที่อยู่"
+            });
+        }
+        else if (!paymentMethod) {
+            AppSwal({
+                icon: "warning",
+                onThen: () => { },
+                title: "กรุณาเลือกช่องทางการชำระเงิน"
+            });
+        }
+        else {
             const result: Result = await dispatch(crateOrderAsync(orderRequest)).unwrap();
             if (result.isSuccess === true && result.statusCode === 200) {
                 AppSwal({
@@ -122,14 +139,8 @@ const CheckoutPage = () => {
                     timer: 1000
                 });
             };
-        } else {
-            AppSwal({
-                icon: "warning",
-                onThen: () => { },
-                title: "กรุณาเลือกที่อยู่"
-            });
         }
-    }
+    };
 
     const showProduct = React.Children.toArray(accountId.map(id => {
         const product = state.dataCart.filter((e: any) => e.accountId === id);
@@ -198,6 +209,7 @@ const CheckoutPage = () => {
                             >
                                 <CheckoutAddress address={address} />
                             </Card>
+                            <CardPaymentMethod setPaymentMethod={setPaymentMethod} paymentMethod={paymentMethod} />
                             <Card
                                 title="การชำระเงิน"
                                 className="block block-progress text-st"

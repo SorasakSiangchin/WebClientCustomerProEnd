@@ -74,7 +74,7 @@ const CartPage = () => {
             dataIndex: 'amount',
             render: (data, more) => <Space direction='vertical'>
                 <InputNumber className='text-st' onChange={(amount) => handleInputChange(amount, more)} size="middle" min={1} max={more.stock} defaultValue={data} />
-                <Container  className="text-st" style={{  color: "#FF6100" , width : "100%" }}>
+                <Container className="text-st" style={{ color: "#FF6100", width: "100%" }}>
                     เหลือสินค้าอยู่ {more.stock} ชิ้น
                 </Container>
             </Space>

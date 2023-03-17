@@ -11,8 +11,11 @@
   "dependencies": {
     "@ant-design/icons": "^4.8.0",
     "@mui/icons-material": "^5.10.16",
+    "@mui/lab": "^5.0.0-alpha.123",
     "@mui/material": "^5.10.17",
     "@reduxjs/toolkit": "^1.9.1",
+    "@stripe/react-stripe-js": "^2.0.0",
+    "@stripe/stripe-js": "^1.49.0",
     "antd": "^5.0.7",
     "antd-img-crop": "^4.6.0",
     "axios": "^1.2.1",

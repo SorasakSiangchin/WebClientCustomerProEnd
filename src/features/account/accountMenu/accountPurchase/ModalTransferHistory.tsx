@@ -2,7 +2,6 @@ import { Image, List, Modal, Space } from 'antd';
 import { currencyFormat, Ts } from '../../../../app/util/util';
 import { EvidenceMoneyTransfer } from '../../../../app/models/EvidenceMoneyTransfer';
 const ModalTransferHistory = ({ openModal, setOpenModal, cancelEvidence }: any) => {
-    [].length
     return (
         <Modal
             title="ประวัติการโอนเงิน"

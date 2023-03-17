@@ -8,9 +8,9 @@ const AppAvatarAccount = ({ accountId }: any) => {
     const [account, setAccount] = useState<Account | null>(null);
     useEffect(() => {
         const loadAccount = async () => {
-            const { result, isSuccess, statusCode }: Result = await agent.Account.currentAccount({accountId : accountId});
+            const { result, isSuccess, statusCode }: Result = await agent.Account.currentAccount(accountId);
             if (isSuccess === true && statusCode === 200) setAccount(result);
-        }
+        };
         loadAccount();
     }, []);
     return <Card.Meta

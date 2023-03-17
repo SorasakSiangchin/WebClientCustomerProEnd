@@ -106,7 +106,6 @@ const OrderDetail = ({ orderId, setOrderPage, delivery }: any) => {
                   title={item.name}
                   description={`x${item.amount}`}
                 />
-                {item.id}
                 <Ts>{currencyFormat(item.price)}</Ts>
               </List.Item>
             )}

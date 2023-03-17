@@ -3,11 +3,11 @@ import React, { Fragment, useEffect, useState } from 'react';
 import agent from '../../../../app/api/agent';
 import { Account } from '../../../../app/models/Account';
 import { Result } from '../../../../app/models/Interfaces/IResponse';
-import { Order } from '../../../../app/models/Order';
+import { Order, PaymentMethod, stripePromise } from '../../../../app/models/Order';
 import { Product } from '../../../../app/models/Product';
 import { EvidenceMoneyTransfer } from '../../../../app/models/EvidenceMoneyTransfer';
 import { currencyFormat, Ts } from '../../../../app/util/util';
-import ModalPayment from './ModalPayment';
+import ModalTransferPayment from './ModalTransferPayment';
 import ModalEvidence from './ModalEvidence';
 import { useAppDispatch } from '../../../../app/store/configureStore';
 import { fetchOrdersAsync, updateOrderAsync } from '../../../../app/store/orderSlice';
@@ -17,6 +17,8 @@ import { Delivery } from '../../../../app/models/Delivery';
 import { TfiTruck } from 'react-icons/tfi';
 import moment from 'moment-timezone';
 import ModalFormReview from './ModalFormReview';
+import ModalCreditCard from './ModalCreditCard';
+import { Elements } from '@stripe/react-stripe-js';
 interface Props {
     orders: Order[]
     setOrderPage?: any;
@@ -26,26 +28,37 @@ interface Props {
 
 const Orders = ({ orders, setOrderPage, setOrderId, setDataDelivery }: Props) => {
     const dispatch = useAppDispatch();
-    const [openModal, setOpenModal] = useState<boolean>(false);
-    const [id, setId] = useState<string>("");
 
-    const onClickButton = (orderId: any) => {
-        setOpenModal(true);
-        setId(orderId);
-    };
+    const [id, setId] = useState<string>("");
 
     const showOrder = orders?.length > 0 ? <Space direction='vertical' size="large" style={{ width: "100%" }}>
         {React.Children.toArray(orders?.map((order: Order) => {
             const [openModalEvidence, setOpenModalEvidence] = useState<boolean>(false);
+            const [openModalTransferPayment, setOpenModalTransferPayment] = useState<boolean>(false);
             const [openModalHistory, setOpenModalHistory] = useState<boolean>(false);
             const [dataCancelEvidence, setDataCancelEvidence] = useState<EvidenceMoneyTransfer[]>();
             const [dataEvidence, setDataEvidence] = useState<EvidenceMoneyTransfer | null>(null);
             const [openModalFormReview, setOpenModalFormReview] = useState<boolean>(false);
             const [delivery, setDelivery] = useState<Delivery | null>(null);
-            
+
+            const [openModalCreditCard, setOpenModalCreditCard] = useState<boolean>(false);
             useEffect(() => {
                 loadData();
             }, []);
+
+            const onClickOpenPaymentForm = (orderId: any) => {
+                switch (order.paymentMethod) {
+                    case PaymentMethod.TransferPayment:
+                        setOpenModalTransferPayment(true);
+                        setId(orderId);
+                        break;
+                    case PaymentMethod.CreditCard:
+                        setOpenModalCreditCard(true);
+                        break;
+                    default:
+                        break;
+                }
+            };
 
             const loadData = async () => {
                 const { isSuccess, result, statusCode }: Result = await agent.Delivery.getByIdOrder(order.id);
@@ -73,7 +86,7 @@ const Orders = ({ orders, setOrderPage, setOrderId, setDataDelivery }: Props) =>
                     return "กำลังรอการชำระเงิน"
                 } else if (dataEvidence !== null && order.orderStatus === 1) {
                     return "รอการอนุมัติ"
-                } else if (dataEvidence !== null && order.orderStatus === 2) {
+                } else if (order.orderStatus === 2) {
                     if (!order.customerStatus) return "ฉันได้ตรวจสอบและยอมรับสินค้า";
                     else return "ให้คะแนน";
                 } else {
@@ -182,17 +195,18 @@ const Orders = ({ orders, setOrderPage, setOrderId, setDataDelivery }: Props) =>
                             openModal={openModalEvidence}
                             setOpenModal={setOpenModalEvidence}
                         />}
-                    <ModalPayment openModal={openModal} setOpenModal={setOpenModal} orderId={id} setOrderId={setId} />
+                    <ModalTransferPayment openModal={openModalTransferPayment} setOpenModal={setOpenModalTransferPayment} orderId={id} setOrderId={setId} />
                     <ModalTransferHistory
                         setOpenModal={setOpenModalHistory}
                         openModal={openModalHistory}
                         cancelEvidence={dataCancelEvidence}
                     />
-                    <ModalFormReview 
+                    <ModalFormReview
                         openModal={openModalFormReview}
                         setOpenModal={setOpenModalFormReview}
                         orderItems={order.orderItems}
                     />
+                    <ModalCreditCard openModal={openModalCreditCard} setOpenModal={setOpenModalCreditCard} order={order} />
                     <List
                         itemLayout="horizontal"
                         size='small'
@@ -233,10 +247,10 @@ const Orders = ({ orders, setOrderPage, setOrderId, setDataDelivery }: Props) =>
                                             <Button
                                                 className='text-st'
                                                 onClick={() => {
-                                                    if (order.orderStatus !== 2) onClickButton(order.id);
+                                                    if (order.orderStatus !== 2) onClickOpenPaymentForm(order.id);
                                                     else {
                                                         if (!order.customerStatus) onConfirmCustomer();
-                                                        else  setOpenModalFormReview(true);
+                                                        else setOpenModalFormReview(true);
                                                     };
                                                 }}
                                                 type='primary'
@@ -275,9 +289,12 @@ const Orders = ({ orders, setOrderPage, setOrderId, setDataDelivery }: Props) =>
     </Space> : <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} className="text-st" description="ไม่มีการสั่งซื้อ" />
 
     return (
-        <Fragment>
-            {showOrder}
-        </Fragment>
+        <Elements stripe={stripePromise}>
+            <Fragment>
+                {showOrder}
+            </Fragment>
+        </Elements>
+
     )
 }
 

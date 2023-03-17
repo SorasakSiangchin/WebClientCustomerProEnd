@@ -26,7 +26,7 @@ const ValidateSchema = Yup.object().shape({
     formFiles: Yup.string().required('กรุณาเลือกไฟล์'),
 });
 
-const ModalPayment = ({ openModal, setOpenModal, orderId, setOrderId }: Props) => {
+const ModalTransferPayment = ({ openModal, setOpenModal, orderId, setOrderId }: Props) => {
     const dispatch = useAppDispatch();
     const [messageApi, contextHolder] = message.useMessage();
     const [imageUrl, setImageUrl] = useState<string>("");
@@ -67,7 +67,6 @@ const ModalPayment = ({ openModal, setOpenModal, orderId, setOrderId }: Props) =
                 const props: UploadProps = {
                     name: 'formFiles',
                     multiple: false,
-                    action: 'https://www.mocky.io/v2/5cc8019d300000980a055e76',
                     onChange: (info) => {
                         if (info.file.status === 'uploading') {
                             setLoading(true);
@@ -160,4 +159,4 @@ const ModalPayment = ({ openModal, setOpenModal, orderId, setOrderId }: Props) =
     )
 }
 
-export default ModalPayment
+export default ModalTransferPayment
