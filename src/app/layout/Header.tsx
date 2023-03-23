@@ -18,7 +18,7 @@ export const midLinks = [
 ];
 
 const Header = () => {
-    
+
     const { account } = useAppSelector(state => state.account);
     const { cart } = useAppSelector(state => state.cart);
 
@@ -35,7 +35,10 @@ const Header = () => {
                                 <div className="fl-nav-menu">
                                     <nav>
                                         <div className="mm-toggle-wrap">
-                                            <div className="mm-toggle"><i className="icon-align-justify"></i><span className="mm-label">Menu</span> </div>
+                                            <div className="mm-toggle">
+                                                <i className="icon-align-justify"></i>
+                                                <span className="mm-label">Menu</span>
+                                            </div>
                                         </div>
                                         <div className="nav-inner">
                                             <ul id="nav" className="hidden-xs">

@@ -28,7 +28,7 @@ const useProducts = () => {
     }, [productRecommendLoaded, dispatch]);
 
     useEffect(() => {
-        if (!productsLoaded) dispatch(fetchProductsAsync());
+    if (!productsLoaded) dispatch(fetchProductsAsync());
     }, [productsLoaded, dispatch]);
 
     useEffect(() => {

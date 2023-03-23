@@ -1,4 +1,10 @@
-import { CalendarOutlined, FacebookFilled, HeartFilled, HeartOutlined, InstagramFilled, ShoppingCartOutlined } from '@ant-design/icons';
+import {
+  CalendarOutlined,
+  FacebookFilled,
+  HeartFilled,
+  InstagramFilled,
+  ShoppingCartOutlined,
+} from '@ant-design/icons';
 import { Alert, Button, Image, Input, Rate, Space } from 'antd';
 import { Fragment, useState, useEffect } from 'react';
 import ImageGallery from 'react-image-gallery';
@@ -7,7 +13,7 @@ import AppButtonCart from '../../app/components/AppButtonCart';
 import { useAppDispatch, useAppSelector } from '../../app/store/configureStore';
 import { currencyFormat, Ts } from '../../app/util/util';
 import { fetchProductAsync, productSelectors } from '../../app/store/productSlice';
-import { FacebookShareButton } from "react-share";
+import { FacebookShareButton ,  } from "react-share";
 import MainContainer from '../../app/layout/MainContainer';
 import TitleTap from '../../app/layout/TitleTap';
 import ContentTap from '../../app/layout/ContentTap';
@@ -16,14 +22,13 @@ import AppSwal from '../../app/components/AppSwal';
 import useReview from '../../app/hooks/useReview';
 import useFavorite from '../../app/hooks/useFavorite';
 import { Product } from '../../app/models/Product';
-import { DataType } from '../cart/CartPage';
 import { OrderUsage } from '../../app/models/Order';
 
 interface IImageGallery {
   original: any;
   thumbnail: any;
   renderItem: any;
-};
+}
 
 const keysTap = ["reviews_tabs", "product_tabs_custom", "product_detail_tabs"];
 const titleTap = ["ความคิดเห็น", "ข้อมูลร้านค้า", "เพิ่มเติม"];
@@ -225,16 +230,13 @@ const ProductDetail = () => {
               <ul className="link">
                 <li className="fb">
                   <FacebookShareButton
-                    url={"https://www.youtube.com/watch?v=UTLgvSvPriE&list=RDMM15bPo11sfTM&index=4"}
+                    url={import.meta.env.VITE_APP_BACKEND_URL}
                     quote={""}
                     hashtag={"#hashtag"}
                     className="Demo__some-network__share-button"
                   >
                     <Button type="default" size='large' icon={<FacebookFilled className='img-opacity' style={{ fontSize: "22px", marginTop: "2px" }} />} />
                   </FacebookShareButton>
-                </li>
-                <li className="fb">
-                  <Button type="default" size='large' icon={<InstagramFilled className='img-opacity' style={{ fontSize: "22px", marginTop: "2px" }} />} />
                 </li>
                 <li style={{ fontSize: "25px", margin: "10px" }}>
                   |

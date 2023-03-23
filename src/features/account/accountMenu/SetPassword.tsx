@@ -1,4 +1,3 @@
-import React, { Fragment } from 'react'
 import { Container } from 'react-bootstrap';
 import { ColAccount } from '../AccountPage';
 import { Button, Form, Divider, Input } from 'antd';
@@ -13,7 +12,7 @@ import AppSwal from '../../../app/components/AppSwal';
 interface IValues {
     newPassword?: string;
     confirmPassword?: string;
-};
+}
 
 const SetPassword = () => {
     const { account } = useAppSelector(state => state.account);

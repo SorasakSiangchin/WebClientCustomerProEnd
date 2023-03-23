@@ -36,6 +36,7 @@ const AccountPersonal = () => {
         phoneNumber: account?.phoneNumber || "",
         roleID: account?.role.id || "",
         formFiles: {} || undefined,
+        status: account?.status || "" ,
         statusLogin: status
     };
 

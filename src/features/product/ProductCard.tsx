@@ -66,6 +66,7 @@ const ProductCard = ({ product, saleLabel = false, isViewMode = false, productsL
                                 <img src={product.imageUrl} alt="Fresh Organic Mustard Leaves " height="250px" />
                             </Link>
                             {checkDate && <div className="new-label new-top-left">ใหม่</div>}
+                            {product.categoryProductID === 999 && <div className="new-label new-top-left">หายาก</div>}
                             {product.stock === 0 && <div className="sale-label sale-top-right">สินค้าหมด</div>}
                         </div>
                     </div>
@@ -104,7 +105,7 @@ const ProductCard = ({ product, saleLabel = false, isViewMode = false, productsL
                     <img className="small-image" style={{ height: "30rem" }} src={product.imageUrl} alt="HTC Rhyme Sense" />
                 </div>
                 <div className="product-shop">
-                    <h2 className="product-name"><a href="product-detail.html" title="HTC Rhyme Sense">{product.name} </a></h2>
+                    <h2 className="product-name"><Link to="#">{product.name} </Link></h2>
                     <div className="ratings">
                         {product.averageScore > 0 ? <Rate style={{ width: "40%", fontSize: "100%" }} disabled value={product.averageScore} /> : ""}
                     </div>

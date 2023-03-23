@@ -1,7 +1,6 @@
-import { MailFilled, PhoneFilled } from '@ant-design/icons'
-import React from 'react'
-import { Link } from 'react-router-dom'
-import { midLinks } from './Header'
+import { MailFilled, PhoneFilled } from '@ant-design/icons';
+import { Link } from 'react-router-dom';
+import { midLinks } from './Header';
 
 const Footer = () => {
     return (
@@ -61,23 +60,7 @@ const Footer = () => {
             <div className="footer-top container">
                 <div>
                     <div className="row">
-                        <div className="col-xs-12 col-sm-4">
-                            <div className="social">
-                                <ul>
-                                    <li className="fb"><Link to=""></Link ></li>
-                                    <li className="tw"><Link to=""></Link ></li>
-                                    <li className="googleplus"><Link to=""></Link ></li>
-                                    <li className="rss"><Link to=""></Link ></li>
-                                    <li className="pintrest"><Link to=""></Link ></li>
-                                    <li className="linkedin"><Link to=""></Link ></li>
-                                    <li className="youtube"><Link to=""></Link ></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div className="col-sm-4 col-xs-12 coppyright">สรศักดิ์ เซี่ยงฉิน 63123250109 ( เพื่อการศึกษา ) </div>
-                        <div className="col-xs-12 col-sm-4">
-                            <div className="payment-accept"> <img src="images/payment-1.png" alt="" /> <img src="images/payment-2.png" alt="" /> <img src="images/payment-3.png" alt="" /> <img src="images/payment-4.png" alt="" /> </div>
-                        </div>
+                        <div className="col-sm-12 col-xs-12 coppyright">สรศักดิ์ เซี่ยงฉิน 63123250109 ( เพื่อการศึกษา ) </div>
                     </div>
                 </div>
             </div>
