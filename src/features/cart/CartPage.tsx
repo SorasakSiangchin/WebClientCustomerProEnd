@@ -7,7 +7,7 @@ import useCart from '../../app/hooks/useCart';
 import MainContainer from '../../app/layout/MainContainer';
 import TopSection from '../../app/layout/TopSection';
 import { useAppDispatch, useAppSelector } from '../../app/store/configureStore';
-import { currencyFormat, Text, Ts } from '../../app/util/util';
+import { currencyFormat, pathHome, Text, Ts } from '../../app/util/util';
 import { addCartItemAsync, removeCartItemAsync } from '../../app/store/cartSlice';
 import { useNavigate } from "react-router-dom";
 import { CartItem } from '../../app/models/Cart';
@@ -146,7 +146,7 @@ const CartPage = () => {
 
     return (
         <Fragment>
-            <TopSection text={Text} title="ตะกร้าสินค้า" backToPageTitle="หน้าแรก" backToPageUrl="/" />
+            <TopSection text={Text} title="ตะกร้าสินค้า" backToPageTitle="หน้าแรก" backToPageUrl={pathHome} />
             <MainContainer className="col1-layout wow bounceInUp animated">
                 <div className="cart wow bounceInUp animated">
                     <div className="table-responsive shopping-cart-tbl  container">

@@ -7,11 +7,12 @@ import { currencyFormat } from '../../app/util/util';
 import { useAppDispatch, useAppSelector } from '../../app/store/configureStore';
 import { removeCartItemAsync } from '../../app/store/cartSlice';
 import { CheckOutlined } from '@ant-design/icons';
+
 interface Props {
   cart: Cart
   itemCount?: number
   subtotal?: number
-}
+};
 
 const BlockCart = ({ cart, itemCount, subtotal }: Props) => {
   const heightShow = cart?.items.length ? "250px" : "120px";

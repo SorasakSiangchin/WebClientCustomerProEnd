@@ -9,9 +9,10 @@ import Lottie from "lottie-react";
 import IconSearch from "../../assets/icons/search.json";
 import { Button, Form, Input } from 'antd';
 import { setParams } from '../../app/store/productSlice';
+import { pathHome } from '../util/util';
 
 export const midLinks = [
-    { title: "หน้าแรก", path: "/" },
+    { title: "หน้าแรก", path: pathHome },
     { title: "เกี่ยวกับ", path: "/about" },
     { title: "สินค้า", path: "/product-list" },
 ];
@@ -28,7 +29,7 @@ const Header = () => {
                     <div id="header">
                         <div className="container">
                             <div className="header-container row">
-                                <div className="logo"> <Link to="/" title="index">
+                                <div className="logo"> <Link to={pathHome} title="index">
                                     <img src={"https://drive.google.com/uc?id=1F6-VLIM03K13GOPYiyuICjDCWQhdT5BR"} width="200px" alt="logo" />
                                 </Link> </div>
                                 <div className="fl-nav-menu">

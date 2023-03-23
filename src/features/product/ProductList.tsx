@@ -11,7 +11,7 @@ import { AppstoreOutlined, RedoOutlined, UnorderedListOutlined } from '@ant-desi
 import { CategoryProduct } from '../../app/models/Product';
 import SideNavCategories from './SideNavCategories';
 import useProducts from '../../app/hooks/useProducts';
-import { Text } from '../../app/util/util';
+import { pathHome, Text } from '../../app/util/util';
 import MainContainer from '../../app/layout/MainContainer';
 import useCart from '../../app/hooks/useCart';
 import { Cart } from '../../app/models/Cart';
@@ -49,7 +49,7 @@ const ProductList = () => {
 
   return (
     <Fragment>
-      <TopSection text={Text} title="สินค้า" backToPageTitle="หน้าแรก" backToPageUrl="/" />
+      <TopSection text={Text} title="สินค้า" backToPageTitle="หน้าแรก" backToPageUrl={pathHome} />
       <MainContainer className="col2-left-layout bounceInUp animated">
         <div className="row">
           <div className="col-main sidebar col-sm-9 col-sm-push-3 product-grid">

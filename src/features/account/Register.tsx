@@ -15,7 +15,7 @@ import { fetchRolesAsync, registerAccount, value } from '../../app/store/account
 import { useAppDispatch, useAppSelector } from '../../app/store/configureStore';
 import AppPasswordInput from '../../app/components/AppPasswordInput';
 import { Result } from '../../app/models/Interfaces/IResponse';
-import { beforeUploadAntd, Text } from '../../app/util/util';
+import { beforeUploadAntd, pathHome, Text } from '../../app/util/util';
 import AppSwal from '../../app/components/AppSwal';
 import "./Register.css";
 
@@ -63,7 +63,7 @@ const Register = () => {
 
   return (
     <Fragment>
-      <TopSection text={Text} title="สมัครสมาชิก" backToPageTitle="หน้าแรก" backToPageUrl="/" />
+      <TopSection text={Text} title="สมัครสมาชิก" backToPageTitle="หน้าแรก" backToPageUrl={pathHome} />
       <Formik
         initialValues={value}
         validationSchema={RegisterValidate}

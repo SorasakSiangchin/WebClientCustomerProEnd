@@ -25,9 +25,10 @@ import AboutPage from "../../features/about/AboutPage";
 import Error404 from "../../features/error404/Error404";
 import UserDetailPrivatePage from "../../features/private/user/UserDetailPrivatePage";
 import ReservePrivate from "../../features/private/order/ReservePrivate";
+import { pathHome } from "../util/util";
 
 export const mainRoutes = <Routes>
-    <Route path='/' element={<HomePage />} />
+    <Route path={pathHome} element={<HomePage />} />
     <Route path='/about' element={<AboutPage />} />
     <Route path='*' element={<Error404 />} />
     <Route path='/login' element={

@@ -9,7 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import { Result } from '../../app/models/Interfaces/IResponse';
 import { LockFilled, UserAddOutlined } from '@ant-design/icons';
 import AppButton from '../../app/components/AppButton';
-import { clientId, Text } from '../../app/util/util';
+import { clientId, pathHome, Text } from '../../app/util/util';
 import MainContainer from '../../app/layout/MainContainer';
 import { GoogleLogin } from "react-google-login";
 import { gapi } from "gapi-script";
@@ -74,7 +74,7 @@ const Login = () => {
 
   return (
     <Fragment>
-      <TopSection text={Text} title="เข้าสู่ระบบ" backToPageTitle="หน้าแรก" backToPageUrl="/" />
+      <TopSection text={Text} title="เข้าสู่ระบบ" backToPageTitle="หน้าแรก" backToPageUrl={pathHome} />
       <MainContainer className="col1-layout wow bounceInUp animated animated">
         <div className="account-login">
           <Formik

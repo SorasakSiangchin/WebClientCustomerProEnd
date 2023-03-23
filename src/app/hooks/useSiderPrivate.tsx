@@ -7,6 +7,7 @@ import { VscAccount, VscChevronLeft, VscDashboard, VscPackage } from 'react-icon
 import { useNavigate } from 'react-router-dom';
 import { resetProductParams } from '../../app/store/productSlice';
 import { useAppDispatch, useAppSelector } from '../store/configureStore';
+import { pathHome } from '../util/util';
 const { Sider } = Layout;
 type MenuItem = Required<MenuProps>['items'][number];
 
@@ -71,7 +72,7 @@ const useSiderPrivate = () => {
         navigate("/private/reserve");
         break;
       case "9":
-        navigate("/");
+        navigate(pathHome);
         dispatch(resetProductParams());
         break;
       default:

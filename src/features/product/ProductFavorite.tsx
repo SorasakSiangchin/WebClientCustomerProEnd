@@ -3,13 +3,11 @@ import React, { Fragment, useState } from 'react';
 import useFavorite from '../../app/hooks/useFavorite';
 import MainContainer from '../../app/layout/MainContainer';
 import TopSection from '../../app/layout/TopSection';
-import { currencyFormat, Text } from '../../app/util/util';
+import { currencyFormat, pathHome, Text } from '../../app/util/util';
 import Meta from 'antd/es/card/Meta';
 import { Link, useNavigate } from 'react-router-dom';
 import { CheckboxValueType } from 'antd/es/checkbox/Group';
 import usePagination from '../../app/hooks/usePagination';
-
-
 
 const ProductFavorite = () => {
     const { infoFavorite, removeFavorite } = useFavorite();
@@ -25,8 +23,8 @@ const ProductFavorite = () => {
             type: 'success',
             content: 'เลิกถูกใจ',
             duration: 1,
-            className: "center"
-        }).then(() => { removeFavorite(id) });
+            className: "center text-st"
+        }).then(() =>  removeFavorite(id));
     };
 
     const showProduct = React.Children.toArray(infoFavorite?.map((product, index) => index >= minIndex &&
@@ -35,7 +33,7 @@ const ProductFavorite = () => {
                 hoverable
                 className='text-st'
                 style={{ width: "100%", marginTop: "30px" }}
-                cover={<img alt="example" onClick={() => navigate(`/product-detail/${product.id}`)} src={product.imageUrl} width="100%" height="200" />}
+                cover={<img alt="example" onClick={() => navigate(`/product/detail/${product.id}`)} src={product.imageUrl} width="100%" height="200" />}
                 actions={[
                     <Link to="#" onClick={() => onDisliked([product.id])}>เลิกถูกใจ</Link>,
                     <Link to="#">สินค้าที่คล้ายกัน</Link>,
@@ -60,7 +58,7 @@ const ProductFavorite = () => {
                 text={Text}
                 title="สิ่งที่ฉันถูกใจ"
                 backToPageTitle="หน้าแรก"
-                backToPageUrl="/"
+                backToPageUrl={pathHome}
                 isMode={true}
                 textSize={true}
                 editStatus={editStatus}

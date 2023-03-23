@@ -9,7 +9,7 @@ import TopSection from '../../app/layout/TopSection';
 import { Product } from '../../app/models/Product';
 import { useAppDispatch, useAppSelector } from '../../app/store/configureStore';
 import { fetchProductAsync, fetchProductsAsync, initParams, productSelectors, resetProductParams, setParams } from '../../app/store/productSlice';
-import { currencyFormat } from '../../app/util/util';
+import { currencyFormat, pathHome } from '../../app/util/util';
 
 const ProductsSimilar = () => {
     const dispatch = useAppDispatch();
@@ -41,7 +41,7 @@ const ProductsSimilar = () => {
                 text={""}
                 title="สินค้าที่คล้ายกัน"
                 backToPageTitle="หน้าแรก"
-                backToPageUrl="/"
+                backToPageUrl={pathHome}
             />
             <MainContainer className="col1-layout wow bounceInUp animated animated">
                 <div className="row">

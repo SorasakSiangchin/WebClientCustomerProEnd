@@ -1,7 +1,7 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import MainContainer from '../../app/layout/MainContainer';
 import TopSection from '../../app/layout/TopSection';
-import { clientId, Text } from '../../app/util/util';
+import { clientId, pathHome, Text } from '../../app/util/util';
 import { CalendarOutlined, EditFilled } from '@ant-design/icons';
 import { Avatar, Card, Menu } from 'antd';
 import type { MenuProps } from 'antd/es/menu';
@@ -69,7 +69,7 @@ const AccountPage = () => {
 
     return (
         <Fragment>
-            <TopSection text={Text} title="บัญชีของฉัน" backToPageTitle="หน้าแรก" backToPageUrl="/" />
+            <TopSection text={Text} title="บัญชีของฉัน" backToPageTitle="หน้าแรก" backToPageUrl={pathHome} />
             <MainContainer className="col2-layout">
                 <div className="row">
                     <ColAccount className="col-right sidebar col-sm-3">

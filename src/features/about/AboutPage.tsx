@@ -2,6 +2,7 @@ import { Carousel, Col, Row } from 'antd';
 import { Fragment } from 'react';
 import MainContainer from '../../app/layout/MainContainer';
 import TopSection from '../../app/layout/TopSection';
+import { pathHome } from '../../app/util/util';
 
 const AboutPage = () => {
     
@@ -15,7 +16,7 @@ const AboutPage = () => {
 
     return (
         <Fragment>
-            <TopSection text={""} title="เกี่ยวกับ" backToPageTitle="หน้าแรก" backToPageUrl="/" />
+            <TopSection text={""} title="เกี่ยวกับ" backToPageTitle="หน้าแรก" backToPageUrl={pathHome} />
             <MainContainer className="col2-left-layout bounceInUp animated">
                 <div className="row">
                     <div className="std">

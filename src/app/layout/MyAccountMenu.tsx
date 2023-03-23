@@ -32,7 +32,6 @@ export const MyAccountMenu = ({ account }: Prop) => {
         confirmButtonText: 'ตกลง'
     }).then((result) => {
         if (result.isConfirmed) onLogout(renderProps);
-        
     });
 
     const googleLogout = <GoogleLogout

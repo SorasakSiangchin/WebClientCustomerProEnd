@@ -4,15 +4,14 @@ import LayoutPrivate from '../LayoutPrivate'
 import type { ColumnsType } from 'antd/es/table';
 import { Role } from '../../../app/models/Account';
 import useAccount from '../../../app/hooks/useAccount';
-import { backEndUtl, Ts } from '../../../app/util/util';
+import { Ts } from '../../../app/util/util';
 import { useAppDispatch, useAppSelector } from '../../../app/store/configureStore';
-import { loadAccountStorage, setAccount } from '../../../app/store/accountSlice';
 import { Option } from 'antd/es/mentions';
 import AppPagination from '../../../app/components/AppPagination';
 import { RedoOutlined } from '@ant-design/icons';
 import agent from '../../../app/api/agent';
 import { Result } from '../../../app/models/Interfaces/IResponse';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 interface DataType {
   key: React.Key;
@@ -25,13 +24,13 @@ interface DataType {
   firstName: string;
   lastName: string;
   password: string;
-};
+}
 
 enum SearchKey {
   Name = "name",
   Email = "email",
   PhoneNumber = "phoneNumber",
-};
+}
 
 const UserPrivatePage = () => {
   const { account } = useAppSelector(state => state.account);

@@ -3,7 +3,7 @@ import React, { Fragment, useEffect, useState } from 'react';
 import MainContainer from '../../app/layout/MainContainer';
 import TopSection from '../../app/layout/TopSection';
 import type { ColumnsType } from 'antd/es/table';
-import { currencyFormat, Ts } from '../../app/util/util';
+import { currencyFormat, pathHome, Ts } from '../../app/util/util';
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import agent from '../../app/api/agent';
 import { Result } from '../../app/models/Interfaces/IResponse';
@@ -215,7 +215,7 @@ const CheckoutPage = () => {
 
     return (
         <Fragment>
-            <TopSection text={""} title={state.cartId ? "ทำการสั่งซื้อ" : "ทำการสั่งจอง"} backToPageTitle="หน้าแรก" backToPageUrl="/" />
+            <TopSection text={""} title={state.cartId ? "ทำการสั่งซื้อ" : "ทำการสั่งจอง"} backToPageTitle="หน้าแรก" backToPageUrl={pathHome}/>
             <MainContainer className="col2-right-layout">
                 <div className="row">
                     <section className="col-main col-sm-8">
