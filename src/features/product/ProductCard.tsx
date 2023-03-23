@@ -1,7 +1,6 @@
 import { ExclamationCircleFilled, HeartFilled, ShoppingCartOutlined, ShoppingOutlined } from '@ant-design/icons';
-import { Avatar, Button, Card, Space } from 'antd';
+import { Button, Card, Rate, Space } from 'antd';
 import { Fragment, useEffect, useState } from 'react';
-import { CiShoppingBasket } from 'react-icons/ci';
 import { Link, useNavigate } from 'react-router-dom';
 import useFavorite from '../../app/hooks/useFavorite';
 import { Product } from '../../app/models/Product';
@@ -63,7 +62,7 @@ const ProductCard = ({ product, saleLabel = false, isViewMode = false, productsL
                 <div className="item-inner">
                     <div className="item-img">
                         <div className="item-img-info">
-                            <Link to={`/product-detail/${product.id}`} title="Fresh Organic Mustard Leaves " className="product-image">
+                            <Link to={`/product/detail/${product.id}`} title="Fresh Organic Mustard Leaves " className="product-image">
                                 <img src={product.imageUrl} alt="Fresh Organic Mustard Leaves " height="250px" />
                             </Link>
                             {checkDate && <div className="new-label new-top-left">ใหม่</div>}
@@ -76,20 +75,23 @@ const ProductCard = ({ product, saleLabel = false, isViewMode = false, productsL
                             <div className="item-content">
                                 <div className="rating">
                                     <div className="ratings">
-                                        <div className="rating-box">
-                                            <div className="rating" style={{ width: "80%" }}></div>
-                                        </div>
-                                        <p className="rating-links"><Link to="">1 Review(s)</Link> <span className="separator">|</span> <Link to="">Add Review</Link> </p>
+                                        <Rate style={{ width: "40%", fontSize: "100%" }} disabled value={product.averageScore} />
                                     </div>
                                 </div>
                                 <div className="item-price">
-                                    <div className="price-box"><span className="regular-price"><span className="price">{currencyFormat(product.price)}</span> </span> </div>
+                                    <div className="price-box">
+                                        <span className="regular-price">
+                                            <span className="price">
+                                                {currencyFormat(product.price)}
+                                            </span>
+                                        </span>
+                                    </div>
                                 </div>
                                 <div className="restuarent">
                                     <Link to="#" onClick={() => onFavorite(product)} >
                                         <HeartFilled style={{ fontSize: "15px", color: statusFavorite ? "red" : "" }} /> รายการโปรด
                                     </Link>
-                                    <Link to="/products-similar">
+                                    <Link to={`/products/similar/${product.id}`}>
                                         <ShoppingCartOutlined style={{ fontSize: "15px" }} /> สินค้าที่คล้ายกัน
                                     </Link>
                                 </div>
@@ -104,10 +106,7 @@ const ProductCard = ({ product, saleLabel = false, isViewMode = false, productsL
                 <div className="product-shop">
                     <h2 className="product-name"><a href="product-detail.html" title="HTC Rhyme Sense">{product.name} </a></h2>
                     <div className="ratings">
-                        <div className="rating-box">
-                            <div style={{ width: "60%" }} className="rating"></div>
-                        </div>
-                        <p className="rating-links"> <a href="#/review/product/list/id/167/category/35/">1 Review(s)</a> <span className="separator">|</span> <a href="#review-form">Add Your Review</a> </p>
+                        {product.averageScore > 0 ? <Rate style={{ width: "40%", fontSize: "100%" }} disabled value={product.averageScore} /> : ""}
                     </div>
                     <div className="desc std">
                         <p>{product.description} </p>
@@ -141,7 +140,7 @@ const ProductCard = ({ product, saleLabel = false, isViewMode = false, productsL
                                 รายการโปรด
                             </Button>
                             <Button
-                                onClick={() => navigate(`/product-detail/${product.id}`)}
+                                onClick={() => navigate(`/product/detail/${product.id}`)}
                                 className="button"
                                 style={{ height: "100%", display: "flex", alignItems: "center", backgroundColor: "#A9A7A7" }}
                                 htmlType="button"
@@ -160,7 +159,12 @@ const ProductCard = ({ product, saleLabel = false, isViewMode = false, productsL
 
 export default ProductCard;
 
-// ลดราคา
-{/*    <span className="price-label">
-<p className="old-price"> <span className="price-label"></span> <span id="old-price-212" className="price"> $442.99 </span> </p>
-                            </span>  */}
+
+{/*  
+
+// ลดราคา  
+<span className="price-label">
+    <p className="old-price"> <span className="price-label"></span> <span id="old-price-212" className="price"> $442.99 </span> </p>
+</span>  
+
+*/}

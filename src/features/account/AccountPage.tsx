@@ -2,16 +2,17 @@ import React, { Fragment, useState, useEffect } from 'react';
 import MainContainer from '../../app/layout/MainContainer';
 import TopSection from '../../app/layout/TopSection';
 import { clientId, Text } from '../../app/util/util';
-import { EditFilled } from '@ant-design/icons';
+import { CalendarOutlined, EditFilled } from '@ant-design/icons';
 import { Avatar, Card, Menu } from 'antd';
 import type { MenuProps } from 'antd/es/menu';
 import { Link, useLocation } from 'react-router-dom';
 import { VscLocation, VscAccount, VscLock, VscOutput } from "react-icons/vsc";
 import { useAppSelector } from '../../app/store/configureStore';
 import AccountPersonal from './accountMenu/AccountPersonal';
-import AccountAddress from './accountMenu/AccountAddress';
+import AccountAddress from './accountMenu/accountAddress/AccountAddress';
 import SetPassword from './accountMenu/SetPassword';
 import AccountPurchase from './accountMenu/accountPurchase/AccountPurchase';
+import AccountReserve from './accountMenu/accountReserve/AccountReserve';
 
 type MenuItem = Required<MenuProps>['items'][number];
 
@@ -34,6 +35,7 @@ const items: MenuItem[] = [
     getItem('ที่อยู่', '2', <VscLocation style={{ fontSize: "18px" }} />),
     getItem('เปลี่ยนรหัสผ่าน', '3', <VscLock style={{ fontSize: "18px" }} />),
     getItem('การซื้อของฉัน', '4', <VscOutput style={{ fontSize: "18px" }} />),
+    getItem('การจองของฉัน', '5', <CalendarOutlined style={{ fontSize: "18px" }} />),
 ];
 
 const AccountPage = () => {
@@ -58,6 +60,8 @@ const AccountPage = () => {
                 return <SetPassword />
             case "4":
                 return <AccountPurchase />
+            case "5":
+                return <AccountReserve />
             default:
                 return <AccountPersonal />;
         };
@@ -92,7 +96,7 @@ const AccountPage = () => {
                                 theme={"light"}
                                 items={items}
                             />
-                           
+
                         </div>
                     </ColAccount>
                     <ShowItem />

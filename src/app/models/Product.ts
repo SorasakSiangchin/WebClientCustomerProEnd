@@ -1,3 +1,5 @@
+import { Account } from "./Account";
+
 export interface Product {
     id: string;
     name: string;
@@ -13,10 +15,12 @@ export interface Product {
     weightUnitID: number;
     categoryProductID: number;
     weightUnit: WeightUnit;
+    averageScore: number;
     categoryProduct: CategoryProduct;
-    levelProductID:number;
-    levelProduct : LevelProduct;
-    imageProducts : ImageProduct[];
+    levelProductID: number;
+    levelProduct: LevelProduct;
+    account?: Account;
+    imageProducts: ImageProduct[];
 }
 
 export interface CategoryProduct {
@@ -31,16 +35,13 @@ export interface WeightUnit {
 }
 
 export interface ProductParams {
-    // orderBy: string;
-    // types: string[];
-    // brands: string[];
     category: string;
     pageNumber: number;
     pageSize: number;
     rangePriceStart: number;
     rangePriceEnd: number;
     searchTerm?: string;
-    accountID?:string;
+    accountID?: string;
 }
 
 export interface ImageProduct {
@@ -50,11 +51,11 @@ export interface ImageProduct {
 }
 
 export interface WeightUnit {
-    id:   number;
+    id: number;
     name: string;
 }
 
 export interface LevelProduct {
-    id:    number;
+    id: number;
     level: string;
 }

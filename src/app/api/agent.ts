@@ -174,13 +174,13 @@ const Review = {
         for (let i = 0; i < value.imageFiles.length; i++) formData.append("imageFiles", value.imageFiles[i]);
         return requests.post("review", formData)
     },
-    getByIdProduct: (params: any) => requests.post("review/productId", params)
+    getByIdProduct: (params: any) => requests.post("review/productId", params) ,
+    getByIdOrderItem: (orderItemId: any) => requests.get(`review/orderItemId?orderItemId=${orderItemId}`)
 };
 
-const Payments = {
-    createPaymentIntent: (accountId : any) => requests.post(`order/payment?accountId=${accountId}`, {})
+const OrderMessage = {
+    create: (value: any) => requests.post("orderMessage", value),
 };
-
 
 const agent = {
     Product,
@@ -198,8 +198,8 @@ const agent = {
     Report,
     Delivery,
     StatusDelivery,
-    Review,
-    Payments
+    Review ,
+    OrderMessage
 };
 
 export default agent;

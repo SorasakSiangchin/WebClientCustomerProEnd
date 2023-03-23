@@ -47,23 +47,20 @@ const OrderDetailPrivate = () => {
 
     const actionCard = (
         <>
-            <span>สั่งซื้อโดย : </span>
+            <span>{state.key !== "reserve" ? "สั่งซื้อโดย" : "สั่งจองโดย"}  </span>
             <span>{`${account?.firstName}  ${account?.lastName}`}</span>
         </>
     );
 
     const loadInfoCustomer = async (order: any) => {
-        const { isSuccess, result }: Result = await agent.Account.currentAccount({
-            accountId: order.address.accountID,
-            statusLogin: ""
-        });
+        const { isSuccess, result }: Result = await agent.Account.currentAccount(order.address.accountID);
         if (isSuccess === true) setAccount(result);
     };
 
     return (
         <LayoutPrivate>
             <Row>
-                <Col span={8}><h1 className='text-st'>ข้อมูลใบสั่งซื้อ</h1></Col>
+                <Col span={8}><h1 className='text-st'>{state.key !== "reserve" ? "ข้อมูลใบสั่งซื้อ" : "ข้อมูลการสั่งจอง"}</h1></Col>
                 <Col span={8} offset={8} style={{ display: "flex", justifyContent: "end", alignItems: "center" }}>
                     <Button style={{ backgroundColor: "grey" }} className='text-st' type="primary" icon={<RollbackOutlined />} onClick={() => navigate(-1)}>
                         กลับ
@@ -88,7 +85,7 @@ const OrderDetailPrivate = () => {
                     </Col>
                     <Col span={14}>
                         <Card
-                            title="รายการสั่งซื้อ"
+                            title={state.key !== "reserve" ? "รายการสั่งซื้อ" : "รายการสั่งจอง"}
                             className="text-st"
                             bordered
                             style={{ width: "100%" }}

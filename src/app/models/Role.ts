@@ -3,8 +3,10 @@ export interface Role {
     name: string;
 }
 
-export const RoleInfo = {
-    admin : "admin" ,
-    seller : "seller" ,
-    customer : "customer"
+export enum RoleInfo {
+    admin = "admin",
+    seller = "seller" ,
+    customer = "customer"
+
 }
+

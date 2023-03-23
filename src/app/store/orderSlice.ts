@@ -70,7 +70,7 @@ export const fetchOrdersAsync = createAsyncThunk<Order[], void, { state: RootSta
 
 const orderAdapter = createEntityAdapter<Order>();
 
-const initParams = (): OrderParams => {
+export const initParams = (): OrderParams => {
     return {
         pageNumber: 1,
         pageSize: 9,
@@ -78,7 +78,9 @@ const initParams = (): OrderParams => {
         id: "",
         orderCancel: "",
         orderStatus: "",
-        sellerId: ""
+        sellerId: "",
+        orderUsage: "" ,
+        haveEvidence : false,
     }
 };
 
@@ -109,9 +111,7 @@ export const orderSlice = createSlice({
     extraReducers(builder) {
         builder.addCase(fetchOrderAsync.fulfilled, (state, action) => {
             const { isSuccess, statusCode, result } = action.payload;
-            if (isSuccess === true && statusCode === 200) {
-                orderAdapter.upsertOne(state, result);
-            }
+            if (isSuccess === true && statusCode === 200) orderAdapter.upsertOne(state, result);
         });
         builder.addCase(fetchOrdersAsync.fulfilled, (state, action) => {
             orderAdapter.setAll(state, action.payload); // set products

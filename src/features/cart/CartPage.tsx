@@ -16,7 +16,7 @@ import Lottie from "lottie-react";
 import IconWarning from "../../assets/icons/warning.json";
 import { Container } from 'react-bootstrap';
 
-export interface DataTypeCart {
+export interface DataType {
     key: string;
     accountId: string;
     stock: number;
@@ -31,7 +31,7 @@ export interface DataTypeCart {
 const CartPage = () => {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
-    const [dataCart, setDataCart] = useState<DataTypeCart[]>([]);
+    const [dataCart, setDataCart] = useState<DataType[]>([]);
     const { account } = useAppSelector(state => state.account);
     const { cart, deliveryFree, status, subtotal } = useCart();
 
@@ -47,7 +47,7 @@ const CartPage = () => {
 
     };
 
-    const columns: ColumnsType<DataTypeCart> = [
+    const columns: ColumnsType<DataType> = [
         {
             title: 'สินค้า',
             dataIndex: 'product',
@@ -97,7 +97,7 @@ const CartPage = () => {
         }
     ];
 
-    const dataTable: DataTypeCart[] = cart?.items.map(item => {
+    const dataTable: DataType[] = cart?.items.map(item => {
         return {
             key: item.productId,
             cartItemId: item.id,
@@ -109,10 +109,10 @@ const CartPage = () => {
             total: item.price * item.amount,
             action: null
         };
-    }) as DataTypeCart[];
+    }) as DataType[];
 
     const rowSelection = {
-        onChange: (_: any, selectedRows: DataTypeCart[]) => {
+        onChange: (_: any, selectedRows: DataType[]) => {
             setDataCart(selectedRows);
         }
     };
@@ -121,7 +121,7 @@ const CartPage = () => {
         if (dataCart?.length > 0) {
             navigate("/checkout", {
                 state: {
-                    dataCart: dataCart,
+                    data: dataCart,
                     cartId: cart?.id
                 }
             });

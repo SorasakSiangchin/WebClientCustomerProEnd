@@ -1,15 +1,15 @@
 import { Cascader, Input, Modal, Space } from 'antd';
 import { ErrorMessage, Formik } from 'formik';
 import React, { useEffect } from 'react';
-import AppTextInput from '../../../app/components/AppTextInput';
-import { AddressValidate } from '../AccountValidate';
-import { default as dtDistrict } from "../../../assets/jsondata/district.json";
-import { default as dtProvince } from "../../../assets/jsondata/province.json";
-import { default as dtSubDistrict } from "../../../assets/jsondata/subdistrict.json";
+import AppTextInput from '../../../../app/components/AppTextInput';
+import { AddressValidate } from '../../AccountValidate';
+import { default as dtDistrict } from "../../../../assets/jsondata/district.json";
+import { default as dtProvince } from "../../../../assets/jsondata/province.json";
+import { default as dtSubDistrict } from "../../../../assets/jsondata/subdistrict.json";
 import { Col, Row } from 'react-bootstrap';
-import { useAppDispatch, useAppSelector } from '../../../app/store/configureStore';
-import { createAddressAsync, updateAddressAsync } from '../../../app/store/addressSlice';
-import { Ts } from '../../../app/util/util';
+import { useAppDispatch, useAppSelector } from '../../../../app/store/configureStore';
+import { createAddressAsync, updateAddressAsync } from '../../../../app/store/addressSlice';
+import { Ts } from '../../../../app/util/util';
 
 interface Props {
     modalOpen: boolean;

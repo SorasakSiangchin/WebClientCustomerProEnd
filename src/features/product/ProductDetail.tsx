@@ -1,8 +1,8 @@
-import { FacebookFilled, HeartOutlined, InstagramFilled } from '@ant-design/icons';
+import { CalendarOutlined, FacebookFilled, HeartFilled, HeartOutlined, InstagramFilled, ShoppingCartOutlined } from '@ant-design/icons';
 import { Alert, Button, Image, Input, Rate, Space } from 'antd';
 import { Fragment, useState, useEffect } from 'react';
 import ImageGallery from 'react-image-gallery';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import AppButtonCart from '../../app/components/AppButtonCart';
 import { useAppDispatch, useAppSelector } from '../../app/store/configureStore';
 import { currencyFormat, Ts } from '../../app/util/util';
@@ -14,6 +14,10 @@ import ContentTap from '../../app/layout/ContentTap';
 import { addCartItemAsync, removeCartItemAsync } from '../../app/store/cartSlice';
 import AppSwal from '../../app/components/AppSwal';
 import useReview from '../../app/hooks/useReview';
+import useFavorite from '../../app/hooks/useFavorite';
+import { Product } from '../../app/models/Product';
+import { DataType } from '../cart/CartPage';
+import { OrderUsage } from '../../app/models/Order';
 
 interface IImageGallery {
   original: any;
@@ -26,21 +30,30 @@ const titleTap = ["ความคิดเห็น", "ข้อมูลร้
 
 const ProductDetail = () => {
   const dispatch = useAppDispatch();
-  const { idProduct } = useParams<{ idProduct: any }>();
+  const navigate = useNavigate();
+  const { productId } = useParams<{ productId: any }>();
   const { cart } = useAppSelector(state => state.cart);
-  const { reviews, metaData, setParams, reviewsLoaded } = useReview({ productId: idProduct });
-  const product = useAppSelector(state => productSelectors.selectById(state, idProduct));
+  const { reviews, metaData, setParams, reviewsLoaded } = useReview({ productId });
+  const product = useAppSelector(state => productSelectors.selectById(state, productId));
   const { account } = useAppSelector(state => state.account);
   const [images, setImages] = useState<IImageGallery[] | any>([]);
   const [amount, setAmount] = useState<Number | any>(0); // จำนวนสินค้าที่เราจะเพิ่มใส่ตะกร้า
+  const { checkFavorite, addFavorite, removeFavorite } = useFavorite();
 
   // เพื่อ check ว่า ซื้อไปหรือยัง ซื้อไปแล้วกี่ชิ้น
   const item = cart?.items.find((i) => i.productId === product?.id);
 
   useEffect(() => {
     if (item) setAmount(item?.amount);
-    if (!product) dispatch(fetchProductAsync(idProduct));
-  }, [idProduct, item, dispatch, product]);
+    if (!product) dispatch(fetchProductAsync(productId));
+  }, [productId, item, dispatch, product]);
+
+  const statusFavorite = checkFavorite(productId);
+
+  const onFavorite = (info: Product) => {
+    if (!statusFavorite) addFavorite(info);
+    else removeFavorite(info.id);
+  };
 
   useEffect(() => {
     if (product) {
@@ -56,6 +69,28 @@ const ProductDetail = () => {
       setAmount(parseInt(event.target.value));
       if (Number(amount) < Number(product?.stock)) setAmount(product?.stock);
     }
+  };
+
+  const handleReserve = () => {
+    navigate("/checkout", {
+      state: {
+        data: [
+          {
+            key: product?.id,
+            accountId: account?.id,
+            action: null,
+            amount: amount,
+            price: product?.price,
+            stock: product?.stock,
+            cartItemId: "",
+            product: product,
+            total: amount * Number(product?.price),
+          }
+        ],
+        cartId: "",
+        orderUsage: OrderUsage.Reserve
+      }
+    });
   };
 
   const handleButtonClick = () => {
@@ -127,6 +162,10 @@ const ProductDetail = () => {
     };
   };
 
+  const checkProduct = product?.categoryProductID !== 999;
+
+  const iconButton = checkProduct ? <ShoppingCartOutlined style={{ fontSize: "30px" }} /> : <CalendarOutlined style={{ fontSize: "30px" }} />
+
   return (
     <Fragment>
       <div className="product-essential container">
@@ -134,7 +173,12 @@ const ProductDetail = () => {
           <div className="product-img-box col-lg-5 col-sm-5 col-xs-12">
             {/* label area */}
             <div className="product-image">
-              <ImageGallery items={images} lazyLoad showThumbnails={images.length > 1 ? true : false} showFullscreenButton={false} />
+              <ImageGallery
+                items={images}
+                lazyLoad
+                showThumbnails={images.length > 1 ? true : false}
+                showFullscreenButton={false}
+              />
             </div>
           </div>
           <div className="product-shop col-lg- col-sm-7 col-xs-12">
@@ -164,7 +208,13 @@ const ProductDetail = () => {
                   <Button onClick={() => amountChange(1, "add")} className="increase items-count" ><i className="fa fa-plus">&nbsp;</i></Button>
                 </div>
               </div>
-              <AppButtonCart disabled={item?.amount === amount || (!item && amount === 0)} onClick={handleOnCart} >เพิ่มไปยังรถเข็น</AppButtonCart>
+              <AppButtonCart
+                disabled={item?.amount === amount || (!item && amount === 0)}
+                onClick={checkProduct ? handleOnCart : handleReserve}
+                icon={iconButton}
+              >
+                {checkProduct ? "เพิ่มไปยังรถเข็น" : "สั่งจอง"}
+              </AppButtonCart>
             </AddToBox>
             <div className="short-description">
               <Ts>
@@ -191,10 +241,17 @@ const ProductDetail = () => {
                 </li>
                 <li>
                   <Button
+                    onClick={() => onFavorite(product as Product)}
                     type="default"
                     size='large'
                     icon={
-                      <HeartOutlined className='img-opacity' style={{ fontSize: "22px", marginTop: "2px", color: "" }} />
+                      <HeartFilled
+                        className='img-opacity'
+                        style={{
+                          fontSize: "22px",
+                          marginTop: "2px",
+                          color: statusFavorite ? "red" : ""
+                        }} />
                     } />
                 </li>
               </ul>
@@ -222,7 +279,7 @@ const ProductDetail = () => {
         </div>
       </MainContainer>
     </Fragment>
-  )
+  );
 }
 
 const RenderItem = (image: string) => (<div className="product-full">

@@ -1,9 +1,8 @@
 import { AutoComplete, Button, Card, Col, Divider, Empty, Image, Input, List, Modal, Row, Space } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { Container } from 'react-bootstrap';
-import useOrder from '../../../app/hooks/useOrder';
 import { useAppDispatch, useAppSelector } from '../../../app/store/configureStore';
-import { resetParams, setParams } from '../../../app/store/orderSlice';
+import { fetchOrdersAsync, initParams, orderSelectors, setParams } from '../../../app/store/orderSlice';
 import { currencyFormat, truncate, Ts } from '../../../app/util/util';
 import LayoutPrivate from '../LayoutPrivate';
 import { TfiTruck } from "react-icons/tfi";
@@ -11,19 +10,21 @@ import { useNavigate } from 'react-router-dom';
 import agent from '../../../app/api/agent';
 import { Result } from '../../../app/models/Interfaces/IResponse';
 import { Delivery } from '../../../app/models/Delivery';
-import { EvidenceMoneyTransfer } from '../../../app/models/EvidenceMoneyTransfer';
 
 const DeliveryPrivatePage = () => {
     const dispatch = useAppDispatch();
-    const { orders, getEvidenceMoneyTransfers } = useOrder();
     const { account } = useAppSelector(state => state.account);
-
+    const orders = useAppSelector(orderSelectors.selectAll);
+    const { metaData, ordersLoaded } = useAppSelector(state => state.order);
+    
     useEffect(() => {
-        dispatch(resetParams());
-        dispatch(setParams({ sellerId: account?.id, orderStatus: "2" }));
+        dispatch(setParams({ ...initParams(), sellerId: account?.id, orderStatus: "2"  }));
+    }, [dispatch]);
+    useEffect(() => {
+        dispatch(fetchOrdersAsync());
     }, [dispatch]);
 
-    const options = orders.filter(e =>  e.orderStatus === 2).map(e => {
+    const options = orders.map(e => {
         return {
             key: e.id,
             value: e.id
@@ -63,10 +64,10 @@ const DeliveryPrivatePage = () => {
             <Divider />
             <Container>
                 <Row gutter={24}>
-                    {orders?.length > 0 ? React.Children.toArray(orders.filter(e => e.orderStatus === 2)?.map(order => {
+                    {orders?.length > 0 ? React.Children.toArray(orders?.map(order => {
                         return (
                             <Col span={8}>
-                                <CardDelivery order={order} getEvidenceMoneyTransfers={getEvidenceMoneyTransfers} />
+                                <CardDelivery order={order} />
                             </Col>
                         )
 
@@ -83,15 +84,11 @@ const DeliveryPrivatePage = () => {
     )
 }
 
-const CardDelivery = ({ order, getEvidenceMoneyTransfers }: any) => {
+const CardDelivery = ({ order }: any) => {
     const [delivery, setDelivery] = useState<Delivery | null>(null);
-    const [dataEvidence, setDataEvidence] = useState<EvidenceMoneyTransfer | null>(null);
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
     const navigate = useNavigate();
-    const showModal = () => {
-        setEvidence();
-        setIsModalOpen(true);
-    };
+    const showModal = () => setIsModalOpen(true);
 
     const loadData = async () => {
         const { isSuccess, result, statusCode }: Result = await agent.Delivery.getByIdOrder(order.id);
@@ -102,8 +99,6 @@ const CardDelivery = ({ order, getEvidenceMoneyTransfers }: any) => {
         loadData();
     }, []);
 
-    const setEvidence = async () => setDataEvidence(await getEvidenceMoneyTransfers(order.id));
-
     const handleOk = () => setIsModalOpen(false);
 
     const handleCancel = () => setIsModalOpen(false);
@@ -113,9 +108,7 @@ const CardDelivery = ({ order, getEvidenceMoneyTransfers }: any) => {
             onClick={() => navigate(`/private/delivery/form/${order.id}`, { state: delivery })}
             type='link'
             icon={<><TfiTruck />{"  "}</>}
-            style={{
-                color: "#75BC4E"
-            }}
+            style={{ color: "#75BC4E" }}
             className='text-st'
         >
             {delivery.statusDelivery.name}
@@ -143,23 +136,23 @@ const CardDelivery = ({ order, getEvidenceMoneyTransfers }: any) => {
             marginTop: "2rem"
         }}
     >
-        {dataEvidence &&
-            <Modal
-                title="หลักฐาน"
-                className="text-st"
-                open={isModalOpen}
-                onOk={handleOk}
-                onCancel={handleCancel}
-                footer={false}
-            >
-                <img
-                    src={dataEvidence?.evidence}
-                    alt="Evidence"
-                    width={"100%"}
-                    height={"100%"}
-                />
-            </Modal>
-        }
+
+        <Modal
+            title="หลักฐาน"
+            className="text-st"
+            open={isModalOpen}
+            onOk={handleOk}
+            onCancel={handleCancel}
+            footer={false}
+        >
+            <img
+                src={order?.evidenceMoney?.evidence}
+                alt="Evidence"
+                width={"100%"}
+                height={"100%"}
+            />
+        </Modal>
+
         <List
             itemLayout="horizontal"
             dataSource={[order.orderItems[0]]}

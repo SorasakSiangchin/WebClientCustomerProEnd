@@ -20,6 +20,7 @@ const AccountPersonal = () => {
     const [statusInput, setStatusInput] = useState<boolean>(false);
     const { roleData } = useAppSelector(state => state.account);
     const status = statusLogin();
+    
     useEffect(() => {
         if (!roleData) dispatch(fetchRolesAsync());
     }, []);

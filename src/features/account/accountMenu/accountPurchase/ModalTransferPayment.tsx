@@ -114,7 +114,8 @@ const ModalTransferPayment = ({ openModal, setOpenModal, orderId, setOrderId }: 
                                         เลขที่บัญชี {accountNumber} {" "}
                                         <CopyToClipboard text={accountNumber} onCopy={() => messageApi.open({
                                             type: 'success',
-                                            content: 'This is a success message',
+                                            content: 'คัดลอกเรียบร้อย',
+                                            className : "text-st"
                                         })}>
                                             <Button type='text' icon={<CopyOutlined />} />
                                         </CopyToClipboard>

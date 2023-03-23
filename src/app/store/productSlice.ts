@@ -175,7 +175,7 @@ export const deleteImageProductAsync = createAsyncThunk<Result, string>("product
 });
 /* #endregion */
 
-const initParams = (): ProductParams => {
+export const initParams = (): ProductParams => {
     return {
         pageNumber: 1,
         pageSize: 9,

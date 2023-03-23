@@ -11,8 +11,8 @@ import { CartItem } from '../../app/models/Cart';
 import CheckoutAddress from './CheckoutAddress';
 import useAddress from '../../app/hooks/useAddress';
 import CheckoutInfoPayment from './CheckoutInfoPayment';
-import { OrderRequest } from '../../app/models/Order';
-import { useAppDispatch, useAppSelector } from '../../app/store/configureStore';
+import { OrderRequest, OrderUsage } from '../../app/models/Order';
+import { useAppDispatch } from '../../app/store/configureStore';
 import { crateOrderAsync } from '../../app/store/orderSlice';
 import { fetchCartAsync } from '../../app/store/cartSlice';
 import AppAvatarAccount from '../../app/components/AppAvatarAccount';
@@ -25,7 +25,7 @@ interface DataType {
     age: number;
     address: string;
     tags: string[];
-}
+};
 
 const columns: ColumnsType<DataType> = [
     {
@@ -64,7 +64,6 @@ const columns: ColumnsType<DataType> = [
     }
 ];
 
-
 const CheckoutPage = () => {
     const { state } = useLocation();
     const dispatch = useAppDispatch();
@@ -73,16 +72,18 @@ const CheckoutPage = () => {
     const { addresses } = useAddress();
     const address = addresses.find(x => x.status === true)
     const navigate = useNavigate();
-    const { account } = useAppSelector(state => state.account);
+
     const loadAccountId = async () => {
-        const { result, isSuccess, statusCode }: Result = await agent.Order.getIdAccount({
-            cartId: state.cartId,
-            cartItemId: state?.dataCart.map((e: any) => e.cartItemId)
-        });
-        if (isSuccess === true && statusCode === 200) setAccountId(result);
+        if (state.cartId) {
+            const { result, isSuccess, statusCode }: Result = await agent.Order.getIdAccount({
+                cartId: state.cartId,
+                cartItemId: state?.data.map((e: any) => e.cartItemId)
+            });
+            if (isSuccess === true && statusCode === 200) setAccountId(result);
+        }
     };
 
-    const priceTotal = state?.dataCart.reduce((curNumber: any, item: any) => {
+    const priceTotal = state?.data.reduce((curNumber: any, item: any) => {
         return curNumber + item.price * item.amount;
     }, 0);
 
@@ -94,7 +95,7 @@ const CheckoutPage = () => {
 
     const orderRequest: OrderRequest = {
         addressID: address?.id !== 0 ? address?.id : 0,
-        orderItems: state.dataCart.map((item: any) => {
+        orderItems: state.data.map((item: any) => {
             return {
                 amount: item.amount,
                 price: item.price,
@@ -106,54 +107,21 @@ const CheckoutPage = () => {
                 id: 0
             }
         }),
-        accountIdFromProduct: accountId,
+        accountIdFromProduct: !state.cartId ? [state.data[0].product.accountID] : accountId,
         cartID: state.cartId,
-        paymentMethod: paymentMethod
+        paymentMethod: paymentMethod,
+        orderUsage: !state.cartId ? OrderUsage.Reserve : OrderUsage.Buy
     };
 
-    const handleClickOrder = async () => {
-        if (!address) {
-            AppSwal({
-                icon: "warning",
-                onThen: () => { },
-                title: "กรุณาเลือกที่อยู่"
-            });
-        }
-        else if (!paymentMethod) {
-            AppSwal({
-                icon: "warning",
-                onThen: () => { },
-                title: "กรุณาเลือกช่องทางการชำระเงิน"
-            });
-        }
-        else {
-            const result: Result = await dispatch(crateOrderAsync(orderRequest)).unwrap();
-            if (result.isSuccess === true && result.statusCode === 200) {
-                AppSwal({
-                    icon: "success",
-                    onThen: () => {
-                        navigate("/account", { state: "4" });
-                        dispatch(fetchCartAsync(address.accountID));
-                    },
-                    title: "สำเร็จ",
-                    timer: 1000
-                });
-            };
-        }
-    };
-
-    const showProduct = React.Children.toArray(accountId.map(id => {
-        const product = state.dataCart.filter((e: any) => e.accountId === id);
-
+    const productGeneral = React.Children.toArray(accountId.map(id => {
+        const product = state.data.filter((e: any) => e.accountId === id);
         const priceSubTotal = product.reduce((curNumber: any, item: any) => {
             return curNumber + item.price * item.amount;
         }, 0);
-
         const amountSubTotal = product.reduce((curNumber: any, item: any) => {
             return curNumber + item.amount;
         }, 0);
-
-        const data: DataType[] = product.map((item: any) => {
+        const data: any[] = product.map((item: any) => {
             return {
                 key: item.cartItemId,
                 accountId: item.accountId,
@@ -163,9 +131,7 @@ const CheckoutPage = () => {
                 total: item.price * item.amount,
             };
         });
-
         const summaryCard = <Ts>ยอดสั่งซื้อทั้งหมด ({amountSubTotal} ชิ้น): <span style={{ fontWeight: "bold" }}>{currencyFormat(priceSubTotal)}</span> </Ts>
-
         return <Card hoverable className='text-st' title={<AppAvatarAccount accountId={id} />} bordered={true} style={{
             width: "100%",
             height: "100%",
@@ -182,9 +148,74 @@ const CheckoutPage = () => {
 
     }));
 
+    const productRare = state.data.map((e: any) => {
+        const priceSubTotal = e.amount * e.product.price;
+
+        const data: any[] = [
+            {
+                key: "",
+                accountId: e.accountId,
+                product: e.product,
+                amount: e.amount,
+                price: e.product.price,
+                total: priceSubTotal,
+            }
+        ];
+
+        const summaryCard = <Ts>ยอดสั่งซื้อทั้งหมด ({e.amount} ชิ้น): <span style={{ fontWeight: "bold" }}>{currencyFormat(priceSubTotal)}</span> </Ts>
+
+        return <Card hoverable className='text-st' bordered={true} style={{
+            width: "100%",
+            height: "100%",
+            marginTop: "20px",
+            marginBottom: "20px",
+            borderStyle: "solid",
+            borderWidth: "5px"
+        }}>
+            <Space size="large" direction='vertical' style={{ width: "100%" }} >
+                <Table columns={columns} dataSource={data} pagination={false} />
+                {summaryCard}
+            </Space>
+        </Card>
+    });
+
+    const handleClickOrder = async () => {
+        if (!address) {
+            AppSwal({
+                icon: "warning",
+                onThen: () => { },
+                title: "กรุณาเลือกที่อยู่"
+            });
+        }
+        else if (paymentMethod === null) {
+            AppSwal({
+                icon: "warning",
+                onThen: () => { },
+                title: "กรุณาเลือกช่องทางการชำระเงิน"
+            });
+        }
+        else {
+            const result: Result = await dispatch(crateOrderAsync(orderRequest)).unwrap();
+            if (result.isSuccess === true && result.statusCode === 200) {
+                AppSwal({
+                    icon: "success",
+                    onThen: () => {
+                        if(state.cartId) navigate("/account", { state: "4" });
+                        else navigate("/account", { state: "5" });
+                        dispatch(fetchCartAsync(address.accountID));
+                    },
+                    title: "สำเร็จ",
+                    timer: 1000
+                });
+            };
+        }
+    };
+
+    const showProduct = !state.orderUsage ? productGeneral : productRare;
+
     return (
         <Fragment>
-            <TopSection text={""} title="ทำการสั่งซื้อ" backToPageTitle="หน้าแรก" backToPageUrl="/" />
+            <TopSection text={""} title={state.cartId ? "ทำการสั่งซื้อ" : "ทำการสั่งจอง"} backToPageTitle="หน้าแรก" backToPageUrl="/" />
             <MainContainer className="col2-right-layout">
                 <div className="row">
                     <section className="col-main col-sm-8">
@@ -215,13 +246,13 @@ const CheckoutPage = () => {
                                 className="block block-progress text-st"
                                 actions={[
                                     <Button
-                                        onClick={() => handleClickOrder()}
+                                        onClick={handleClickOrder}
                                         style={{ width: "90%" }}
                                         htmlType="button"
                                         size='large'
                                         className="button btn-proceed-checkout"
                                     >
-                                        <span>ดำเนินการชำระเงิน</span>
+                                        <span>{state.cartId ? "ดำเนินการชำระเงิน" : "ดำเนินการสั่งจอง"}</span>
                                     </Button>
                                 ]}
                             >
@@ -232,7 +263,7 @@ const CheckoutPage = () => {
                 </div>
             </MainContainer>
         </Fragment>
-    )
+    );
 };
 
 

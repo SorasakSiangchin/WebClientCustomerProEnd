@@ -10,6 +10,7 @@ import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from '../../../../app/store/configureStore';
 import { resetParams, setParams } from '../../../../app/store/orderSlice';
 import { Delivery } from '../../../../app/models/Delivery';
+import { OrderUsage } from '../../../../app/models/Order';
 
 const AccountPurchase = () => {
     const dispatch = useAppDispatch();
@@ -17,7 +18,7 @@ const AccountPurchase = () => {
 
     useEffect(() => {
         dispatch(resetParams());
-        dispatch(setParams({ accountId: account?.id }));
+        dispatch(setParams({ accountId: account?.id, orderUsage: OrderUsage.Buy.toString() }));
     }, []);
 
     const { orders } = useOrder();
@@ -41,7 +42,7 @@ const AccountPurchase = () => {
             children: <Orders
                 setDataDelivery={setDelivery}
                 orders={orders?.filter(e => e.orderCancel === false && e.orderStatus === 0 || e.orderStatus === 1)}
-                setOrderPage={setOrderPage} 
+                setOrderPage={setOrderPage}
                 setOrderId={setOrderId}
             />,
         },

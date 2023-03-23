@@ -1,4 +1,3 @@
-import { ShoppingCartOutlined } from '@ant-design/icons';
 import { Button } from 'antd';
 import { SizeType } from 'antd/es/config-provider/SizeContext';
 
@@ -7,16 +6,17 @@ interface Prop {
   onClick?: any;
   disabled?: boolean;
   size? : SizeType;
+  icon? : any;
 }
 
-const AppButtonCart = ({ children, onClick, disabled , size }: Prop) => {
+const AppButtonCart = ({ children, onClick, disabled , size , icon }: Prop) => {
   return (
     <Button
       size={size}
       htmlType='button'
       disabled={disabled}
       onClick={() => onClick()}
-      icon={<ShoppingCartOutlined style={{ fontSize : "30px" }} />}
+      icon={icon}
       className="button btn-cart"
       style={{
         height: "54px", display: "flex",

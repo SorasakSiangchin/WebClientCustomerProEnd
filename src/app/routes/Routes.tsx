@@ -24,6 +24,7 @@ import DeliveryFormPrivate from "../../features/private/delivery/DeliveryFormPri
 import AboutPage from "../../features/about/AboutPage";
 import Error404 from "../../features/error404/Error404";
 import UserDetailPrivatePage from "../../features/private/user/UserDetailPrivatePage";
+import ReservePrivate from "../../features/private/order/ReservePrivate";
 
 export const mainRoutes = <Routes>
     <Route path='/' element={<HomePage />} />
@@ -50,15 +51,16 @@ export const mainRoutes = <Routes>
         <Route path='/private/user/detail/:id' element={<UserDetailPrivatePage />} />
         <Route path='/private/order' element={<OrderPrivatePage />} />
         <Route path='/private/product' element={<ProductPrivatePage />} />
-        <Route path='/private/product/detail/:idProduct' element={<ProductDetailPrivatePage />} />
+        <Route path='/private/product/detail/:productId' element={<ProductDetailPrivatePage />} />
         <Route path='/private/product/form' element={<ProductFormPrivate />} />
         <Route path='/private/delivery' element={<DeliveryPrivatePage />} />
         <Route path='/private/delivery/form/:idOrder' element={<DeliveryFormPrivate />} />
         <Route path='/private/order/detail' element={<OrderDetailPrivate />} />
+        <Route path='/private/reserve' element={<ReservePrivate />} />
     </Route>
     <Route path='/product-favorite' element={<ProductFavorite />} />
     <Route path='/product-list' element={<ProductList />} />
-    <Route path='/products-similar' element={<ProductsSimilar />} />
-    <Route path='/product-detail/:idProduct' element={<ProductDetail />} />
+    <Route path='/products/similar/:productId' element={<ProductsSimilar />} />
+    <Route path='/product/detail/:productId' element={<ProductDetail />} />
     <Route path='/test' element={<TestPage />} />
 </Routes>

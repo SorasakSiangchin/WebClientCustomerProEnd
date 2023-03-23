@@ -14,17 +14,13 @@ import {
     Space,
     Spin,
 } from 'antd';
-import React, { Fragment, useState, useEffect } from 'react'
+import React, { Fragment, useEffect } from 'react';
 import { Container } from 'react-bootstrap';
-import agent from '../api/agent';
-import { Account } from '../models/Account';
 import { Review, ReviewResponse } from '../models/Review';
-import { Result } from '../models/Interfaces/IResponse';
 import { Product } from '../models/Product';
 import { useAppDispatch, useAppSelector } from '../store/configureStore';
 import { fetchDetailProductByIdProductAsync, reSetDetailProduct } from '../store/detailProductSlice';
 import moment from 'moment-timezone';
-import { statusLogin } from '../store/accountSlice';
 import AppPagination from '../components/AppPagination';
 import { MetaData } from '../models/Pagination';
 
@@ -56,19 +52,18 @@ const ContentTap = ({ ids, product, reviewsLoaded, setParams, metaData, reviews 
         <Fragment>
             <ReviewTap
                 id={ids[0]}
-                productId={product?.id}
                 reviewsLoaded={reviewsLoaded}
                 setParams={setParams}
                 metaData={metaData}
                 reviews={reviews}
             />
-            <ProductStore id={ids[1]} accountId={product?.accountID} />
+            <ProductStore id={ids[1]} account={product?.account} />
             <ProductDetail id={ids[2]} product={product} />
         </Fragment>
     )
 };
 
-const ReviewTap = ({ id, productId, reviewsLoaded, setParams, metaData, reviews }: any) => {
+const ReviewTap = ({ id, reviewsLoaded, setParams, metaData, reviews }: any) => {
     const dispatch = useAppDispatch();
     const rate = (
         <>
@@ -107,7 +102,7 @@ const ReviewTap = ({ id, productId, reviewsLoaded, setParams, metaData, reviews 
             <ol className="commentlist">
                 {
                     reviewsLoaded ?
-                        React.Children.toArray(reviews?.reviews?.map((review : Review) => <Comment reviewData={review} />)) :
+                        React.Children.toArray(reviews?.reviews?.map((review: Review) => <Comment reviewData={review} />)) :
                         <Spin indicator={loadingIcon} />
                 }
             </ol>
@@ -131,32 +126,7 @@ const ReviewTap = ({ id, productId, reviewsLoaded, setParams, metaData, reviews 
     </div>
 };
 
-const ProductStore = ({ id, accountId }: any) => {
-    const dispatch = useAppDispatch();
-    const [account, setAccount] = useState<Account | null>(null);
-    const [products, setProducts] = useState<Product[] | null>(null);
-    const status = statusLogin();
-    useEffect(() => {
-        if (account === null) {
-            const loadAccount = async () => {
-                const result: Result = await agent.Account.currentAccount(accountId);
-                if (result.isSuccess === true && result.statusCode === 200) setAccount(result.result);
-            }
-            loadAccount();
-        }
-    }, [dispatch, account]);
-
-    useEffect(() => {
-        if (products === null) {
-            const loadProducts = async () => {
-                const result: Result = await agent.Product.getByIdAccount(accountId);
-                if (result.isSuccess === true && result.statusCode === 200) setProducts(result.result);
-                console.log(result.result)
-            }
-            loadProducts();
-        }
-    }, [dispatch]);
-
+const ProductStore = ({ id, account }: any) => {
     return <div className="tab-pane fade" id={id}>
         <div className="product-tabs-content-inner clearfix" >
             <Row gutter={24}>
@@ -171,7 +141,7 @@ const ProductStore = ({ id, accountId }: any) => {
                         <div style={{ display: "flex" }}>
                             <Col className='text-st'>
                                 <h2>{account?.firstName}</h2>
-                                <p>สินค้าทั้งหมด {products?.length} รายการ</p>
+                                <p>สินค้าทั้งหมด {account?.products?.length} รายการ</p>
                                 <br />
                                 <br />
                             </Col>
@@ -271,42 +241,6 @@ const Comment = ({ reviewData }: IComment) => {
             </div>
         </div>
     </li>
-}
-
-
-// Add a review
-
-{/* <div className="comment-respond">
-    <span className="comment-reply-title">Add a review </span>
-    <form action="#" method="post" className="comment-form">
-        <p className="comment-notes"><span id="email-notes">Your email address will not be published.</span> Required fields are marked <span className="required">*</span></p>
-        <div className="comment-form-rating">
-            <label id="rating">Your rating</label>
-            <p className="stars">
-                <span>
-                    <a className="star-1" href="#">1</a>
-                    <a className="star-2" href="#">2</a>
-                    <a className="star-3" href="#">3</a>
-                    <a className="star-4" href="#">4</a>
-                    <a className="star-5" href="#">5</a>
-                </span>
-            </p>
-        </div>
-        <p className="comment-form-comment">
-            <label>Your review <span className="required">*</span></label>
-            <textarea id="comment" name="comment" required></textarea>
-        </p>
-        <p className="comment-form-author">
-            <label >Name <span className="required">*</span></label>
-            <input id="author" name="author" type="text" value="" required /></p>
-        <p className="comment-form-email">
-            <label >Email <span className="required">*</span></label>
-            <input id="email" name="email" type="email" value="" required /></p>
-        <p className="form-submit">
-            <input name="submit" type="submit" id="submit" className="submit" value="Submit" />
-        </p>
-    </form>
-</div> */}
-
+};
 
 export default ContentTap

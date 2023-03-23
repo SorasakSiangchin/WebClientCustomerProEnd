@@ -28,27 +28,27 @@ const ProductDetailPrivatePage = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [modalOpen, setModalOpen] = useState<boolean>(false);
-  const { idProduct } = useParams<{ idProduct: any }>();
+  const { productId } = useParams<{ productId: any }>();
   const [loading, setLoading] = useState<boolean>(false);
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [urlModal, setUrlModal] = useState<string>("");
-  const product = useAppSelector(state => productSelectors.selectById(state, idProduct));
+  const product = useAppSelector(state => productSelectors.selectById(state, productId));
   const { imageProducts, imageProductLoaded } = useAppSelector(state => state.product);
   const { detailProduct, detailProductLoaded } = useAppSelector(state => state.detailProduct);
 
   useEffect(() => {
-    if (!product) dispatch(fetchProductAsync(idProduct));
-  }, [idProduct, dispatch, product]);
+    if (!product) dispatch(fetchProductAsync(productId));
+  }, [productId, dispatch, product]);
 
   useEffect(() => {
-    if (!imageProductLoaded) dispatch(fetchImageProductsAsync(idProduct));
+    if (!imageProductLoaded) dispatch(fetchImageProductsAsync(productId));
     return () => {
       if (imageProducts) dispatch(resetImageProduct());
     };
   }, [imageProductLoaded, dispatch]);
 
   useEffect(() => {
-    dispatch(fetchDetailProductByIdProductAsync(idProduct));
+    dispatch(fetchDetailProductByIdProductAsync(productId));
     return () => {
       dispatch(reSetDetailProduct());
     }
@@ -124,7 +124,7 @@ const ProductDetailPrivatePage = () => {
 
   return (
     <LayoutPrivate>
-      <ModalFormDetailProduct modalOpen={modalOpen} setModalOpen={setModalOpen} detailProduct={detailProduct} idProduct={idProduct} />
+      <ModalFormDetailProduct modalOpen={modalOpen} setModalOpen={setModalOpen} detailProduct={detailProduct} idProduct={productId} />
       <Row  >
         <Col span={8}><h1 className='text-st'>ข้อมูลสินค้า</h1></Col>
         <Col span={8} offset={8} style={{ display: "flex", justifyContent: "end", alignItems: "center" }}>

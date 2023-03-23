@@ -3,20 +3,29 @@ import { AutoComplete, Button, Card, Col, Divider, Empty, Image, Input, List, Mo
 import React, { useState, useEffect } from 'react';
 import { Container } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
-import useOrder from '../../../app/hooks/useOrder';
-import { EvidenceMoneyTransfer } from '../../../app/models/EvidenceMoneyTransfer';
-import { useAppDispatch } from '../../../app/store/configureStore';
+import AppPagination from '../../../app/components/AppPagination';
+import { Order, OrderUsage } from '../../../app/models/Order';
+import { useAppDispatch, useAppSelector } from '../../../app/store/configureStore';
 import { updateEvidenceMoneyTransferAsync } from '../../../app/store/evidenceMoneyTransferSlice';
-import { fetchOrdersAsync, resetParams, setParams, updateOrderAsync, resetOrder } from '../../../app/store/orderSlice';
+import { fetchOrdersAsync, resetParams, setParams, updateOrderAsync, resetOrder, orderSelectors, initParams } from '../../../app/store/orderSlice';
 import { currencyFormat, truncate, Ts } from '../../../app/util/util';
 import LayoutPrivate from '../LayoutPrivate';
 
 const OrderPrivatePage = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { orders, getEvidenceMoneyTransfers } = useOrder();
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [dataEvidence, setDataEvidence] = useState<EvidenceMoneyTransfer | null>(null);
+  const [order, setOrder] = useState<Order | null>(null);
+  const orders = useAppSelector(orderSelectors.selectAll);
+  const { metaData, ordersLoaded , orderParams} = useAppSelector(state => state.order);
+
+  useEffect(() => {
+    dispatch(setParams({ ...initParams() , haveEvidence: true, orderUsage: OrderUsage.Buy.toString() }));
+  }, []);
+
+  useEffect(() => {
+   if(!ordersLoaded) dispatch(fetchOrdersAsync());
+  }, [dispatch  , ordersLoaded]);
 
   const options = orders.map(e => {
     return {
@@ -34,17 +43,33 @@ const OrderPrivatePage = () => {
         dispatch(setParams({ orderStatus: "2" }));
         break;
       default:
-        dispatch(resetParams());
+        dispatch(setParams({ ...initParams() , haveEvidence: true, orderUsage: OrderUsage.Buy.toString() }));
         break;
     }
   };
 
-  useEffect(() => {
-    dispatch(resetParams());
-  }, []);
+  const handleOk = () => {
+    setIsModalOpen(false);
+  }
 
+  const handleCancel = () => setIsModalOpen(false);
   return (
     <LayoutPrivate>
+      <Modal
+        title="หลักฐาน"
+        className="text-st"
+        open={isModalOpen}
+        onOk={handleOk}
+        onCancel={handleCancel}
+        footer={false}
+      >
+        <img
+          src={order?.evidenceMoney?.evidence}
+          alt="Evidence"
+          width={"100%"}
+          height={"100%"}
+        />
+      </Modal>
       <Row>
         <Col span={8}><h1 className='text-st'>การสั่งซื้อทั้งหมด</h1></Col>
         <Col span={8} offset={8} style={{ display: "flex", justifyContent: "end" }}>
@@ -66,9 +91,7 @@ const OrderPrivatePage = () => {
                 filterOption={(inputValue, option) =>
                   option!.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
                 }
-                onChange={(e) => {
-                  dispatch(setParams({ id: e }));
-                }}
+                onChange={(e) => dispatch(setParams({ id: e }))}
                 style={{ width: "30rem", height: "100%" }}
                 options={options}
               >
@@ -88,7 +111,7 @@ const OrderPrivatePage = () => {
       <Divider />
       <Container>
         <Row gutter={24}>
-          {orders?.filter(e => e.orderStatus !== 0).length > 0 ? React.Children.toArray(orders?.filter(e => e.orderStatus !== 0).map(order => {
+          {orders.length > 0 ? React.Children.toArray(orders.map(order => {
 
             const onUpdateEvidence = (evidence: any) => {
               dispatch(updateEvidenceMoneyTransferAsync({
@@ -114,9 +137,7 @@ const OrderPrivatePage = () => {
                 color="#75BC4E"
               />,
               <ConfirmButton
-                onConfirm={async () => {
-                  onUpdateEvidence(await getEvidenceMoneyTransfers(order.id));
-                }}
+                onConfirm={async () => onUpdateEvidence(order?.evidenceMoney)}
                 icon={<CloseCircleOutlined />}
                 textBtn={"ยกเลิก"}
                 title={"ยกเลิกการชำระเงิน?"}
@@ -136,34 +157,15 @@ const OrderPrivatePage = () => {
             ];
 
             const showModal = () => {
-              setEvidence();
+              setOrder(order);
               setIsModalOpen(true);
             }
 
-            const handleOk = () => setIsModalOpen(false);
 
-            const handleCancel = () => setIsModalOpen(false);
-
-            const setEvidence = async () => setDataEvidence(await getEvidenceMoneyTransfers(order.id));
 
             return <>
-              {dataEvidence &&
-                <Modal
-                  title="หลักฐาน"
-                  className="text-st"
-                  open={isModalOpen}
-                  onOk={handleOk}
-                  onCancel={handleCancel}
-                  footer={false}
-                >
-                  <img
-                    src={dataEvidence?.evidence}
-                    alt="Evidence"
-                    width={"100%"}
-                    height={"100%"}
-                  />
-                </Modal>
-              }
+
+
               <Col span={8}>
                 <Card
                   className='text-st'
@@ -240,11 +242,20 @@ const OrderPrivatePage = () => {
           </div>}
         </Row>
       </Container>
+      {metaData &&
+        <AppPagination
+          isSimple={false}
+          metaData={metaData}
+          onPageChange={(page: number) =>
+            dispatch(setParams({ pageNumber: page }))
+          }
+        />
+      }
     </LayoutPrivate>
   )
 }
 
-const ConfirmButton = ({ onConfirm, icon, textBtn, title, color }: any) => {
+export const ConfirmButton = ({ onConfirm, icon, textBtn, title, color }: any) => {
   return <Popconfirm
     title={<Ts>{title}</Ts>}
     onConfirm={onConfirm}

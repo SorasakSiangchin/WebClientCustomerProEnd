@@ -1,4 +1,4 @@
-import { ShoppingOutlined } from '@ant-design/icons';
+import { CalendarOutlined, ShoppingOutlined } from '@ant-design/icons';
 import { Layout, Menu, MenuProps } from 'antd';
 import React, { useState } from 'react'
 import { Container } from 'react-bootstrap';
@@ -7,7 +7,6 @@ import { VscAccount, VscChevronLeft, VscDashboard, VscPackage } from 'react-icon
 import { useNavigate } from 'react-router-dom';
 import { resetProductParams } from '../../app/store/productSlice';
 import { useAppDispatch, useAppSelector } from '../store/configureStore';
-import { resetParams, setParams } from '../store/orderSlice';
 const { Sider } = Layout;
 type MenuItem = Required<MenuProps>['items'][number];
 
@@ -35,7 +34,9 @@ const useSiderPrivate = () => {
       getItem('แดชบอร์ด', '1', <VscDashboard style={{ fontSize: "20px" }} />,),
       getItem('ผู้ใช้งาน', '3', <VscAccount style={{ fontSize: "20px" }} />),
       getItem('สินค้า', '2', <VscPackage style={{ fontSize: "20px" }} />),
+      getItem('การจัดส่ง', '5', <FiTruck style={{ fontSize: "20px" }} />),
       getItem('การสั่งซื้อ', '4', <ShoppingOutlined style={{ fontSize: "20px" }} />),
+      getItem('การสั่งจอง', '6', <CalendarOutlined style={{ fontSize: "20px" }} />),
       getItem('กลับ', '9', <VscChevronLeft style={{ fontSize: "20px" }} />),
     ] :
     [
@@ -47,7 +48,7 @@ const useSiderPrivate = () => {
 
   interface Page {
     key?: string;
-  }
+  };
 
   const onPage = ({ key }: Page) => {
     switch (key) {
@@ -65,6 +66,9 @@ const useSiderPrivate = () => {
         break;
       case "5":
         navigate("/private/delivery");
+        break;
+      case "6":
+        navigate("/private/reserve");
         break;
       case "9":
         navigate("/");

@@ -13,6 +13,7 @@ import { ReviewRequest } from '../../../../app/models/Review';
 import { Result } from '../../../../app/models/Interfaces/IResponse';
 import AppSwal from '../../../../app/components/AppSwal';
 import { createReviewAsync, fetchReviewByProductIdAsync, setParams } from '../../../../app/store/reviewSilce';
+import agent from '../../../../app/api/agent';
 
 interface Props {
     openModal: boolean;
@@ -66,7 +67,7 @@ const ModalFormReview = ({ openModal, orderItems, setOpenModal }: Props) => {
                                     const [videoDatas, setVideoDatas] = useState<any>(null);
                                     const [videoLoading, setVideoLoading] = useState<boolean>(false);
 
-                                    const { check, onLoad } = checkFormReview(item.productID);
+                                    const { check, onLoad } = checkFormReview(item.id);
 
                                     const addEmoji = (e: any) => {
                                         let sym = e.unified.split("-");
@@ -280,24 +281,23 @@ const ModalFormReview = ({ openModal, orderItems, setOpenModal }: Props) => {
     )
 }
 
-const checkFormReview = (productId: any) => {
+const checkFormReview = (orderItemId: any) => {
     const dispatch = useAppDispatch();
     const [check, setCheck] = useState<boolean>(false);
 
     useEffect(() => {
-        dispatch(setParams({ productId }));
         onLoad();
     }, [dispatch]);
 
     const onLoad = async () => {
-        const { result, isSuccess, statusCode }: Result = await dispatch(fetchReviewByProductIdAsync()).unwrap();
-        if (isSuccess && statusCode === 200) setCheck(result.reviews.length! > 0 ? true : false);
+        const { result, isSuccess, statusCode }: Result = await agent.Review.getByIdOrderItem(orderItemId);
+        if (isSuccess && statusCode === 200) setCheck(result !== null ? true : false);
     };
 
     return {
         check,
         onLoad
     };
-}
+};
 
 export default ModalFormReview

@@ -1,10 +1,10 @@
-import { Carousel, Col, Row } from 'antd'
-import { Fragment } from 'react'
-import MainContainer from '../../app/layout/MainContainer'
-import TopSection from '../../app/layout/TopSection'
-import { Text } from '../../app/util/util'
+import { Carousel, Col, Row } from 'antd';
+import { Fragment } from 'react';
+import MainContainer from '../../app/layout/MainContainer';
+import TopSection from '../../app/layout/TopSection';
 
 const AboutPage = () => {
+    
     const imageUrl = [
         "https://drive.google.com/uc?id=141a950toxJrurHUNLQcKvXU2wGslrENs",
         "https://drive.google.com/uc?id=1zsWAzj7Ke3xThBG_C8jdJgSTJyzqcb3B",
@@ -12,9 +12,10 @@ const AboutPage = () => {
         "https://drive.google.com/uc?id=1CgwKGDLMYAYIO3-08_afDS7AQtBzHacq",
         "https://drive.google.com/uc?id=1tXCiH7AwuwMeGrrFZ6dFo6xOSnQMZJIw"
     ];
+
     return (
         <Fragment>
-            <TopSection text={Text} title="เกี่ยวกับ" backToPageTitle="หน้าแรก" backToPageUrl="/" />
+            <TopSection text={""} title="เกี่ยวกับ" backToPageTitle="หน้าแรก" backToPageUrl="/" />
             <MainContainer className="col2-left-layout bounceInUp animated">
                 <div className="row">
                     <div className="std">

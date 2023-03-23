@@ -1,6 +1,6 @@
 import { CloseOutlined, CloudUploadOutlined, LoadingOutlined, RollbackOutlined, SaveOutlined } from '@ant-design/icons';
 import { ErrorMessage, Formik } from 'formik';
-import { useState } from 'react';
+import { useState, Children } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import {
   Button,
@@ -28,6 +28,7 @@ import { useAppDispatch, useAppSelector } from '../../../app/store/configureStor
 import { createProductAsync, updateProductAsync } from '../../../app/store/productSlice';
 import { Result } from '../../../app/models/Interfaces/IResponse';
 import AppSwal from '../../../app/components/AppSwal';
+import { RoleInfo } from '../../../app/models/Role';
 const { Option } = Select;
 
 const ProductFormPrivate = () => {
@@ -227,21 +228,22 @@ const ProductFormPrivate = () => {
                       >
                         <Select
                           style={{ width: "100%" }}
-                          size="large"
-                          onChange={(data) => {
-                            setFieldValue("categoryProductID", data);
-                          }}
+                          size="middle"
+                          onChange={(data) => setFieldValue("categoryProductID", data)}
                           value={values.categoryProductID}
                           onBlur={handleBlur}
                           status={touched.categoryProductID && errors.categoryProductID
                             ? "error"
                             : ""}
                           options={
-                            categoryProducts?.map(data => {
+                            categoryProducts?.filter(e => {
+                              if (account?.role.name === RoleInfo.admin) return e;
+                              else return e.id !== 999;
+                            })?.map(data => {
                               return {
                                 value: data.id,
                                 label: data.name,
-                              }
+                              };
                             })
                           }
                         />
