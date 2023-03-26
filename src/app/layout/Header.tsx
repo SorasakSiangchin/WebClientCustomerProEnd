@@ -14,7 +14,7 @@ import { pathHome } from '../util/util';
 export const midLinks = [
     { title: "หน้าแรก", path: pathHome },
     { title: "เกี่ยวกับ", path: "/about" },
-    { title: "สินค้า", path: "/product-list" },
+    { title: "สินค้า", path: "/product/list" },
 ];
 
 const Header = () => {
@@ -29,9 +29,11 @@ const Header = () => {
                     <div id="header">
                         <div className="container">
                             <div className="header-container row">
-                                <div className="logo"> <Link to={pathHome} title="index">
-                                    <img src={"https://drive.google.com/uc?id=1F6-VLIM03K13GOPYiyuICjDCWQhdT5BR"} width="200px" alt="logo" />
-                                </Link> </div>
+                                <div className="logo">
+                                    <Link to={pathHome} title="index">
+                                        <img src={"https://drive.google.com/uc?id=1F6-VLIM03K13GOPYiyuICjDCWQhdT5BR"} width="200px" alt="logo" />
+                                    </Link>
+                                </div>
                                 <div className="fl-nav-menu">
                                     <nav>
                                         <div className="mm-toggle-wrap">
@@ -69,7 +71,7 @@ const InputSearch = () => {
     const onChange = (event: any) => {
         dispatch(setParams({ searchTerm: event.target.value }));
         setInfoSearch(event.target.value);
-        navigate("/product-list");
+        navigate("/product/list");
     };
     return <div className="collapse navbar-collapse">
         <Form className="navbar-form" role="search">

@@ -1,17 +1,19 @@
 
 import SimpleImageSlider from "react-simple-image-slider";
+
 const images = [
-    { url: "https://drive.google.com/uc?id=1NRV8h9NSsT5sCzkn6m74E65yb4KDgH8O" },
-    { url: "https://drive.google.com/uc?id=1Tx9fSSrvyPz_Cy7p0rF9KNa-tSqxVC5D" },
-    { url: "https://drive.google.com/uc?id=1xBnL7uj_WYDdUYjGaAHo6JEsdANoF9V9" },
-    { url: "https://drive.google.com/uc?id=1SFqfx8-VdMNU66OIgY0P6Pc4_pUiqJ9W" },
+    { url: "https://drive.google.com/uc?id=1XS_IQoLQ3Kv87Oqby7M3ilYQdzbkzc4O" },
+    { url: "https://drive.google.com/uc?id=1Avb4wa7BkvxhWdAtXr2JtB-_N5m97s7R" },
+    { url: "https://drive.google.com/uc?id=1zdt51OPNnR7p4MPik-AauNIOGZK3rJ4b" },
+    { url: "https://drive.google.com/uc?id=1JX6BkZgDiK-ZgePwuFJWNunKJI8ldrO0" },
 ];
+
 const SlideImage = () => {
     return (
         <div className="content">
             <SimpleImageSlider
                 width={"100%"}
-                height={700}
+                height={"57rem"}
                 images={images}
                 showBullets
                 showNavs
@@ -22,7 +24,5 @@ const SlideImage = () => {
         </div>
     )
 };
-
-
 
 export default SlideImage

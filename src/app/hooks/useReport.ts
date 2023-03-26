@@ -54,10 +54,10 @@ const useReport = () => {
 
     const infoProductStatistic: RequestProductStatistics = {
         accountId: account?.id,
-        dateEnd: null,
-        dateStart: null,
-
+        dateEnd: "1/1/0544 0:00:00",
+        dateStart: "1/1/0544 0:00:00",
     };
+    
     const infoSalesStatistic: RequestSalesStatistics = {
         accountId: account?.id,
         year: null

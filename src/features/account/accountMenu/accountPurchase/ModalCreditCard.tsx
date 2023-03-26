@@ -204,7 +204,7 @@ const ModalCreditCard = ({ openModal, setOpenModal, order }: Props) => {
             !cardComplete.cardExpiry ||
             !cardComplete.cardNumber
         );
-    }
+    };
 
     const submitOrder = async ({ nameOnCard }: any) => {
         if (!stripe || !elements) return; // stripe not ready
@@ -222,27 +222,14 @@ const ModalCreditCard = ({ openModal, setOpenModal, order }: Props) => {
                 }
             );
             if (paymentResult.paymentIntent?.status === "succeeded") { // ถ้าสำเร็จจะส่งไปที่ Backend
-                const data = {
-                    ...order,
-                    orderStatus: OrderStatus.SuccessfulPayment
-                };
-                const { isSuccess, statusCode, errorMessages }: Result = await dispatch(updateOrderAsync(data)).unwrap();
-                if (isSuccess && statusCode === 200) {
-                    AppSwal({
-                        icon: "success",
-                        title: "ชำระเงินสำเร็จ",
-                        onThen: () => {
-                            setOpenModal(false);
-                            dispatch(fetchOrdersAsync());
-                        }
-                    });
-                } else {
-                    AppSwal({
-                        icon: "error",
-                        title: errorMessages[0],
-                        onThen: () => { }
-                    });
-                };
+                AppSwal({
+                    icon: "success",
+                    title: "ชำระเงินสำเร็จ",
+                    onThen: () => {
+                        setOpenModal(false);
+                        dispatch(fetchOrdersAsync());
+                    }
+                });
             } else {
                 AppSwal({
                     icon: "error",
@@ -253,17 +240,16 @@ const ModalCreditCard = ({ openModal, setOpenModal, order }: Props) => {
         } catch (error) {
             console.log(error);
         }
-    }
+    };
 
     return (
         <Formik
             initialValues={{ nameCard: "" }}
             validationSchema={validationSchema}
-            onSubmit={(values, { setSubmitting }) => {
-                setTimeout(async () => {
-                    await submitOrder({ nameOnCard: values.nameCard });
-                    setSubmitting(false);
-                }, 400);
+            onSubmit={async (values, { setSubmitting }) => {
+                await submitOrder({ nameOnCard: values.nameCard })
+                    .then(() => setSubmitting(false));
+               
             }}
         >
             {({
@@ -273,6 +259,8 @@ const ModalCreditCard = ({ openModal, setOpenModal, order }: Props) => {
                 handleChange,
                 handleBlur,
                 handleSubmit,
+                isSubmitting
+
             }) => {
                 return <Modal
                     title="โอนชำระ"
@@ -293,7 +281,7 @@ const ModalCreditCard = ({ openModal, setOpenModal, order }: Props) => {
                             </Button>
                         )}
                         {current === steps({ touched, errors, handleChange, handleBlur }).length - 1 && (
-                            <Button className='text-st' htmlType='submit' type="primary" disabled={submitDisabled()} onClick={() => handleSubmit(values as any)}>
+                            <Button loading={isSubmitting} className='text-st' htmlType='submit' type="primary" disabled={submitDisabled()} onClick={() => handleSubmit(values as any)}>
                                 เสร็จสิน
                             </Button>
                         )}

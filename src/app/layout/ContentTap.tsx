@@ -23,6 +23,7 @@ import { fetchDetailProductByIdProductAsync, reSetDetailProduct } from '../store
 import moment from 'moment-timezone';
 import AppPagination from '../components/AppPagination';
 import { MetaData } from '../models/Pagination';
+import { useNavigate } from 'react-router-dom';
 
 interface Props {
     ids: any;
@@ -91,8 +92,9 @@ const ReviewTap = ({ id, reviewsLoaded, setParams, metaData, reviews }: any) => 
                             buttonStyle="solid"
                         >
                             {
-                                infoRadioButton.map(info =>
-                                    <Radio.Button className='text-st' value={info.value}>{info.title}</Radio.Button>)
+                                React.Children.toArray(infoRadioButton.map((info) =>
+                                <Radio.Button className='text-st' value={info.value}>{info.title}</Radio.Button>))
+                                
                             }
                         </Radio.Group>
                     </Col>
@@ -127,6 +129,7 @@ const ReviewTap = ({ id, reviewsLoaded, setParams, metaData, reviews }: any) => 
 };
 
 const ProductStore = ({ id, account }: any) => {
+    const navigate = useNavigate();
     return <div className="tab-pane fade" id={id}>
         <div className="product-tabs-content-inner clearfix" >
             <Row gutter={24}>
@@ -153,7 +156,14 @@ const ProductStore = ({ id, account }: any) => {
                     alignItems: "center",
                     justifyContent: "end"
                 }}>
-                    <Button className='text-st' size='large' icon={<ShopOutlined />}>ดูร้านค้า</Button>
+                    <Button
+                        className='text-st'
+                        size='large'
+                        onClick={() => navigate("/product/detail/seller", { state: account })}
+                        icon={<ShopOutlined />}
+                    >
+                        ดูร้านค้า
+                    </Button>
                 </Col>
             </Row>
         </div>
@@ -231,7 +241,7 @@ const Comment = ({ reviewData }: IComment) => {
                             <Image width="10rem" height="10rem" alt='review-image' src={image.imageUrl} />
                         ))}
                         {
-                            vdoUrl ?
+                            vdoUrl !== "" ?
                                 <video width="100rem" height="105rem" controls >
                                     <source src={vdoUrl} type="video/mp4" />
                                 </video> : ""

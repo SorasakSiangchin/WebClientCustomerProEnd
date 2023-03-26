@@ -102,7 +102,7 @@ const ProductCard = ({ product, saleLabel = false, isViewMode = false, productsL
                 </div>
             </li> : <li className="item odd" >
                 <div className="product-image">
-                    <img className="small-image" style={{ height: "30rem" }} src={product.imageUrl} alt="HTC Rhyme Sense" />
+                    <img className="small-image" style={{ height: "30rem" }} src={product.imageUrl} alt="product-image" />
                 </div>
                 <div className="product-shop">
                     <h2 className="product-name"><Link to="#">{product.name} </Link></h2>

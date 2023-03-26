@@ -10061,6 +10061,19 @@ a.button.detail-bnt span {
   background: url("https://drive.google.com/uc?id=16Uk2DxcEyQSicK4c__JlTqJaCg-3ZgjN") top right/cover no-repeat #fff;
 }
 
+.product-essential-bg-white {
+  padding: 30px;
+  position: relative;
+  margin-top: 0px;
+  background-color: #fff;
+  margin-bottom: 50px;
+}
+
+.product-essential-bg-white .row {
+  margin: 50px 30px;
+  padding-bottom: 80px;
+}
+
 .product-essential .row {
   margin: 50px 30px;
   padding-bottom: 80px;

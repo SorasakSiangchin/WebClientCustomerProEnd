@@ -7,7 +7,7 @@ export const clientId = "54000393134-9j18ndph0oor1sh396dl5cd89a788klg.apps.googl
 
 export const backEndUtl = "https://localhost:7265/";
 
-export const pathHome = import.meta.env.NODE_ENV !== 'development' ? "/" : "/cs63/s09/project-end/";
+export const pathHome = import.meta.env.NODE_ENV !== 'development' ? "/" : "cs63/s09/project-end/";
 
 const padTo2Digits = (num: any) => {
     return num.toString().padStart(2, '0');

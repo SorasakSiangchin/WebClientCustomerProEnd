@@ -15,6 +15,7 @@ import { GoogleLogin } from "react-google-login";
 import { gapi } from "gapi-script";
 import { GoogleLoginRequest } from '../../app/models/Account';
 import AppSwal from '../../app/components/AppSwal';
+
 const value = { email: '', password: '' };
 
 const valueGoogle: GoogleLoginRequest = { email: '', password: '', firstName: '', lastName: '', imageUrl: '' };
@@ -46,7 +47,7 @@ const Login = () => {
         clientId: clientId,
         scope: ''
       })
-    }
+    };
     gapi.load("client:auth2", initClient);
   }, []);
 

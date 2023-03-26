@@ -45,7 +45,7 @@ export const MyAccountMenu = ({ account }: Prop) => {
 
     const customer = [
         { title: "บัญชีของฉัน", path: "/account", icon: <UserOutlined />, onClick: () => { } },
-        { title: "สิงที่ฉันถูกใจ", path: "/product-favorite", icon: <HeartOutlined />, onClick: () => { } },
+        { title: "สิงที่ฉันถูกใจ", path: "/product/favorite", icon: <HeartOutlined />, onClick: () => { } },
         {
             title: googleLogout,
             path: null,
@@ -58,7 +58,7 @@ export const MyAccountMenu = ({ account }: Prop) => {
 
     const seller = [
         { title: "บัญชีของฉัน", path: "/account", icon: <UserOutlined />, onClick: () => { } },
-        { title: "สิงที่ฉันถูกใจ", path: "/product-favorite", icon: <HeartOutlined />, onClick: () => { } },
+        { title: "สิงที่ฉันถูกใจ", path: "/product/favorite", icon: <HeartOutlined />, onClick: () => { } },
         { title: "ร้านของฉัน", path: "/private/dashboard", icon: <ShopOutlined />, onClick: () => { } },
         {
             title: googleLogout, path: null, icon: <LogoutOutlined />, onClick: () => {

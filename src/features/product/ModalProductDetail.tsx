@@ -27,7 +27,6 @@ const ModalProductDetail = ({ open, setOpen, product }: Props) => {
 
   useEffect(() => {
     if (item) setAmount(item?.amount);
-    dispatch(fetchProductAsync(product.id));
   }, [item, dispatch, product]);
 
   const checkTypeAlert = (levelID: any) => {

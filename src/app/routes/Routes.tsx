@@ -22,15 +22,15 @@ import OrderDetailPrivate from "../../features/private/order/OrderDetailPrivate"
 import DeliveryPrivatePage from "../../features/private/delivery/DeliveryPrivatePage";
 import DeliveryFormPrivate from "../../features/private/delivery/DeliveryFormPrivate";
 import AboutPage from "../../features/about/AboutPage";
-import Error404 from "../../features/error404/Error404";
 import UserDetailPrivatePage from "../../features/private/user/UserDetailPrivatePage";
 import ReservePrivate from "../../features/private/order/ReservePrivate";
 import { pathHome } from "../util/util";
+import SellerDetail from "../../features/product/SellerDetail";
 
 export const mainRoutes = <Routes>
     <Route path={pathHome} element={<HomePage />} />
     <Route path='/about' element={<AboutPage />} />
-    <Route path='*' element={<Error404 />} />
+    <Route path='*' element={<HomePage />} />
     <Route path='/login' element={
         <PrivateLogin>
             <Login />
@@ -59,8 +59,9 @@ export const mainRoutes = <Routes>
         <Route path='/private/order/detail' element={<OrderDetailPrivate />} />
         <Route path='/private/reserve' element={<ReservePrivate />} />
     </Route>
-    <Route path='/product-favorite' element={<ProductFavorite />} />
-    <Route path='/product-list' element={<ProductList />} />
+    <Route path='/product/favorite' element={<ProductFavorite />} />
+    <Route path='/product/list' element={<ProductList />} />
+    <Route path='/product/detail/seller' element={<SellerDetail />} />
     <Route path='/products/similar/:productId' element={<ProductsSimilar />} />
     <Route path='/product/detail/:productId' element={<ProductDetail />} />
     <Route path='/test' element={<TestPage />} />

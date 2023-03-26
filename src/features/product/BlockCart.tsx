@@ -1,6 +1,6 @@
-import { Button, Image, List } from 'antd';
+import { Button, Image, List, Space } from 'antd';
 import { Fragment } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Cart } from '../../app/models/Cart';
 import FreeScrollBar from 'react-free-scrollbar';
 import { currencyFormat } from '../../app/util/util';
@@ -18,7 +18,7 @@ const BlockCart = ({ cart, itemCount, subtotal }: Props) => {
   const heightShow = cart?.items.length ? "250px" : "120px";
   const dispatch = useAppDispatch();
   const { account } = useAppSelector(state => state.account);
-
+  const navigate = useNavigate();
   return (
     <Fragment>
       <ContainerCart>
@@ -32,8 +32,8 @@ const BlockCart = ({ cart, itemCount, subtotal }: Props) => {
             </p>
           </div>
           <div className="ajax-checkout">
-            <Button type="primary" icon={<CheckOutlined />} size="middle" >
-              <span>ชำระเงิน</span>
+            <Button onClick={() => navigate("/cart")} className='text-st' type="primary" icon={<CheckOutlined />} size="middle" >
+              ชำระเงิน
             </Button>
           </div>
           <p className="block-subtitle">รายการที่เพิ่ม({cart?.items.length | 0})</p>
@@ -49,8 +49,12 @@ const BlockCart = ({ cart, itemCount, subtotal }: Props) => {
                         <div className="access">
                           <Link to="#" onClick={() => dispatch(removeCartItemAsync({ productId: item.productId, accountId: account?.id, amount: item.amount, name: "del" }))} className="btn-remove1">Remove</Link>
                         </div>
-                        <strong>1</strong> x <span className="price">$299.00</span>
-                        <p className="product-name">{item.name}</p>
+                        <Space size={"large"}>
+                          <strong className='text-st'>{item.amount} รายการ</strong>
+
+                          <span className="price text-st">{currencyFormat(item.price)}</span>
+                        </Space>
+                        <p className="product-name text-st">{item.name}</p>
                       </div>
                     </List.Item>
                   )}

@@ -1,19 +1,17 @@
 import { useEffect, useCallback } from 'react';
-import {
-  useLocation
-} from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import Footer from './Footer';
 import Header from './Header';
 import { useAppDispatch, useAppSelector } from '../store/configureStore';
-import { fetchCurrentAccount  } from '../store/accountSlice'; //logout, setTing, setUp
+import { fetchCurrentAccount } from '../store/accountSlice'; //logout, setTing, setUp
 import { fetchCartAsync } from '../../app/store/cartSlice';
 import { mainRoutes } from '../routes/Routes';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import "../../App.css";
 import { setShowLayout } from '../../app/store/homeSlice';
-import { Layout } from 'antd';
 import useSiderPrivate from '../hooks/useSiderPrivate';
+import { Layout } from 'antd';
 
 const App = () => {
   //const { token, tokenExpirationDate } = useAppSelector(state => state.account);

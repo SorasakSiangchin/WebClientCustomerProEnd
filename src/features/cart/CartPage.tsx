@@ -117,7 +117,7 @@ const CartPage = () => {
         }
     };
 
-    const onClick = () => {
+    const onClickToCheckout = () => {
         if (dataCart?.length > 0) {
             navigate("/checkout", {
                 state: {
@@ -186,7 +186,7 @@ const CartPage = () => {
                                                 size='large'
                                                 className="button btn-proceed-checkout"
                                                 icon={<CheckCircleFilled />}
-                                                onClick={onClick}
+                                                onClick={onClickToCheckout}
                                             >
                                                 <span>ดำเนินการชำระเงิน</span>
                                             </Button>

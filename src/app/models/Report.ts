@@ -23,8 +23,8 @@ export interface Sale {
 
 export interface RequestProductStatistics {
     accountId: any ;
-    dateStart: Date | null;
-    dateEnd: Date | null;
+    dateStart: Date | null | string;
+    dateEnd: Date | null | string;
 }
 
 export interface RequestSalesStatistics {

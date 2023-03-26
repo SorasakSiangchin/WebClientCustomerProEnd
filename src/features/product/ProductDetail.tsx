@@ -3,6 +3,8 @@ import {
   FacebookFilled,
   HeartFilled,
   InstagramFilled,
+  MinusOutlined,
+  PlusOutlined,
   ShoppingCartOutlined,
 } from '@ant-design/icons';
 import { Alert, Button, Image, Input, Rate, Space } from 'antd';
@@ -13,7 +15,7 @@ import AppButtonCart from '../../app/components/AppButtonCart';
 import { useAppDispatch, useAppSelector } from '../../app/store/configureStore';
 import { currencyFormat, Ts } from '../../app/util/util';
 import { fetchProductAsync, productSelectors } from '../../app/store/productSlice';
-import { FacebookShareButton ,  } from "react-share";
+import { FacebookShareButton, } from "react-share";
 import MainContainer from '../../app/layout/MainContainer';
 import TitleTap from '../../app/layout/TitleTap';
 import ContentTap from '../../app/layout/ContentTap';
@@ -46,13 +48,17 @@ const ProductDetail = () => {
   const { checkFavorite, addFavorite, removeFavorite } = useFavorite();
 
   // เพื่อ check ว่า ซื้อไปหรือยัง ซื้อไปแล้วกี่ชิ้น
-  const item = cart?.items.find((i) => i.productId === product?.id);
-
+  const item = cart?.items.find((i : any) => i.productId === product?.id);
+ 
   useEffect(() => {
     if (item) setAmount(item?.amount);
     if (!product) dispatch(fetchProductAsync(productId));
   }, [productId, item, dispatch, product]);
 
+  useEffect(() => {
+    if (Number(amount) > Number(product?.stock)) setAmount(product?.stock);
+  }, [amount]);
+  
   const statusFavorite = checkFavorite(productId);
 
   const onFavorite = (info: Product) => {
@@ -70,10 +76,10 @@ const ProductDetail = () => {
   }, [product, dispatch]);
 
   const handleInputChange = (event: any) => {
-    if (event.target.value >= 0) {
+    if (parseInt(event.target.value) > 0) {
       setAmount(parseInt(event.target.value));
-      if (Number(amount) < Number(product?.stock)) setAmount(product?.stock);
-    }
+    }else  setAmount(0);
+    
   };
 
   const handleReserve = () => {
@@ -208,9 +214,22 @@ const ProductDetail = () => {
             <AddToBox>
               <div className="pull-left">
                 <div className="custom pull-left">
-                  <Button onClick={() => amountChange(1, "remove")} className="reduced items-count" ><i className="fa fa-minus">&nbsp;</i></Button>
-                  <Input onChange={handleInputChange} className="input-text qty" value={amount || 0} style={{ width: "55px" }} />
-                  <Button onClick={() => amountChange(1, "add")} className="increase items-count" ><i className="fa fa-plus">&nbsp;</i></Button>
+                  <Button onClick={() => amountChange(1, "remove")} className="reduced items-count" >
+                    <MinusOutlined style={{
+                      fontWeight: "bold" 
+                    }} >
+                      &nbsp;
+                    </MinusOutlined>
+                  </Button>
+                  <Input min={0} max={product?.stock} onChange={handleInputChange} className="input-text qty" value={amount} style={{ width: "55px" }} />
+                  <Button onClick={() => amountChange(1, "add")} className="increase items-count" >
+                    <PlusOutlined style={{
+                      fontWeight: "bold"
+                    }}
+                    >
+                      &nbsp;
+                    </PlusOutlined>
+                  </Button>
                 </div>
               </div>
               <AppButtonCart

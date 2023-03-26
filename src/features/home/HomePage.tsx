@@ -6,14 +6,16 @@ import TopRareGood from './TopRareGood';
 import ProductRecommend from './ProductRecommend';
 
 const HomePage = () => {
+  
   const { productRare, productRecommend } = useProducts();
+  
   return (
     <Fragment>
       <div className="container">
         <SlideImage />
       </div>
       <div className="content">
-        {/*สินค้าหายาก */}
+        {/* สินค้าหายาก */}
         {productRare ? <TopRareGood productRare={productRare} /> : ""}
         <section className="best-pro">
           <ProductRecommend productRecommend={productRecommend} />

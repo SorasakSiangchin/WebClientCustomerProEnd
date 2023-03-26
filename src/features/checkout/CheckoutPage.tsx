@@ -76,7 +76,7 @@ const CheckoutPage = () => {
     const loadAccountId = async () => {
         if (state.cartId) {
             const { result, isSuccess, statusCode }: Result = await agent.Order.getIdAccount({
-                cartId: state.cartId,
+                cartId: state?.cartId,
                 cartItemId: state?.data.map((e: any) => e.cartItemId)
             });
             if (isSuccess === true && statusCode === 200) setAccountId(result);

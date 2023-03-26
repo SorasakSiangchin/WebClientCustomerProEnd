@@ -1,6 +1,4 @@
 import { Badge, Button, List, Popover } from "antd";
-import ProductsP6 from "../../assets/products-images/p6.jpg";
-import ProductsP5 from "../../assets/products-images/p5.jpg";
 import { Link, useNavigate, } from "react-router-dom";
 import { Cart, CartItem } from "../models/Cart";
 import { currencyFormat } from "../util/util";
@@ -11,7 +9,7 @@ import { ShoppingCartOutlined } from "@ant-design/icons";
 
 interface Prop {
     cart: Cart;
-};
+}
 
 export const MyCartMenu = ({ cart }: Prop) => {
     const navigate = useNavigate();
@@ -26,7 +24,8 @@ export const MyCartMenu = ({ cart }: Prop) => {
                     size="small"
                     dataSource={cart?.items}
                     renderItem={(item) => <List.Item><li >
-                        <div className="item-inner"><Link className="product-image" title="timi &amp; leslie Sophia Diaper Bag, Lemon Yellow/Shadow White" to="#">
+                        <div className="item-inner">
+                            <Link className="product-image" title="timi &amp; leslie Sophia Diaper Bag, Lemon Yellow/Shadow White" to="#">
                             <img alt="Fresh Organic Mustard Leaf" width={100} src={item.imageUrl} />
                         </Link>
                             <div className="product-details">
